@@ -8,7 +8,6 @@ import android.support.v4.widget.NestedScrollView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.AnticipateInterpolator;
 import android.widget.TextView;
 
 import com.hookedonplay.decoviewlib.DecoView;
@@ -72,21 +71,6 @@ public class HomeFragment extends Fragment
             public void onSeriesItemAnimationProgress(float percentComplete, float currentPosition) {
                 float percentFilled = ((currentPosition - seriesItem.getMinValue()) / (seriesItem.getMaxValue() - seriesItem.getMinValue()));
                 textPercentage.setText(String.format("%.0f%%", percentFilled * 100f));
-            }
-
-            @Override
-            public void onSeriesItemDisplayProgress(float percentComplete) {
-
-            }
-        });
-
-
-        final TextView textToGo = (TextView) nestedScrollView.findViewById(R.id.textRemaining);
-        seriesItem.addArcSeriesItemListener(new SeriesItem.SeriesItemListener() {
-            @Override
-            public void onSeriesItemAnimationProgress(float percentComplete, float currentPosition) {
-                textToGo.setText(String.format("%.1f Km to goal", seriesItem.getMaxValue() - currentPosition));
-
             }
 
             @Override
@@ -196,58 +180,7 @@ public class HomeFragment extends Fragment
                 .setDelay(12500)
                 .build());
 
-        mDecoView.addEvent(new DecoEvent.Builder(4.36f).setIndex(mSeries3Index).setDelay(14000).build());
-
-        mDecoView.addEvent(new DecoEvent.Builder(0).setIndex(mSeries3Index).setDelay(18000).build());
-
-        mDecoView.addEvent(new DecoEvent.Builder(0).setIndex(mSeries2Index).setDelay(18000).build());
-
-        mDecoView.addEvent(new DecoEvent.Builder(0)
-                .setIndex(mSeries1Index)
-                .setDelay(20000)
-                .setDuration(1000)
-                .setInterpolator(new AnticipateInterpolator())
-                .setListener(new DecoEvent.ExecuteEventListener() {
-                    @Override
-                    public void onEventStart(DecoEvent decoEvent) {
-
-                    }
-
-                    @Override
-                    public void onEventEnd(DecoEvent decoEvent) {
-                        resetText();
-                    }
-                })
-                .build());
-
-        mDecoView.addEvent(new DecoEvent.Builder(DecoDrawEffect.EffectType.EFFECT_SPIRAL_EXPLODE)
-                .setIndex(mSeries1Index)
-                .setDelay(21000)
-                .setDuration(3000)
-                .setDisplayText("GOAL!")
-                .setListener(new DecoEvent.ExecuteEventListener() {
-                    @Override
-                    public void onEventStart(DecoEvent decoEvent) {
-
-                    }
-
-                    @Override
-                    public void onEventEnd(DecoEvent decoEvent) {
-                        createEvents();
-                    }
-                })
-                .build());
-
-        resetText();
+        mDecoView.addEvent(new DecoEvent.Builder(10f).setIndex(mSeries3Index).setDelay(14000).build());
     }
-
-    private void resetText() {
-        ((TextView) nestedScrollView.findViewById(R.id.textActivity1)).setText("");
-        ((TextView) nestedScrollView.findViewById(R.id.textActivity2)).setText("");
-        ((TextView) nestedScrollView.findViewById(R.id.textActivity3)).setText("");
-        ((TextView) nestedScrollView.findViewById(R.id.textPercentage)).setText("");
-        ((TextView) nestedScrollView.findViewById(R.id.textRemaining)).setText("");
-    }
-
 
 }

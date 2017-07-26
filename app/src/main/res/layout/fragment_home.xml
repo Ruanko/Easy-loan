@@ -29,18 +29,9 @@
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:textSize="40sp"/>
 
-            <TextView
-                android:id="@+id/textRemaining"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/textPercentage"
-                android:layout_centerHorizontal="true"
-                android:maxWidth="200dp"
-                android:textAppearance="?android:attr/textAppearanceSmall"/>
-
             <com.hookedonplay.decoviewlib.DecoView
                 xmlns:custom="http://schemas.android.com/apk/res-auto"
-                custom:dv_lineWidth="26dp"
+                custom:dv_lineWidth="24dp"
                 android:id="@+id/dynamicArcView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" >
@@ -49,7 +40,9 @@
         </RelativeLayout>
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:paddingLeft="@dimen/activity_horizontal_margin"
+            android:paddingRight="@dimen/activity_horizontal_margin">
             <ImageView
                 android:id="@+id/imageActivity1"
                 android:layout_width="wrap_content"
@@ -60,7 +53,7 @@
                 android:background="@drawable/circle_activity1"
                 android:contentDescription="cycling"
                 android:padding="12dp"
-                android:src="@drawable/ic_activity1"/>
+                android:src="@drawable/ic_account_balance_wallet_white_24dp"/>
 
             <ImageView
                 android:id="@+id/imageActivity3"
@@ -70,7 +63,7 @@
                 android:layout_centerHorizontal="true"
                 android:background="@drawable/circle_activity3"
                 android:padding="12dp"
-                android:src="@drawable/ic_activity3"/>
+                android:src="@drawable/ic_account_circle_white_24dp"/>
 
             <ImageView
                 android:id="@+id/imageActivity2"
@@ -82,7 +75,7 @@
                 android:background="@drawable/circle_activity2"
                 android:contentDescription="running"
                 android:padding="12dp"
-                android:src="@drawable/ic_activity2"/>
+                android:src="@drawable/ic_shopping_cart_white_24dp"/>
 
             <TextView
                 android:id="@+id/textActivity3"
