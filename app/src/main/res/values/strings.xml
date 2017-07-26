@@ -21,6 +21,7 @@
     <string name="nav_setting_item2">个人设置</string>
     <string name="nav_about">关于</string>
     <string name="nav_about_item">关于我们</string>
+    <string name="app_designed_by">燕山大学计算机系</string>
 
     <!---->
 </resources>
