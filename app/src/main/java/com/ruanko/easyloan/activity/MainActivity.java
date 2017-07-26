@@ -13,6 +13,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.AlphaAnimation;
@@ -22,7 +23,6 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import com.bumptech.glide.Glide;
-
 import com.ruanko.easyloan.R;
 import com.ruanko.easyloan.adapter.MainFragmentPagerAdapter;
 import com.ruanko.easyloan.fragment.HomeFragment;
@@ -197,11 +197,31 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 //                intent.setClass(this, BottomNavigationActivity.class);
 //                startActivity(intent);
                 break;
+            case R.id.nav_setting:
+                intent.setClass(this, SettingsActivity.class);
+                startActivity(intent);
             default:
                 break;
         }
 
         drawerLayout.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.action_menu_main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int itemId = item.getItemId();
+        switch (itemId) {
+            case R.id.action_menu_main_1:
+                Intent intent = new Intent();
+
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

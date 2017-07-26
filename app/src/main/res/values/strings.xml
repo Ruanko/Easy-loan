@@ -5,6 +5,10 @@
     <string name="tab_orders">订单</string>
     <string name="tab_account">个人中心</string>
 
+    <!--Activity labels (titles)-->
+    <string name="settings_label">设置</string>
+    <string name="login_label">登录</string>
+
     <!--keys-->
 
     <!--for main navigation-->
