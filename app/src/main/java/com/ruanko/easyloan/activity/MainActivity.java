@@ -1,11 +1,12 @@
 package com.ruanko.easyloan.activity;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
@@ -34,9 +35,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private TabLayout tabLayout;
     private ViewPager viewPager;
     private Toolbar toolbar;
+    private FloatingActionButton floatingActionButton;
 
     // For page start
-    private boolean isShowPageStart = true;
+//    private boolean isShowPageStart = true;
     private ImageView imgViewPageStart;
     private RelativeLayout relativeLayoutPageStart;
 
@@ -51,10 +53,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             switch (msg.what) {
                 case MESSAGE_SHOW_DRAWER_LAYOUT:
                     drawerLayout.openDrawer(GravityCompat.START);
-                    SharedPreferences sharedPreferences = getSharedPreferences("app", MODE_PRIVATE);
-                    SharedPreferences.Editor editor = sharedPreferences.edit();
-                    editor.putBoolean("isFirst", false);
-                    editor.apply();
+//                    SharedPreferences sharedPreferences = getSharedPreferences("app", MODE_PRIVATE);
+//                    SharedPreferences.Editor editor = sharedPreferences.edit();
+//                    editor.putBoolean("isFirst", false);
+//                    editor.apply();
                     break;
 
                 case MESSAGE_SHOW_START_PAGE:
@@ -89,6 +91,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         initView();
         initTabLayout();
         initPageStart();
+        initFloatingActionButton();
     }
 
     // for other views
@@ -123,41 +126,77 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private void initPageStart () {
         relativeLayoutPageStart = (RelativeLayout) findViewById(R.id.relative_main);
         imgViewPageStart = (ImageView) findViewById(R.id.img_page_start);
-        SharedPreferences sharedPreferences = getSharedPreferences("app", MODE_PRIVATE);
+        Glide.with(MainActivity.this).load(R.drawable.ic_launcher_big).into(imgViewPageStart);
+        mHandler.sendEmptyMessageDelayed(MESSAGE_SHOW_START_PAGE, 2000);
+//        SharedPreferences sharedPreferences = PreferenceManager.get;
+//
+//        if (isShowPageStart) {
+//            relativeLayoutPageStart.setVisibility(View.VISIBLE);
+//            Glide.with(MainActivity.this).load(R.drawable.ic_launcher_big).into(imgViewPageStart);
+//            if (sharedPreferences.getBoolean("isFirst", true)) {
+//                mHandler.sendEmptyMessageDelayed(MESSAGE_SHOW_START_PAGE, 2000);
+//            } else {
+//                mHandler.sendEmptyMessageDelayed(MESSAGE_SHOW_START_PAGE, 1000);
+//            }
+//            isShowPageStart = false;
+//        }
 
-        if (isShowPageStart) {
-            relativeLayoutPageStart.setVisibility(View.VISIBLE);
-            Glide.with(MainActivity.this).load(R.drawable.ic_launcher_big).into(imgViewPageStart);
-            if (sharedPreferences.getBoolean("isFirst", true)) {
-                mHandler.sendEmptyMessageDelayed(MESSAGE_SHOW_START_PAGE, 2000);
-            } else {
-                mHandler.sendEmptyMessageDelayed(MESSAGE_SHOW_START_PAGE, 1000);
+//        if (sharedPreferences.getBoolean("isFirst", true)) {
+//            mHandler.sendEmptyMessageDelayed(MESSAGE_SHOW_DRAWER_LAYOUT, 2500);
+//        }
+    }
+
+    // floating action button
+    private void initFloatingActionButton(){
+        this.floatingActionButton = (FloatingActionButton)findViewById(R.id.fab_main_add_order);
+        // 只在第二个Tab显示浮动按钮
+        this.viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
             }
-            isShowPageStart = false;
-        }
 
-        if (sharedPreferences.getBoolean("isFirst", true)) {
-            mHandler.sendEmptyMessageDelayed(MESSAGE_SHOW_DRAWER_LAYOUT, 2500);
-        }
+            @Override
+            public void onPageSelected(int position) {
+                if (position == 1) {
+                    floatingActionButton.show();
+                }
+                else {
+                    floatingActionButton.hide();
+                }
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
+        floatingActionButton.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                Snackbar.make(view, getString(R.string.snack_bar_main_info), Snackbar.LENGTH_LONG)
+                        .setAction(getString(R.string.snack_bar_main_action), new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+
+                            }
+                        }).show();
+            }
+        });
     }
 
     // for tab layout
     private void initTabLayout() {
         viewPager = (ViewPager) findViewById(R.id.view_pager_main);
-        initViewPager(viewPager);
+        //initViewPager(viewPager);
 
-        tabLayout = (TabLayout) findViewById(R.id.tab_layout_main);
-        tabLayout.setupWithViewPager(viewPager);
-    }
-
-
-    // for tab layout
-    private void initViewPager(ViewPager viewPager) {
         MainFragmentPagerAdapter adapter = new MainFragmentPagerAdapter(getSupportFragmentManager());
         adapter.addFragment(new HomeFragment(), getString(R.string.tab_home));
         adapter.addFragment(new OrderFragment(), getString(R.string.tab_orders));
         adapter.addFragment(new AccountFragment(), getString(R.string.tab_account));
         viewPager.setAdapter(adapter);
+        tabLayout = (TabLayout) findViewById(R.id.tab_layout_main);
+        tabLayout.setupWithViewPager(viewPager);
     }
 
     // For navigation
