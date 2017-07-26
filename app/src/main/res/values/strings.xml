@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">软酷e贷</string>
+    <!--tab names-->
+    <string name="tab_home">首页</string>
+    <string name="tab_orders">订单</string>
+    <string name="tab_account">个人中心</string>
+
+    <!--keys-->
+
+    <!--by md-->
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+</resources>
