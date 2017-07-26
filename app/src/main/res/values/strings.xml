@@ -7,7 +7,20 @@
 
     <!--keys-->
 
-    <!--by md-->
+    <!--for main navigation-->
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_guest_text">点击头像登录</string>
+    <string name="nav_header_text">点击头像查看个人信息</string>
+    <string name="nav_item1">首页</string>
+    <string name="nav_item2">已完成</string>
+    <string name="nav_item3">申请中</string>
+    <string name="nav_item4">全部项目</string>
+    <string name="nav_group_settings">设置</string>
+    <string name="nav_setting_item1">全局设置</string>
+    <string name="nav_setting_item2">个人设置</string>
+    <string name="nav_about">关于</string>
+    <string name="nav_about_item">关于我们</string>
+
+    <!---->
 </resources>
