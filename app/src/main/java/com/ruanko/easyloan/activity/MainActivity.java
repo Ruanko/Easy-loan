@@ -10,6 +10,7 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
@@ -35,7 +36,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     // For page start
     private boolean isShowPageStart = true;
     private ImageView imgViewPageStart;
-    private RelativeLayout relativePageStart;
+    private RelativeLayout relativeLayoutPageStart;
 
     // For drawer
     private DrawerLayout drawerLayout;
@@ -65,7 +66,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
                         @Override
                         public void onAnimationEnd(Animation animation) {
-                            relativePageStart.setVisibility(View.GONE);
+                            relativeLayoutPageStart.setVisibility(View.GONE);
                         }
 
                         @Override
@@ -73,7 +74,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
                         }
                     });
-                    relativePageStart.startAnimation(alphaAnimation);
+                    relativeLayoutPageStart.startAnimation(alphaAnimation);
                     break;
             }
         }
@@ -91,9 +92,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     // for other views
     
     private void initView() {
-        // drawer && nav
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_main);
+        setSupportActionBar(toolbar);
+
+        drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawerLayout.addDrawerListener(toggle);
+        toggle.syncState();
+
         navigationView.setNavigationItemSelectedListener(this);
         View headerView = navigationView.getHeaderView(0);
         LinearLayout nav_header = (LinearLayout) headerView.findViewById(R.id.nav_header);
@@ -109,13 +119,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     private void initPageStart () {
-        relativePageStart = (RelativeLayout) findViewById(R.id.relative_main);
+        relativeLayoutPageStart = (RelativeLayout) findViewById(R.id.relative_main);
         imgViewPageStart = (ImageView) findViewById(R.id.img_page_start);
-
         SharedPreferences sharedPreferences = getSharedPreferences("app", MODE_PRIVATE);
 
         if (isShowPageStart) {
-            relativePageStart.setVisibility(View.VISIBLE);
+            relativeLayoutPageStart.setVisibility(View.VISIBLE);
             Glide.with(MainActivity.this).load(R.drawable.ic_launcher_big).into(imgViewPageStart);
             if (sharedPreferences.getBoolean("isFirst", true)) {
                 mHandler.sendEmptyMessageDelayed(MESSAGE_SHOW_START_PAGE, 2000);
@@ -194,27 +203,5 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         drawerLayout.closeDrawer(GravityCompat.START);
         return true;
-    }
-
-    // init the preferences data of Settings
-    private void initPreference() {
-
-        SharedPreferences sharedPreferences = getSharedPreferences("app", MODE_PRIVATE);
-
-        // 首次启动引导
-        if (isShowPageStart) {
-            relativePageStart.setVisibility(View.VISIBLE);
-            Glide.with(MainActivity.this).load(R.drawable.ic_launcher_big).into(imgViewPageStart);
-            if (sharedPreferences.getBoolean("isFirst", true)) {
-                mHandler.sendEmptyMessageDelayed(MESSAGE_SHOW_START_PAGE, 2000);
-            } else {
-                mHandler.sendEmptyMessageDelayed(MESSAGE_SHOW_START_PAGE, 1000);
-            }
-            isShowPageStart = false;
-        }
-
-        if (sharedPreferences.getBoolean("isFirst", true)) {
-            mHandler.sendEmptyMessageDelayed(MESSAGE_SHOW_DRAWER_LAYOUT, 2500);
-        }
     }
 }

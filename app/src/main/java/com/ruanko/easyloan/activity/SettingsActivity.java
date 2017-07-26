@@ -1,16 +1,12 @@
 package com.ruanko.easyloan.activity;
 
-import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
 
 import com.ruanko.easyloan.R;
-
-/**
- * Created by deserts on 17/7/26.
- */
 
 public class SettingsActivity extends AppCompatActivity {
     @Override
@@ -23,8 +19,5 @@ public class SettingsActivity extends AppCompatActivity {
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
-
     }
-
-
 }
