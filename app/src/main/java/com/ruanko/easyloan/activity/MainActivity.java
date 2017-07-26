@@ -25,7 +25,9 @@ import android.widget.RelativeLayout;
 import com.bumptech.glide.Glide;
 import com.ruanko.easyloan.R;
 import com.ruanko.easyloan.adapter.MainFragmentPagerAdapter;
+import com.ruanko.easyloan.fragment.AccountFragment;
 import com.ruanko.easyloan.fragment.HomeFragment;
+import com.ruanko.easyloan.fragment.OrderFragment;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener  {
     // For tab layout
@@ -57,7 +59,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
                 case MESSAGE_SHOW_START_PAGE:
                     AlphaAnimation alphaAnimation = new AlphaAnimation(1.0f, 0.0f);
-                    alphaAnimation.setDuration(300);
+                    alphaAnimation.setDuration(600);
                     alphaAnimation.setAnimationListener(new Animation.AnimationListener() {
                         @Override
                         public void onAnimationStart(Animation animation) {
@@ -88,7 +90,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         initTabLayout();
         initPageStart();
     }
-    
+
     // for other views
     
     private void initView() {
@@ -141,11 +143,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     // for tab layout
     private void initTabLayout() {
-        toolbar = (Toolbar) findViewById(R.id.toolbar_main);
-        setSupportActionBar(toolbar);
-
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
         viewPager = (ViewPager) findViewById(R.id.view_pager_main);
         initViewPager(viewPager);
 
@@ -158,11 +155,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private void initViewPager(ViewPager viewPager) {
         MainFragmentPagerAdapter adapter = new MainFragmentPagerAdapter(getSupportFragmentManager());
         adapter.addFragment(new HomeFragment(), getString(R.string.tab_home));
-        adapter.addFragment(new HomeFragment(), getString(R.string.tab_orders));
-        adapter.addFragment(new HomeFragment(), getString(R.string.tab_account));
+        adapter.addFragment(new OrderFragment(), getString(R.string.tab_orders));
+        adapter.addFragment(new AccountFragment(), getString(R.string.tab_account));
         viewPager.setAdapter(adapter);
     }
-
 
     // For navigation
     @Override
@@ -224,4 +220,5 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
         return super.onOptionsItemSelected(item);
     }
+
 }
