@@ -34,11 +34,22 @@
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab_main_add_order"
+        android:backgroundTint="@color/google_blue"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/float_button_margin"
         android:src="@drawable/ic_add_white_24dp"
+        android:visibility="gone"
+        app:layout_scrollFlags="scroll|enterAlways" />
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab_main_modify_info"
+        android:backgroundTint="@color/google_red"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="@dimen/float_button_margin"
+        android:src="@drawable/ic_create_white_24dp"
         android:visibility="gone"
         app:layout_scrollFlags="scroll|enterAlways" />
 

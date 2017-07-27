@@ -53,7 +53,7 @@
     <string name="tv_recycler_item_3">detail</string>
 
     <!--其他-->
-    <string name="snack_bar_main_info">新申请借款，还未实现！</string>
+    <string name="snack_bar_main_info">还未实现！</string>
     <string name="snack_bar_main_action">好吧</string>
 
 </resources>

@@ -35,7 +35,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private TabLayout tabLayout;
     private ViewPager viewPager;
     private Toolbar toolbar;
-    private FloatingActionButton floatingActionButton;
+    private FloatingActionButton floatButtonAddOrder;
+    private FloatingActionButton floatButtonModifyInfo;
 
     // For page start
 //    private boolean isShowPageStart = true;
@@ -148,7 +149,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     // floating action button
     private void initFloatingActionButton(){
-        this.floatingActionButton = (FloatingActionButton)findViewById(R.id.fab_main_add_order);
+        this.floatButtonAddOrder = (FloatingActionButton)findViewById(R.id.fab_main_add_order);
+        this.floatButtonModifyInfo = (FloatingActionButton) findViewById(R.id.fab_main_modify_info);
         // 只在第二个Tab显示浮动按钮
         this.viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
@@ -159,10 +161,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             @Override
             public void onPageSelected(int position) {
                 if (position == 1) {
-                    floatingActionButton.show();
+                    floatButtonAddOrder.show();
+                    floatButtonModifyInfo.hide();
                 }
-                else {
-                    floatingActionButton.hide();
+                else if (position == 2){
+                    floatButtonModifyInfo.show();
+                    floatButtonAddOrder.hide();
+                }
+                else
+                {
+                    floatButtonModifyInfo.hide();
+                    floatButtonAddOrder.hide();
                 }
             }
 
@@ -171,7 +180,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
             }
         });
-        floatingActionButton.setOnClickListener(new View.OnClickListener(){
+        floatButtonAddOrder.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                Snackbar.make(view, getString(R.string.snack_bar_main_info), Snackbar.LENGTH_LONG)
+                        .setAction(getString(R.string.snack_bar_main_action), new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+
+                            }
+                        }).show();
+            }
+        });
+        floatButtonModifyInfo.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
                 Snackbar.make(view, getString(R.string.snack_bar_main_info), Snackbar.LENGTH_LONG)

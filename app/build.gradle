@@ -21,7 +21,12 @@ android {
 
 dependencies {
     repositories {
-        maven { url "https://jitpack.io" }
+        maven {
+            url "https://jitpack.io"
+        }
+        maven {
+            url 'http://dl.bintray.com/amulyakhare/maven'
+        }
     }
     compile fileTree(dir: 'libs', include: ['*.jar'])
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
@@ -36,5 +41,6 @@ dependencies {
     compile 'com.github.bumptech.glide:glide:3.7.0'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
     compile 'com.github.bmarrdev:android-DecoView-charting:v0.9.3'
+    compile 'com.amulyakhare:com.amulyakhare.textdrawable:1.0.1'
     testCompile 'junit:junit:4.12'
 }

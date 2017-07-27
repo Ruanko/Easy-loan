@@ -5,7 +5,6 @@
 package com.ruanko.easyloan.adapter;
 
 import android.content.Context;
-import android.content.res.ColorStateList;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,8 +12,10 @@ import android.view.ViewGroup;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.widget.RelativeLayout;
+import android.widget.ImageView;
 
+import com.amulyakhare.textdrawable.TextDrawable;
+import com.amulyakhare.textdrawable.util.ColorGenerator;
 import com.ruanko.easyloan.R;
 
 import java.util.ArrayList;
@@ -66,24 +67,12 @@ public class OrderListAdapter extends RecyclerView.Adapter<OrderListAdapter.Orde
 
         AlphaAnimation aa1 = new AlphaAnimation(1.0f, 0.1f);
         aa1.setDuration(400);
-        holder.round.startAnimation(aa1);
+        holder.roundIcon.startAnimation(aa1);
 
         AlphaAnimation aa = new AlphaAnimation(0.1f, 1.0f);
         aa.setDuration(400);
 
-        if (color == 1) {
-            holder.round.setBackgroundTintList(ColorStateList.valueOf(context.getResources().getColor(R.color.google_blue)));
-        } else if (color == 2) {
-            holder.round.setBackgroundTintList(ColorStateList.valueOf(context.getResources().getColor(R.color.google_green)));
-        } else if (color == 3) {
-            holder.round.setBackgroundTintList(ColorStateList.valueOf(context.getResources().getColor(R.color.google_yellow)));
-        } else if (color == 4) {
-            holder.round.setBackgroundTintList(ColorStateList.valueOf(context.getResources().getColor(R.color.google_red)));
-        } else {
-            holder.round.setBackgroundTintList(ColorStateList.valueOf(context.getResources().getColor(R.color.gray)));
-        }
-
-        holder.round.startAnimation(aa);
+        holder.roundIcon.startAnimation(aa);
 
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -106,12 +95,20 @@ public class OrderListAdapter extends RecyclerView.Adapter<OrderListAdapter.Orde
 
         private View mView;
         private int position;
-        private RelativeLayout round;
+        private ImageView roundIcon;
 
         private OrderListViewHolder(View itemView) {
             super(itemView);
             mView = itemView;
-            round = (RelativeLayout) itemView.findViewById(R.id.rv_round);
+            roundIcon = (ImageView) itemView.findViewById(R.id.text_icon_order_item);
+            initRoundIcon();
+        }
+
+        private void initRoundIcon() {
+            ColorGenerator generator = ColorGenerator.MATERIAL;
+            TextDrawable drawable = TextDrawable.builder()
+                    .buildRound("潘", generator.getRandomColor());
+            roundIcon.setImageDrawable(drawable);
         }
     }
 

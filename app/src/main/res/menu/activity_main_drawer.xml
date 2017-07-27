@@ -16,11 +16,11 @@
             android:title="@string/nav_item3" />
         <item
             android:id="@+id/nav_item4"
-            android:icon="@drawable/ic_timeline_black_24dp"
+            android:icon="@drawable/ic_access_time_black_24dp"
             android:title="@string/nav_item4" />
         <item
             android:id="@+id/nav_item5"
-            android:icon="@drawable/ic_done_black_24dp"
+            android:icon="@drawable/ic_done_all_black_24dp"
             android:title="@string/nav_item5" />
 
     </group>
