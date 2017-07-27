@@ -40,12 +40,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        if (AVUser.getCurrentUser() != null) {
-            Intent intent = new Intent(this, MainActivity.class);
-            intent.putExtra(Intent.EXTRA_TEXT, "account");
-            startActivity(intent);
-            this.finish();
-        }
+        initView();
     }
 
     @Override
@@ -53,13 +48,13 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         Intent intent = new Intent();
         switch (view.getId()) {
             case R.id.btn_login:
+                attemptLogin();
                 break;
             case R.id.btn_forgot_password:
                 break;
             case R.id.btn_register:
                 intent.setClass(this, RegisterActivity.class);
                 startActivity(intent);
-
                 break;
             default:
                 break;
@@ -113,10 +108,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
         if (TextUtils.isEmpty(username)) {
             inputUserNname.setError(getString(R.string.error_no_name));
-            focusView = mUserNameView;
-            cancel = true;
-        } else if (!isPhoneValid(username) && !isEmailValid(username)) {
-            inputUserNname.setError(getString(R.string.error_invalid_name));
             focusView = mUserNameView;
             cancel = true;
         } else if (!TextUtils.isEmpty(password) && !isPasswordValid(password)) {

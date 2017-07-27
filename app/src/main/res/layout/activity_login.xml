@@ -43,6 +43,7 @@
                     android:layout_height="wrap_content"
                     android:hint="@string/login_user_name_hint"
                     android:imeOptions="actionNext"
+                    android:inputType="textPersonName"
                     android:maxLength="20"
                     android:maxLines="1"/>
             </android.support.design.widget.TextInputLayout>
@@ -76,7 +77,8 @@
                 android:backgroundTint="@color/colorPrimaryDark"
                 android:padding="16dp"
                 android:text="@string/action_sign_in"
-                android:textColor="@color/white"/>
+                android:textColor="@color/white"
+                android:onClick="onClick"/>
 
             <RelativeLayout
                 android:layout_width="match_parent"

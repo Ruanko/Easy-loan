@@ -52,5 +52,7 @@ dependencies {
     compile 'com.github.bmarrdev:android-DecoView-charting:v0.9.3'
     compile 'com.amulyakhare:com.amulyakhare.textdrawable:1.0.1'
     compile 'cn.leancloud.android:avoscloud-sdk:v4.4.3'
+    // round image
+    compile 'com.wx.ovalimageview:roundimageview:1.1.0'
     testCompile 'junit:junit:4.12'
 }

@@ -39,6 +39,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/login_user_name_hint"
+                    android:inputType="textPersonName"
                     android:maxLines="1"
                     android:singleLine="true"/>
 
@@ -53,6 +54,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/login_user_phone_hint"
+                    android:inputType="phone"
                     android:maxLines="1"
                     android:singleLine="true"/>
 

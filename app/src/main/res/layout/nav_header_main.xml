@@ -3,7 +3,7 @@
     android:id="@+id/nav_header"
     android:layout_width="match_parent"
     android:layout_height="@dimen/nav_header_height"
-    android:background="@drawable/material_design_4"
+    android:background="@drawable/header"
     android:clickable="true"
     android:foreground="?attr/selectableItemBackgroundBorderless"
     android:gravity="bottom"
@@ -11,18 +11,24 @@
     android:padding="@dimen/activity_vertical_margin"
     android:theme="@style/ThemeOverlay.AppCompat.Dark">
 
-    <ImageView
-        android:id="@+id/imageView_nav_header"
+    <com.wx.ovalimageview.RoundImageView
+        xmlns:app="http://schemas.android.com/apk/res/com.wx.roundimageview.demo"
+        android:id="@+id/round_image_view_head"
         android:layout_width="64dp"
         android:layout_height="64dp"
-        android:src="@mipmap/ic_launcher" />
-
+        android:src="@drawable/default_header"
+        />
     <TextView
-        android:id="@+id/text_nav_header"
+        android:id="@+id/name_nav_header"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingTop="@dimen/nav_header_vertical_spacing"
         android:text="@string/nav_header_text"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
+    <TextView
+        android:id="@+id/info_nav_header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/nav_header_info"/>
 
 </LinearLayout>

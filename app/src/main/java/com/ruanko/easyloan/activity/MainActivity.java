@@ -1,5 +1,6 @@
 package com.ruanko.easyloan.activity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -10,6 +11,7 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -32,45 +34,55 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private FloatingActionButton floatButtonAddOrder;
     private FloatingActionButton floatButtonModifyInfo;
 
+    private boolean isSignIn = false;
+
     // For drawer
+    private NavigationView navigationView;
     private DrawerLayout drawerLayout;
+
+    // user
+    AVUser avUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        // 警告：以下耦合度极其高，注意调用顺序
         initView();
+        checkAccountState();
+        initNavigation();
         initTabLayout();
         initFloatingActionButton();
         selectTab();
+        if (!isSignIn) {
+            Intent intent = new Intent(this, LoginActivity.class);
+            startActivity(intent);
+        }
     }
 
-    private void selectTab () {
+    private void selectTab() {
         Intent intent = getIntent();
         if (intent.hasExtra(Intent.EXTRA_TEXT)) {
             try {
                 if (intent.getStringExtra(Intent.EXTRA_TEXT).equals("account")) {
                     tabLayout.getTabAt(2).select();
-                }
-                else if (intent.getStringExtra(Intent.EXTRA_TEXT).equals("order")) {
+                } else if (intent.getStringExtra(Intent.EXTRA_TEXT).equals("order")) {
                     tabLayout.getTabAt(1).select();
-                }
-                else {
+                } else {
                     tabLayout.getTabAt(0).select();
                 }
-            }
-            catch (NullPointerException e) {
+            } catch (NullPointerException e) {
             }
 
         }
     }
 
 
-    // for other views
+    // for some views
 
     private void initView() {
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView = (NavigationView) findViewById(R.id.nav_view);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_main);
         setSupportActionBar(toolbar);
@@ -80,19 +92,47 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
+    }
 
+    private void initNavigation() {
         navigationView.setNavigationItemSelectedListener(this);
         View headerView = navigationView.getHeaderView(0);
-        LinearLayout nav_header = (LinearLayout) headerView.findViewById(R.id.nav_header);
+        final LinearLayout nav_header = (LinearLayout) headerView.findViewById(R.id.nav_header);
+        TextView navHeadName = (TextView) nav_header.findViewById(R.id.name_nav_header);
+        TextView navHeadInfo = (TextView) nav_header.findViewById(R.id.info_nav_header);
+        if (isSignIn) {
+            navHeadName.setText(avUser.getUsername());
+            if (avUser.getMobilePhoneNumber() != null) {
+                navHeadInfo.setText(avUser.getMobilePhoneNumber());
+            }
+        }
         nav_header.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, LoginActivity.class);
-                startActivity(intent);
-                DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-                drawer.closeDrawer(GravityCompat.START);
+                if (!isSignIn) {
+                    Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+                    startActivity(intent);
+                    DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+                    drawer.closeDrawer(GravityCompat.START);
+                }
+                else {
+                    new AlertDialog.Builder(MainActivity.this)
+                            .setTitle(getString(R.string.sign_out_alert_title))
+                            .setMessage(getString(R.string.sign_out_alert_text))
+                            .setPositiveButton(getString(R.string.dialog_ok), new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    avUser.logOut();
+                                    isSignIn = false;
+                                    startActivity(new Intent(MainActivity.this, LoginActivity.class));
+                                }
+                            })
+                            .setNegativeButton(getString(R.string.dialog_cancel), null)
+                            .show();
+                }
             }
         });
+
     }
 
     // floating action button
@@ -228,12 +268,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     // check if login
-    private void checkAccountState () {
-        AVUser user = AVUser.getCurrentUser();
-        if (user != null) {
-            TextView navHeadText = (TextView) findViewById(R.id.text_nav_header);
-            navHeadText.setText(user.getUsername());
-        }
+    private void checkAccountState() {
+        this.avUser = AVUser.getCurrentUser();
+        this.isSignIn = avUser != null;
     }
-
 }

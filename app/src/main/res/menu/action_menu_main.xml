@@ -6,6 +6,6 @@
         android:orderInCategory="1"
         app:showAsAction="never"
         android:icon="@drawable/ic_add_white_24dp"
-        android:title="快速申请" />
+        android:title="@string/main_action_menu_item1" />
 
 </menu>
