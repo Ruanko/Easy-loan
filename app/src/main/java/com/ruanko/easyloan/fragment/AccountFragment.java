@@ -1,3 +1,6 @@
+/**
+ * Created by deserts on 17/7/25.
+ */
 package com.ruanko.easyloan.fragment;
 
 import android.os.Bundle;
@@ -8,10 +11,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.ruanko.easyloan.R;
-
-/**
- * Created by deserts on 17/7/25.
- */
 
 public class AccountFragment extends Fragment
 {

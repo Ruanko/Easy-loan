@@ -12,6 +12,7 @@
         android:layout_width="@dimen/start_page_image_size"
         android:layout_height="@dimen/start_page_image_size"
         android:layout_centerInParent="true"
+        android:src="@drawable/ic_launcher_big"
         android:scaleType="fitCenter"/>
 
     <TextView
