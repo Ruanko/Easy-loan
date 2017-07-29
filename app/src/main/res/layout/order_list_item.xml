@@ -36,7 +36,7 @@
             android:transitionName="shareView"/>
 
         <TextView
-            android:id="@+id/tv_recycler_item_1"
+            android:id="@+id/tv_order_item_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_toEndOf="@id/text_icon_order_item"
@@ -44,19 +44,19 @@
             android:textColor="@color/black" />
 
         <TextView
-            android:id="@+id/tv_recycler_item_2"
+            android:id="@+id/tv_order_item_amount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/tv_recycler_item_1"
+            android:layout_below="@id/tv_order_item_title"
             android:layout_marginTop="@dimen/text_margin_very_small"
             android:layout_toEndOf="@id/text_icon_order_item"
             android:text="@string/tv_recycler_item_2" />
 
         <TextView
-            android:id="@+id/tv_recycler_item_3"
+            android:id="@+id/tv_order_item_date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/tv_recycler_item_2"
+            android:layout_below="@id/tv_order_item_amount"
             android:layout_marginTop="@dimen/text_margin_very_small"
             android:layout_toEndOf="@id/text_icon_order_item"
             android:text="@string/tv_recycler_item_3" />

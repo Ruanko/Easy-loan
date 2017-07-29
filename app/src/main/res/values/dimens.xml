@@ -48,6 +48,6 @@
     <dimen name="big_activity_text_margin">16dp</dimen>
 
     <!--for acr view-->
-    <dimen name="arc_margin">64dp</dimen>
+    <dimen name="arc_margin">96dp</dimen>
 
 </resources>

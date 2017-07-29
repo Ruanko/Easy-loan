@@ -23,6 +23,7 @@
             <com.wx.ovalimageview.RoundImageView
                 android:layout_width="96dp"
                 android:layout_height="96dp"
+                android:id="@+id/img_user_head"
                 android:layout_centerHorizontal="true"
                 android:layout_alignParentBottom="true"
                 android:src="@drawable/default_header"/>
@@ -33,6 +34,7 @@
             android:paddingTop="@dimen/card_title_margin"
             android:orientation="vertical">
             <TextView
+                android:id="@+id/tv_real_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textAlignment="center"
@@ -40,6 +42,7 @@
                 android:textSize="28sp"
                 android:textAppearance="@style/TextAppearance.AppCompat.Title" />
             <TextView
+                android:id="@+id/tv_account_mail"
                 android:paddingTop="2dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -48,16 +51,127 @@
                 android:textSize="14sp"
                 android:textAppearance="@style/TextAppearance.AppCompat.Caption" />
         </LinearLayout>
-        <RelativeLayout
+        <LinearLayout
             android:paddingTop="@dimen/card_title_margin_top"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:layout_marginRight="@dimen/activity_horizontal_margin"
             android:layout_width="match_parent"
-            android:layout_height="100dp">
-            <ImageView
-                android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:src="@drawable/circle_activity1"
-                android:background="@drawable/circle_activity1"
-                android:scaleType="center"/>
-        </RelativeLayout>
+                android:layout_marginTop="@dimen/card_button_margin"
+                android:layout_marginBottom="@dimen/card_button_margin">
+                <TextView
+                    android:paddingStart="@dimen/btn_margin"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="@string/name_label"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"/>
+                <TextView
+                    android:id="@+id/tv_name_account_center"
+                    android:paddingStart="@dimen/btn_margin"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text=""
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"/>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/card_button_margin"
+                android:layout_marginBottom="@dimen/card_button_margin">
+                <TextView
+                    android:paddingStart="@dimen/btn_margin"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="@string/phone_label"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"/>
+                <TextView
+                    android:id="@+id/tv_phone_account_center"
+                    android:paddingStart="@dimen/btn_margin"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text=""
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"/>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/card_button_margin"
+                android:layout_marginBottom="@dimen/card_button_margin">
+                <TextView
+                    android:paddingStart="@dimen/btn_margin"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="@string/mail_label"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"/>
+                <TextView
+                    android:id="@+id/tv_mail_account_center"
+                    android:paddingStart="@dimen/btn_margin"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text=""
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"/>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/card_button_margin"
+                android:layout_marginBottom="@dimen/card_button_margin">
+                <TextView
+                    android:paddingStart="@dimen/btn_margin"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="@string/school_label"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"/>
+                <TextView
+                    android:id="@+id/tv_school_account_center"
+                    android:paddingStart="@dimen/btn_margin"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text=""
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"/>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/card_button_margin"
+                android:layout_marginBottom="@dimen/card_button_margin">
+                <TextView
+                    android:paddingStart="@dimen/btn_margin"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="@string/credit_label"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"/>
+                <TextView
+                    android:id="@+id/tv_review_account_center"
+                    android:paddingStart="@dimen/btn_margin"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="@string/arc_final_text_level1"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"/>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/card_button_margin"
+                android:layout_marginBottom="@dimen/card_button_margin">
+                <TextView
+                    android:paddingStart="@dimen/btn_margin"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="@string/info_integrity_label"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"/>
+                <TextView
+                    android:id="@+id/tv_info_account_center"
+                    android:paddingStart="@dimen/btn_margin"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="100 %"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"/>
+            </LinearLayout>
+        </LinearLayout>
     </LinearLayout>
 </android.support.v4.widget.NestedScrollView>
