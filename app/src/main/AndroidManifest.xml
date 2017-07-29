@@ -43,17 +43,20 @@
             </intent-filter>
         </activity>
         <activity
-            android:label="@string/apply_label"
             android:name=".activity.ApplyActivity"
+            android:label="@string/apply_label"
             android:parentActivityName=".activity.MainActivity"
             android:windowSoftInputMode="adjustResize">
-
         </activity>
         <activity
-            android:label="@string/user_info_label"
             android:name=".activity.UserInfoActivity"
+            android:label="@string/user_info_label"
             android:parentActivityName=".activity.MainActivity">
 
+        </activity>
+        <activity android:name=".activity.OrderDetailActivity"
+            android:label="@string/title_order_detail"
+            android:theme="@style/AppTheme.NoActionBar">
         </activity>
     </application>
 

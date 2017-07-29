@@ -1,8 +1,7 @@
-package com.ruanko.easyloan.data;
-
 /**
  * Created by deserts on 17/7/29.
  */
+package com.ruanko.easyloan.data;
 
 
 public class OrderContract {

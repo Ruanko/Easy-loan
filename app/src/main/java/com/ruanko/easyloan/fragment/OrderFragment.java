@@ -55,37 +55,18 @@ public class OrderFragment extends Fragment
     }
 
     private void initView() {
-//        floatingActionButton = (FloatingActionButton) rootView.findViewById(R.id.fab_add_order);
         orderListAdapter = new OrderListAdapter(getContext(), orderList);
         mRecyclerView = (RecyclerView) rootView.findViewById(R.id.rv_order_list);
 
         if (getScreenWidthDp() >= 1200) {
             final GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), 3);
             mRecyclerView.setLayoutManager(gridLayoutManager);
-//            floatingActionButton.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View view) {
-//                    orderListAdapter.addItem(gridLayoutManager.findFirstVisibleItemPosition() + 1);
-//                }
-//            });
         } else if (getScreenWidthDp() >= 800) {
             final GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), 2);
             mRecyclerView.setLayoutManager(gridLayoutManager);
-//            floatingActionButton.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View view) {
-//                    orderListAdapter.addItem(gridLayoutManager.findFirstVisibleItemPosition() + 1);
-//                }
-//            });
         } else {
             final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
             mRecyclerView.setLayoutManager(linearLayoutManager);
-//            floatingActionButton.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View view) {
-//                    orderListAdapter.addItem(linearLayoutManager.findFirstVisibleItemPosition() + 1);
-//                }
-//            });
         }
 
         mRecyclerView.setAdapter(orderListAdapter);
@@ -143,7 +124,7 @@ public class OrderFragment extends Fragment
         orderList.clear();
         AVQuery<AVObject> avQuery = new AVQuery<>(OrderContract.OrderEntry.TABLE_NAME);
         avQuery.orderByDescending("createdAt");
-        avQuery.include("owner");
+//        avQuery("owner", AVUser.getCurrentUser());
         avQuery.findInBackground(new FindCallback<AVObject>() {
             @Override
             public void done(List<AVObject> list, AVException e) {
