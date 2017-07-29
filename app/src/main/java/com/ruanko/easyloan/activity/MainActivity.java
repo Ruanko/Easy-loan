@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
-import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
@@ -27,7 +26,8 @@ import com.ruanko.easyloan.fragment.AccountFragment;
 import com.ruanko.easyloan.fragment.HomeFragment;
 import com.ruanko.easyloan.fragment.OrderFragment;
 
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class MainActivity extends AppCompatActivity
+        implements NavigationView.OnNavigationItemSelectedListener {
     // For tab layout
     private TabLayout tabLayout;
     private ViewPager viewPager;
@@ -76,8 +76,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         }
     }
-
-
     // for some views
 
     private void initView() {
@@ -106,6 +104,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 navHeadInfo.setText(avUser.getMobilePhoneNumber());
             }
         }
+        else {
+            navHeadName.setText(getString(R.string.nav_header_text));
+            navHeadInfo.setText(getString(R.string.nav_header_info));
+        }
         nav_header.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -114,6 +116,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     startActivity(intent);
                     DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
                     drawer.closeDrawer(GravityCompat.START);
+                    finish();
                 }
                 else {
                     new AlertDialog.Builder(MainActivity.this)
@@ -124,7 +127,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                                 public void onClick(DialogInterface dialogInterface, int i) {
                                     avUser.logOut();
                                     isSignIn = false;
-                                    startActivity(new Intent(MainActivity.this, LoginActivity.class));
+                                    initNavigation();
+                                    //startActivity(new Intent(MainActivity.this, LoginActivity.class));
                                 }
                             })
                             .setNegativeButton(getString(R.string.dialog_cancel), null)
@@ -168,25 +172,21 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         floatButtonAddOrder.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, getString(R.string.snack_bar_main_info), Snackbar.LENGTH_LONG)
-                        .setAction(getString(R.string.snack_bar_main_action), new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
+                startActivity(new Intent(MainActivity.this, ApplyActivity.class));
 
-                            }
-                        }).show();
             }
         });
         floatButtonModifyInfo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, getString(R.string.snack_bar_main_info), Snackbar.LENGTH_LONG)
-                        .setAction(getString(R.string.snack_bar_main_action), new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-
-                            }
-                        }).show();
+                startActivity(new Intent(MainActivity.this, UserInfoActivity.class));
+//                Snackbar.make(view, getString(R.string.snack_bar_main_info), Snackbar.LENGTH_LONG)
+//                        .setAction(getString(R.string.snack_bar_main_action), new View.OnClickListener() {
+//                            @Override
+//                            public void onClick(View view) {
+//
+//                            }
+//                        }).show();
             }
         });
     }

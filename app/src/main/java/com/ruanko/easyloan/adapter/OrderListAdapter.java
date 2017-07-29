@@ -13,42 +13,27 @@ import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.amulyakhare.textdrawable.TextDrawable;
 import com.amulyakhare.textdrawable.util.ColorGenerator;
+import com.avos.avoscloud.AVObject;
 import com.ruanko.easyloan.R;
+import com.ruanko.easyloan.data.OrderContract;
 
-import java.util.ArrayList;
-import java.util.Arrays;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
-
 
 
 public class OrderListAdapter extends RecyclerView.Adapter<OrderListAdapter.OrderListViewHolder> {
 
     private Context context;
-    private List mItems;
-    private int color = 0;
+    private List<AVObject> mOrders;
 
-    public OrderListAdapter(Context context) {
+    public OrderListAdapter(Context context, List<AVObject> orders) {
         this.context = context;
-        mItems = new ArrayList();
-        mItems.addAll(Arrays.asList(context.getResources().getStringArray(R.array.recycler_name_array)));
-    }
-
-    public void setItems(int color) {
-        this.color = color;
-        notifyDataSetChanged();
-    }
-
-    public void addItem(int position) {
-        mItems.add(position);
-        notifyItemInserted(position);
-    }
-
-    public void removeItem(int position) {
-        mItems.remove(position);
-        notifyItemRemoved(position);
+        this.mOrders = orders;
     }
 
     @Override
@@ -60,10 +45,17 @@ public class OrderListAdapter extends RecyclerView.Adapter<OrderListAdapter.Orde
 
     @Override
     public void onBindViewHolder(final OrderListViewHolder holder, int position) {
-        holder.position = position;
-
+        AVObject orderObject = mOrders.get(position);
+        String title = orderObject.getString(OrderContract.OrderEntry.COLUMN_TITLE);
+        holder.titleText.setText(title);
+        int amount = orderObject.getInt(OrderContract.OrderEntry.COLUMN_AMOUNT);
+        holder.amountText.setText("金额：￥" + amount);
+        Date date = orderObject.getDate(OrderContract.OrderEntry.COLUMN_DEADLINE);
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        holder.dateText.setText("最后还款日期：" + simpleDateFormat.format(date));
         Animation animation = AnimationUtils.loadAnimation(context, R.anim.anim_recycler_item_show);
         holder.mView.startAnimation(animation);
+        holder.initRoundIcon(String.valueOf(title.charAt(0)));
 
         AlphaAnimation aa1 = new AlphaAnimation(1.0f, 0.1f);
         aa1.setDuration(400);
@@ -88,26 +80,30 @@ public class OrderListAdapter extends RecyclerView.Adapter<OrderListAdapter.Orde
 
     @Override
     public int getItemCount() {
-        return mItems.size();
+        return mOrders.size();
     }
 
     class OrderListViewHolder extends RecyclerView.ViewHolder {
 
         private View mView;
-        private int position;
         private ImageView roundIcon;
+        private TextView titleText;
+        private TextView dateText;
+        private TextView amountText;
 
         private OrderListViewHolder(View itemView) {
             super(itemView);
             mView = itemView;
-            roundIcon = (ImageView) itemView.findViewById(R.id.text_icon_order_item);
-            initRoundIcon();
+            roundIcon = (ImageView) mView.findViewById(R.id.text_icon_order_item);
+            titleText = (TextView) mView.findViewById(R.id.tv_order_item_title);
+            dateText = (TextView) mView.findViewById(R.id.tv_order_item_date);
+            amountText = (TextView) mView.findViewById(R.id.tv_order_item_amount);
         }
 
-        private void initRoundIcon() {
+        private void initRoundIcon(String letter) {
             ColorGenerator generator = ColorGenerator.MATERIAL;
             TextDrawable drawable = TextDrawable.builder()
-                    .buildRound("潘", generator.getRandomColor());
+                    .buildRound(letter, generator.getRandomColor());
             roundIcon.setImageDrawable(drawable);
         }
     }
