@@ -93,5 +93,6 @@
     <string name="apply_basic_label">请填写借款基本信息</string>
     <string name="apply_extra_label">请在此输入借款详细说明</string>
     <string name="repay_date">选择截止日期</string>
+    <string name="user_info_basic_label">请完善用户信息</string>
 
 </resources>
