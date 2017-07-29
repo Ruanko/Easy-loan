@@ -43,7 +43,7 @@
     <string name="error_no_name">请输入你的用户名</string>
     <string name="error_no_password">请输入你的密码</string>
     <string name="action_register">注册</string>
-    <string name="error_invalid_phone">请输入正确的手机号！</string>
+    <string name="error_invalid_phone">请输入正确的手机号!</string>
 
     <!--for arc view-->
     <string name="arc_final_text_level1">信誉极好!</string>
