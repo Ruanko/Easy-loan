@@ -46,10 +46,10 @@
     <string name="error_invalid_phone">请输入正确的手机号</string>
 
     <!--for arc view-->
-    <string name="arc_final_text_level1">信誉极好!</string>
-    <string name="arc_final_text_level2">信誉良好!</string>
-    <string name="arc_final_text_level3">还需努力!</string>
-    <string name="arc_final_text_level4">加油!</string>
+    <string name="arc_final_text_level1">信誉极好</string>
+    <string name="arc_final_text_level2">信誉良好</string>
+    <string name="arc_final_text_level3">还需努力</string>
+    <string name="arc_final_text_level4">加油</string>
     <string name="tv_recycler_item_1">Title</string>
     <string name="tv_recycler_item_2">sub title</string>
     <string name="tv_recycler_item_3">detail</string>
