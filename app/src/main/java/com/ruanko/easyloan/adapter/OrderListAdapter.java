@@ -4,7 +4,10 @@
 
 package com.ruanko.easyloan.adapter;
 
+import android.app.Activity;
+import android.app.ActivityOptions;
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,6 +22,7 @@ import com.amulyakhare.textdrawable.TextDrawable;
 import com.amulyakhare.textdrawable.util.ColorGenerator;
 import com.avos.avoscloud.AVObject;
 import com.ruanko.easyloan.R;
+import com.ruanko.easyloan.activity.OrderDetailActivity;
 import com.ruanko.easyloan.data.OrderContract;
 
 import java.text.SimpleDateFormat;
@@ -29,11 +33,11 @@ import java.util.List;
 public class OrderListAdapter extends RecyclerView.Adapter<OrderListAdapter.OrderListViewHolder> {
 
     private Context context;
-    private List<AVObject> mOrders;
+    private List<AVObject> orderList;
 
     public OrderListAdapter(Context context, List<AVObject> orders) {
         this.context = context;
-        this.mOrders = orders;
+        this.orderList = orders;
     }
 
     @Override
@@ -44,8 +48,8 @@ public class OrderListAdapter extends RecyclerView.Adapter<OrderListAdapter.Orde
     }
 
     @Override
-    public void onBindViewHolder(final OrderListViewHolder holder, int position) {
-        AVObject orderObject = mOrders.get(position);
+    public void onBindViewHolder(final OrderListViewHolder holder, final int position) {
+        AVObject orderObject = orderList.get(position);
         String title = orderObject.getString(OrderContract.OrderEntry.COLUMN_TITLE);
         holder.titleText.setText(title);
         int amount = orderObject.getInt(OrderContract.OrderEntry.COLUMN_AMOUNT);
@@ -69,18 +73,18 @@ public class OrderListAdapter extends RecyclerView.Adapter<OrderListAdapter.Orde
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // 待完成，点击进入详情
-//                Intent intent = new Intent(context, ShareViewActivity.class);
-//                intent.putExtra("color", color);
-//                context.startActivity(intent, ActivityOptions.makeSceneTransitionAnimation
-//                        ((Activity) context, holder.round, "shareView").toBundle());
+                // 点击进入详情
+                Intent intent = new Intent(context, OrderDetailActivity.class);
+                intent.putExtra("orderObjectId", orderList.get(position).getObjectId());
+                context.startActivity(intent, ActivityOptions.makeSceneTransitionAnimation
+                        ((Activity) context, holder.roundIcon, "orderDetail").toBundle());
             }
         });
     }
 
     @Override
     public int getItemCount() {
-        return mOrders.size();
+        return orderList.size();
     }
 
     class OrderListViewHolder extends RecyclerView.ViewHolder {

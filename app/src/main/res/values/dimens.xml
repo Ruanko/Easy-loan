@@ -13,7 +13,7 @@
     <dimen name="activity_horizontal_margin_big_activity">16dp</dimen>
     <dimen name="float_button_margin">16dp</dimen>
     <dimen name="app_bar_height">180dp</dimen>
-    <dimen name="app_bar_height_image_view">180dp</dimen>
+    <dimen name="app_bar_height_image_view">240dp</dimen>
     <dimen name="text_margin">16dp</dimen>
     <dimen name="text_margin_small">8dp</dimen>
     <dimen name="text_margin_very_small">4dp</dimen>
@@ -49,5 +49,7 @@
 
     <!--for acr view-->
     <dimen name="arc_margin">96dp</dimen>
+
+    <dimen name="order_detail_margin_top">24dp</dimen>
 
 </resources>
