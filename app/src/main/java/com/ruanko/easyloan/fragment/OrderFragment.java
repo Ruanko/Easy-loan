@@ -1,8 +1,11 @@
 package com.ruanko.easyloan.fragment;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
@@ -17,8 +20,10 @@ import android.widget.RelativeLayout;
 import com.avos.avoscloud.AVException;
 import com.avos.avoscloud.AVObject;
 import com.avos.avoscloud.AVQuery;
+import com.avos.avoscloud.AVUser;
 import com.avos.avoscloud.FindCallback;
 import com.ruanko.easyloan.R;
+import com.ruanko.easyloan.activity.ApplyActivity;
 import com.ruanko.easyloan.adapter.OrderListAdapter;
 import com.ruanko.easyloan.data.OrderContract;
 
@@ -31,13 +36,12 @@ import java.util.List;
 
 public class OrderFragment extends Fragment
 {
-    private RelativeLayout rootView;
-    private SwipeRefreshLayout swipeRefreshLayout;
+    private RelativeLayout mRootView;
+    private SwipeRefreshLayout mSwipeRefreshLayout;
     private RecyclerView mRecyclerView;
-    private List<AVObject> orderList = new ArrayList<>();
-    OrderListAdapter orderListAdapter;
-    private int color = 0;
-//    private FloatingActionButton floatingActionButton;
+    private List<AVObject> mOrderList = new ArrayList<>();
+    OrderListAdapter mOrderListAdapter;
+    private FloatingActionButton mFloatingActionButton;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -47,16 +51,17 @@ public class OrderFragment extends Fragment
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        this.rootView = (RelativeLayout) inflater.inflate(
+        this.mRootView = (RelativeLayout) inflater.inflate(
                 R.layout.fragment_order, container, false);
         initView();
-        initData();
-        return rootView;
+        loadData();
+        return mRootView;
     }
 
     private void initView() {
-        orderListAdapter = new OrderListAdapter(getContext(), orderList);
-        mRecyclerView = (RecyclerView) rootView.findViewById(R.id.rv_order_list);
+        mOrderListAdapter = new OrderListAdapter(getContext(), mOrderList);
+        mRecyclerView = (RecyclerView) mRootView.findViewById(R.id.rv_order_list);
+        mFloatingActionButton = (FloatingActionButton) getActivity().findViewById(R.id.fab_main_add_order);
 
         if (getScreenWidthDp() >= 1200) {
             final GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), 3);
@@ -69,24 +74,19 @@ public class OrderFragment extends Fragment
             mRecyclerView.setLayoutManager(linearLayoutManager);
         }
 
-        mRecyclerView.setAdapter(orderListAdapter);
+        mRecyclerView.setAdapter(mOrderListAdapter);
 
-        //关联ItemTouchHelper和RecyclerView
-//        ItemTouchHelper.Callback callback = new ItemTouchHelperCallback(orderListAdapter);
-//        ItemTouchHelper mItemTouchHelper = new ItemTouchHelper(callback);
-//        mItemTouchHelper.attachToRecyclerView(mRecyclerView);
-
-        swipeRefreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.swipe_refresh_layout_recycler_view);
-        swipeRefreshLayout.setColorSchemeResources(R.color.google_blue,
+        mSwipeRefreshLayout = (SwipeRefreshLayout) mRootView.findViewById(R.id.swipe_refresh_layout_recycler_view);
+        mSwipeRefreshLayout.setColorSchemeResources(R.color.google_blue,
                 R.color.google_green, R.color.google_red, R.color.google_yellow);
-        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                initData();
+                loadData();
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        swipeRefreshLayout.setRefreshing(false);
+                        mSwipeRefreshLayout.setRefreshing(false);
                     }
                 }, 1000);
 
@@ -98,16 +98,25 @@ public class OrderFragment extends Fragment
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
-//                if (newState > 0) {
-//                    floatingActionButton.hide();
-//                } else {
-//                    floatingActionButton.show();
-//                }
+                if (newState > 0) {
+                    mFloatingActionButton.hide();
+                } else {
+                    mFloatingActionButton.show();
+                }
             }
 
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
+            }
+        });
+
+        mFloatingActionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivityForResult(new Intent(getContext(), ApplyActivity.class),
+                        ApplyActivity.APPLY_ACTIVITY_REQUEST_CODE);
+
             }
         });
 
@@ -120,17 +129,17 @@ public class OrderFragment extends Fragment
     }
 
 
-    private void initData() {
-        orderList.clear();
+    private void loadData() {
+        mOrderList.clear();
         AVQuery<AVObject> avQuery = new AVQuery<>(OrderContract.OrderEntry.TABLE_NAME);
         avQuery.orderByDescending("createdAt");
-//        avQuery("owner", AVUser.getCurrentUser());
+        avQuery.whereEqualTo(OrderContract.OrderEntry.COLUMN_OWNER, AVUser.getCurrentUser());
         avQuery.findInBackground(new FindCallback<AVObject>() {
             @Override
             public void done(List<AVObject> list, AVException e) {
                 if (e == null) {
-                    orderList.addAll(list);
-                    orderListAdapter.notifyDataSetChanged();
+                    mOrderList.addAll(list);
+                    mOrderListAdapter.notifyDataSetChanged();
                 } else {
                     e.printStackTrace();
                 }
@@ -138,6 +147,14 @@ public class OrderFragment extends Fragment
         });
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == ApplyActivity.APPLY_ACTIVITY_REQUEST_CODE
+                && resultCode == Activity.RESULT_OK) {
+            loadData();
+        }
+    }
 }
 
 

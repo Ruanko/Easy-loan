@@ -94,5 +94,8 @@
     <string name="apply_extra_label">请在此输入借款详细说明</string>
     <string name="repay_date">选择截止日期</string>
     <string name="title_order_detail">订单详情</string>
+    <string name="crop_image_title">选择图片并裁切</string>
+    <string name="upload_done">上传完成！</string>
+    <string name="upload_fail">上传失败，请重试！</string>
 
 </resources>

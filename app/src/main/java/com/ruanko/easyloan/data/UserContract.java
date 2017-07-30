@@ -20,5 +20,7 @@ public class UserContract {
         public static final String COLUMN_RELATIVE_PHONE = "relative_phone";
         public static final String COLUMN_RELATIVE_RELATION = "relative_relation";
         public static final String COLUMN_RELATIVE_LEVEL = "level";
+        public static final String COLUMN_AVATAR = "avatar";
+
     }
 }

@@ -20,7 +20,7 @@
                 android:src="@drawable/header"
                 android:layout_alignParentTop="true"
                 android:scaleType="fitXY"/>
-            <com.wx.ovalimageview.RoundImageView
+            <ImageView
                 android:layout_width="96dp"
                 android:layout_height="96dp"
                 android:id="@+id/img_user_head"

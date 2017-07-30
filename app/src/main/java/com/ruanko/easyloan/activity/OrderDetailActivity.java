@@ -12,9 +12,9 @@ import android.widget.TextView;
 import com.avos.avoscloud.AVException;
 import com.avos.avoscloud.AVObject;
 import com.avos.avoscloud.GetCallback;
-import com.bumptech.glide.Glide;
 import com.ruanko.easyloan.R;
 import com.ruanko.easyloan.data.OrderContract;
+import com.squareup.picasso.Picasso;
 
 import java.text.SimpleDateFormat;
 
@@ -54,7 +54,7 @@ public class OrderDetailActivity extends AppCompatActivity {
         topImageView = (ImageView) findViewById(R.id.image_order_detail);
         createDateTextView = (TextView) findViewById(R.id.tv_detail_create_date);
         orderIdTextView = (TextView) findViewById(R.id.tv_detail_id);
-        Glide.with(this).load(R.drawable.big_pic_cash).fitCenter().into(topImageView);
+        Picasso.with(this).load(R.drawable.big_pic_cash).fit().into(topImageView);
         fab = (FloatingActionButton) findViewById(R.id.fab_order_detail);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_order_detail);
         toolbar.setSubtitle("Shared Element Transitions");

@@ -1,5 +1,6 @@
 package com.ruanko.easyloan.activity;
 
+import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.os.Bundle;
 import android.support.v4.widget.NestedScrollView;
@@ -37,6 +38,11 @@ public class ApplyActivity extends AppCompatActivity {
     Button deadlineBtn;
     Calendar calendar;
 
+    public static final int APPLY_ACTIVITY_REQUEST_CODE = 10010;
+
+    public interface OrderListChangedListener {
+        public void onOrderListChanged ();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState){
@@ -137,6 +143,7 @@ public class ApplyActivity extends AppCompatActivity {
                 progressBar.setVisibility(View.GONE);
                 scrollView.setVisibility(View.INVISIBLE);
                 if (e == null) {
+                    setResult(Activity.RESULT_OK);
                     Toast.makeText(ApplyActivity.this,
                             getString(R.string.apply_done),
                             Toast.LENGTH_LONG).show();

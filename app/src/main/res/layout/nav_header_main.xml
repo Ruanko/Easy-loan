@@ -11,12 +11,10 @@
     android:padding="@dimen/activity_vertical_margin"
     android:theme="@style/ThemeOverlay.AppCompat.Dark">
 
-    <com.wx.ovalimageview.RoundImageView
-        xmlns:app="http://schemas.android.com/apk/res/com.wx.roundimageview.demo"
+    <ImageView
         android:id="@+id/round_image_view_head"
         android:layout_width="64dp"
         android:layout_height="64dp"
-        android:src="@drawable/default_header"
         />
     <TextView
         android:id="@+id/name_nav_header"
