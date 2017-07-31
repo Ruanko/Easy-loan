@@ -1,215 +1,281 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingLeft="10dp"
-    android:paddingRight="10dp">
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+    android:background="@color/main_background"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
+    <ProgressBar
+        android:id="@+id/progress_userinfo"
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="36dp"
+        android:layout_height="36dp"
+        android:layout_centerInParent="true"
+        android:layout_marginBottom="8dp"
+        android:visibility="gone" />
+
+    <ScrollView
+        android:id="@+id/ns_userinfo"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:paddingBottom="@dimen/activity_vertical_margin"
+            android:paddingLeft="@dimen/activity_horizontal_margin"
+            android:paddingRight="@dimen/activity_horizontal_margin"
+            android:paddingTop="@dimen/activity_vertical_margin">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="完善用户信息" />
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/text_margin_small">
+
+                <EditText
+                    android:id="@+id/username"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="用户名"
+                    android:maxLines="1"
+                    android:textSize="16sp" />
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/text_margin_small">
+
+                <EditText
+                    android:id="@+id/emil_address"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:hint="邮箱"
+                    android:inputType="textEmailAddress"
+                    android:maxLines="1"
+                    android:textSize="16sp" />
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/text_margin_small">
+
+                <EditText
+                    android:id="@+id/true_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:hint="真实姓名"
+                    android:maxLines="1"
+                    android:textSize="16sp" />
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/text_margin_small">
+
+                <EditText
+                    android:id="@+id/editText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:hint="电话"
+                    android:maxLines="1"
+                    android:textSize="16sp" />
+            </android.support.design.widget.TextInputLayout>
+
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
-                <android.support.design.widget.TextInputLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-                    <EditText
-                        android:id="@+id/username"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="用户名"
-                        android:maxLines="1"
-                        android:singleLine="true" />
-                </android.support.design.widget.TextInputLayout>
-                <android.support.design.widget.TextInputLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-                    <EditText
-                        android:id="@+id/emil_address"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="邮箱"
-                        android:inputType="textEmailAddress"
-                        android:layout_weight="1"
-                        android:maxLines="1"/>
-                </android.support.design.widget.TextInputLayout>
-                <android.support.design.widget.TextInputLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-                    <EditText
-                        android:id="@+id/true_name"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="真实姓名"
-                        android:layout_weight="1"
-                        android:maxLines="1"/>
-                </android.support.design.widget.TextInputLayout>
-                <android.support.design.widget.TextInputLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-                    <EditText
-                        android:id="@+id/editText"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:hint="电话" />
-                </android.support.design.widget.TextInputLayout>
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:paddingTop="5dp">
-                    <EditText
-                        android:id="@+id/type_card_text"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="3"
-                        android:textStyle="italic"
-                        android:onClick="selectTypeOfCard"
-                        android:editable="false"
-                        android:hint="证件类型:" />
-                    <!--<TextView-->
-                    <!--android:id="@+id/type_card_text"-->
-                    <!--android:layout_width="match_parent"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:layout_weight="1"-->
-                    <!--android:text="请选择证件类型"/>-->
-                    <!--<Spinner-->
-                    <!--android:id="@+id/type_card"-->
-                    <!--android:gravity="center"-->
-                    <!--android:layout_width="match_parent"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:layout_weight="1">-->
-                    <!--</Spinner>-->
-                </LinearLayout>
-                <android.support.design.widget.TextInputLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-                    <EditText
-                        android:id="@+id/card_id"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="证件号"
-                        android:layout_weight="1"
-                        android:maxLines="1"/>
-                </android.support.design.widget.TextInputLayout>
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:paddingTop="5dp">
-                    <EditText
-                        android:id="@+id/sex_text"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="3"
-                        android:layout_gravity="left"
-                        android:textStyle="italic"
-                        android:editable="false"
-                        android:onClick="selectSexOfUser"
-                        android:hint="性别:" />
-                    <!--<TextView-->
-                    <!--android:id="@+id/sex_text"-->
-                    <!--android:layout_width="match_parent"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:layout_weight="1"-->
-                    <!--android:text="请选择性别"/>-->
-                    <!--<Spinner-->
-                    <!--android:paddingLeft="20dp"-->
-                    <!--android:id="@+id/sex_person_select"-->
-                    <!--android:layout_width="match_parent"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:layout_weight="1">-->
-                    <!--</Spinner>-->
-                </LinearLayout>
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingTop="10dp">
-                    <EditText
-                        android:id="@+id/select_school_Button"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="选择学校:"
-                        android:editable="false"
-                        android:onClick="selectprovince"
-                        android:textStyle="italic"/>
-                </LinearLayout>
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:paddingTop="10dp"
-                    android:layout_gravity="center">
-                    <!--<TextView-->
-                    <!--android:layout_width="match_parent"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:layout_weight="1"-->
-                    <!--android:text="地区:"/>-->
-                    <EditText android:id="@+id/province_text"
-                        android:layout_height="wrap_content"
-                        android:layout_width="match_parent"
-                        android:layout_weight="1"
-                        android:hint="地区"
-                        android:onClick="selectprovince"
-                        android:editable="false" />
-                    <!--<TextView-->
-                    <!--android:layout_width="match_parent"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:text="学校:"-->
-                    <!--android:layout_weight="1"-->
-                    <!--android:paddingLeft="10dp"/>-->
-                    <EditText android:id="@+id/school_text"
-                        android:layout_width="match_parent"
-                        android:layout_weight="1"
-                        android:layout_height="wrap_content"
-                        android:hint="学校"
-                        android:onClick="selectprovince"
-                        android:editable="false"/>
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingBottom="8dp"
+                android:paddingStart="4dp"
+                android:paddingTop="@dimen/btn_padding"
+                android:weightSum="1">
 
-                </LinearLayout>
-                <android.support.design.widget.TextInputLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-                    <EditText
-                        android:id="@+id/stu_id"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="学生学号"
-                        android:maxLines="1"
-                        android:layout_weight="1"/>
-                </android.support.design.widget.TextInputLayout>
-                <android.support.design.widget.TextInputLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-                    <EditText
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="家庭住址"
-                        android:maxLines="1"
-                        android:layout_weight="1"/>
-                </android.support.design.widget.TextInputLayout>
-                <Button
-                    android:id="@+id/submit_loan_info"
-                    style="?android:textAppearanceSmall"
+                <TextView
+                    android:id="@+id/type_card_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="证件类型"
+                    android:textSize="16sp" />
+                <!--<TextView-->
+                <!--android:id="@+id/type_card_text"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_weight="1"-->
+                <!--android:text="请选择证件类型"/>-->
+                <Spinner
+                    android:id="@+id/type_card"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:text="提交"
-                    android:textStyle="bold" />
+                    android:layout_marginRight="50dp"
+                    android:entries="@array/type_card"
+                    android:paddingEnd="48dp"
+                    android:paddingStart="48dp"
+                    android:spinnerMode="dialog" />
             </LinearLayout>
 
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/text_margin_small">
 
+                <EditText
+                    android:id="@+id/card_id"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:hint="证件号"
+                    android:maxLines="1"
+                    android:textSize="16sp"/>
+            </android.support.design.widget.TextInputLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingBottom="8dp"
+                android:paddingStart="4dp"
+                android:paddingTop="@dimen/btn_padding"
+                android:weightSum="1">
+
+                <TextView
+                    android:id="@+id/sex_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="选择性别"
+                    android:textSize="16sp" />
+                <!--<TextView-->
+                <!--android:id="@+id/sex_text"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_weight="1"-->
+                <!--android:text="请选择性别"/>-->
+                <Spinner
+                    android:id="@+id/sex_person_select"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="50dp"
+                    android:entries="@array/sex_person"
+                    android:paddingEnd="48dp"
+                    android:paddingStart="48dp"
+                    android:spinnerMode="dialog" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingBottom="8dp"
+                android:paddingStart="4dp"
+                android:paddingTop="@dimen/btn_padding"
+                android:weightSum="1">
+
+                <TextView
+                    android:id="@+id/select_school_Button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:hint="学校省份:"
+                    android:textSize="16sp" />
+                <Spinner
+                    android:id="@+id/prpovince_select"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:entries="@array/province"
+                    android:layout_marginRight="50dp"
+                    android:paddingEnd="48dp"
+                    android:paddingStart="48dp"
+                    android:spinnerMode="dialog" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingBottom="8dp"
+                android:paddingStart="4dp"
+                android:paddingTop="@dimen/btn_padding"
+                android:weightSum="1">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:hint="选择学校:"
+                    android:textSize="16sp" />
+                <Spinner
+                    android:id="@+id/school_select"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="50dp"
+                    android:entries="@array/province"
+                    android:paddingEnd="48dp"
+                    android:paddingStart="48dp"
+                    android:spinnerMode="dialog" />
+            </LinearLayout>
+                <!--<TextView-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:text="学校:"-->
+                <!--android:layout_weight="1"-->
+                <!--android:paddingLeft="10dp"/>-->
+                <!--<EditText-->
+                    <!--android:id="@+id/school_text"-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_weight="1"-->
+                    <!--android:editable="false"-->
+                    <!--android:hint="学校"-->
+                    <!--android:onClick="selectprovince" />-->
+
+            <!--</LinearLayout>-->
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/text_margin_small">
+
+                <EditText
+                    android:id="@+id/stu_id"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:hint="学生学号"
+                    android:maxLines="1"
+                    android:textSize="16sp" />
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/text_margin_small">
+
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:hint="家庭住址"
+                    android:maxLines="1"
+                    android:textSize="16sp" />
+            </android.support.design.widget.TextInputLayout>
+
+            <Button
+                android:id="@+id/submit_loan_info"
+                style="?android:textAppearanceSmall"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="提交"
+                android:textStyle="bold" />
         </LinearLayout>
-
-    </LinearLayout>
-</ScrollView>
+    </ScrollView>
+</RelativeLayout>
