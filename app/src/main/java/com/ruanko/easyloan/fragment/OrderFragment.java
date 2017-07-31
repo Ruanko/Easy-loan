@@ -1,11 +1,15 @@
 package com.ruanko.easyloan.fragment;
 
+/**
+ * Created by deserts on 17/7/25.
+ */
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
@@ -30,10 +34,6 @@ import com.ruanko.easyloan.data.OrderContract;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by deserts on 17/7/25.
- */
-
 public class OrderFragment extends Fragment
 {
     private RelativeLayout mRootView;
@@ -42,6 +42,7 @@ public class OrderFragment extends Fragment
     private List<AVObject> mOrderList = new ArrayList<>();
     OrderListAdapter mOrderListAdapter;
     private FloatingActionButton mFloatingActionButton;
+    private TabLayout mTabLayout;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -59,6 +60,7 @@ public class OrderFragment extends Fragment
     }
 
     private void initView() {
+        mTabLayout = (TabLayout) getActivity().findViewById(R.id.tab_layout_for_orders);
         mOrderListAdapter = new OrderListAdapter(getContext(), mOrderList);
         mRecyclerView = (RecyclerView) mRootView.findViewById(R.id.rv_order_list);
         mFloatingActionButton = (FloatingActionButton) getActivity().findViewById(R.id.fab_main_add_order);
@@ -94,22 +96,22 @@ public class OrderFragment extends Fragment
         });
 
         // 滑动隐藏浮动按钮
-        mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-                super.onScrollStateChanged(recyclerView, newState);
-                if (newState > 0) {
-                    mFloatingActionButton.hide();
-                } else {
-                    mFloatingActionButton.show();
-                }
-            }
-
-            @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                super.onScrolled(recyclerView, dx, dy);
-            }
-        });
+//        mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+//            @Override
+//            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+//                super.onScrollStateChanged(recyclerView, newState);
+//                if (newState > 0) {
+//                    mFloatingActionButton.hide();
+//                } else {
+//                    mFloatingActionButton.show();
+//                }
+//            }
+//
+//            @Override
+//            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+//                super.onScrolled(recyclerView, dx, dy);
+//            }
+//        });
 
         mFloatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -130,7 +132,6 @@ public class OrderFragment extends Fragment
 
 
     private void loadData() {
-        mOrderList.clear();
         AVQuery<AVObject> avQuery = new AVQuery<>(OrderContract.OrderEntry.TABLE_NAME);
         avQuery.orderByDescending("createdAt");
         avQuery.whereEqualTo(OrderContract.OrderEntry.COLUMN_OWNER, AVUser.getCurrentUser());
@@ -138,7 +139,7 @@ public class OrderFragment extends Fragment
             @Override
             public void done(List<AVObject> list, AVException e) {
                 if (e == null) {
-                    mOrderList.addAll(list);
+                    mOrderListAdapter.updateData(list);
                     mOrderListAdapter.notifyDataSetChanged();
                 } else {
                     e.printStackTrace();

@@ -33,11 +33,11 @@ import java.util.List;
 public class OrderListAdapter extends RecyclerView.Adapter<OrderListAdapter.OrderListViewHolder> {
 
     private Context context;
-    private List<AVObject> orderList;
+    private List<AVObject> mOrderList;
 
     public OrderListAdapter(Context context, List<AVObject> orders) {
         this.context = context;
-        this.orderList = orders;
+        this.mOrderList = orders;
     }
 
     @Override
@@ -49,7 +49,7 @@ public class OrderListAdapter extends RecyclerView.Adapter<OrderListAdapter.Orde
 
     @Override
     public void onBindViewHolder(final OrderListViewHolder holder, final int position) {
-        AVObject orderObject = orderList.get(position);
+        AVObject orderObject = mOrderList.get(position);
         String title = orderObject.getString(OrderContract.OrderEntry.COLUMN_TITLE);
         holder.titleText.setText(title);
         int amount = orderObject.getInt(OrderContract.OrderEntry.COLUMN_AMOUNT);
@@ -75,7 +75,7 @@ public class OrderListAdapter extends RecyclerView.Adapter<OrderListAdapter.Orde
             public void onClick(View view) {
                 // 点击进入详情
                 Intent intent = new Intent(context, OrderDetailActivity.class);
-                intent.putExtra("orderObjectId", orderList.get(position).getObjectId());
+                intent.putExtra("orderObjectId", mOrderList.get(position).getObjectId());
                 context.startActivity(intent, ActivityOptions.makeSceneTransitionAnimation
                         ((Activity) context, holder.roundIcon, "orderDetail").toBundle());
             }
@@ -84,7 +84,17 @@ public class OrderListAdapter extends RecyclerView.Adapter<OrderListAdapter.Orde
 
     @Override
     public int getItemCount() {
-        return orderList.size();
+        return mOrderList.size();
+    }
+
+    public void updateData(List<AVObject> orderList) {
+        if (orderList != null) {
+            int previousSize = orderList.size();
+            mOrderList.clear();
+            notifyItemRangeRemoved(0, previousSize);
+            mOrderList.addAll(orderList);
+            notifyItemRangeInserted(0, orderList.size());
+        }
     }
 
     class OrderListViewHolder extends RecyclerView.ViewHolder {

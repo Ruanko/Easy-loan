@@ -21,6 +21,7 @@ import android.widget.Toast;
 
 import com.avos.avoscloud.AVFile;
 import com.avos.avoscloud.AVUser;
+import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 import com.ruanko.easyloan.R;
 import com.ruanko.easyloan.adapter.MainFragmentPagerAdapter;
 import com.ruanko.easyloan.data.UserContract;
@@ -34,15 +35,19 @@ import static com.ruanko.easyloan.utilities.ImageUtils.getRoundedTransformation;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
         AccountFragment.UserInfoChangedListener {
+    private Toolbar mToolbar;
     // For tab layout
-    private TabLayout mTabLayout;
+    private TabLayout mTabLayoutForOrderList;
     private ViewPager mViewPager;
     private FloatingActionButton mFloatButtonAddOrder;
     private FloatingActionButton mFloatButtonModifyInfo;
 
     // For drawer
-    private NavigationView navigationView;
-    private DrawerLayout drawerLayout;
+    private NavigationView mNavigationView;
+    private DrawerLayout mDrawerLayout;
+
+    // bottom navigation
+    private BottomNavigationViewEx mBottomNavigationViewEx;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,21 +62,24 @@ public class MainActivity extends AppCompatActivity
     // for some views
 
     private void initView() {
-        drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-        navigationView = (NavigationView) findViewById(R.id.nav_view);
+        mTabLayoutForOrderList = (TabLayout) findViewById(R.id.tab_layout_for_orders);
+        mBottomNavigationViewEx = (BottomNavigationViewEx) findViewById(R.id.bottom_navigation);
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        mNavigationView = (NavigationView) findViewById(R.id.nav_view);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_main);
-        setSupportActionBar(toolbar);
+
+        mToolbar = (Toolbar) findViewById(R.id.toolbar_main);
+        setSupportActionBar(mToolbar);
 
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawerLayout.addDrawerListener(toggle);
+                this, mDrawerLayout, mToolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        mDrawerLayout.addDrawerListener(toggle);
         toggle.syncState();
     }
 
     private void initNavigation() {
-        navigationView.setNavigationItemSelectedListener(this);
-        View headerView = navigationView.getHeaderView(0);
+        mNavigationView.setNavigationItemSelectedListener(this);
+        View headerView = mNavigationView.getHeaderView(0);
         final LinearLayout navHeaderRoot = (LinearLayout) headerView.findViewById(R.id.nav_header);
         TextView navHeadName = (TextView) navHeaderRoot.findViewById(R.id.name_nav_header);
         TextView navHeadInfo = (TextView) navHeaderRoot.findViewById(R.id.info_nav_header);
@@ -102,8 +110,9 @@ public class MainActivity extends AppCompatActivity
         avatarImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                drawerLayout.closeDrawer(GravityCompat.START);
-                mTabLayout.getTabAt(2).select();
+                mDrawerLayout.closeDrawer(GravityCompat.START);
+                mBottomNavigationViewEx.getChildAt(2).setSelected(true);
+//                mTabLayout.getTabAt(2).select();
 //                new AlertDialog.Builder(MainActivity.this)
 //                        .setTitle(getString(R.string.sign_out_alert_title))
 //                        .setMessage(getString(R.string.sign_out_alert_text))
@@ -141,12 +150,18 @@ public class MainActivity extends AppCompatActivity
                 if (position == 1) {
                     mFloatButtonAddOrder.show();
                     mFloatButtonModifyInfo.hide();
+                    mTabLayoutForOrderList.setVisibility(View.VISIBLE);
+                    mToolbar.setVisibility(View.GONE);
                 } else if (position == 2) {
                     mFloatButtonModifyInfo.show();
                     mFloatButtonAddOrder.hide();
+                    mTabLayoutForOrderList.setVisibility(View.GONE);
+                    mToolbar.setVisibility(View.VISIBLE);
                 } else {
+                    mTabLayoutForOrderList.setVisibility(View.GONE);
                     mFloatButtonModifyInfo.hide();
                     mFloatButtonAddOrder.hide();
+                    mToolbar.setVisibility(View.VISIBLE);
                 }
             }
 
@@ -167,15 +182,16 @@ public class MainActivity extends AppCompatActivity
         adapter.addFragment(new OrderFragment(), getString(R.string.tab_orders));
         adapter.addFragment(new AccountFragment(), getString(R.string.tab_account));
         mViewPager.setAdapter(adapter);
-        mTabLayout = (TabLayout) findViewById(R.id.tab_layout_main);
-        mTabLayout.setupWithViewPager(mViewPager);
+        mBottomNavigationViewEx.setupWithViewPager(mViewPager);
+//        mTabLayout = (TabLayout) findViewById(R.id.tab_layout_main);
+//        mTabLayout.setupWithViewPager(mViewPager);
     }
 
     // For navigation
     @Override
     public void onBackPressed() {
-        if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
-            drawerLayout.closeDrawer(GravityCompat.START);
+        if (mDrawerLayout.isDrawerOpen(GravityCompat.START)) {
+            mDrawerLayout.closeDrawer(GravityCompat.START);
         }
         Intent intent = new Intent(Intent.ACTION_MAIN);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -190,13 +206,13 @@ public class MainActivity extends AppCompatActivity
 
         switch (item.getItemId()) {
             case R.id.nav_item1:
-                drawerLayout.closeDrawer(GravityCompat.START);
-                mTabLayout.getTabAt(0).select();
+                mDrawerLayout.closeDrawer(GravityCompat.START);
+//                mTabLayout.getTabAt(0).select();
                 break;
 
             case R.id.nav_item2:
-                drawerLayout.closeDrawer(GravityCompat.START);
-                mTabLayout.getTabAt(1).select();
+                mDrawerLayout.closeDrawer(GravityCompat.START);
+//                mTabLayout.getTabAt(1).select();
                 break;
 
             case R.id.nav_item3:
@@ -214,7 +230,7 @@ public class MainActivity extends AppCompatActivity
                 break;
         }
 
-        drawerLayout.closeDrawer(GravityCompat.START);
+        mDrawerLayout.closeDrawer(GravityCompat.START);
         return true;
     }
 
