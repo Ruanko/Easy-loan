@@ -123,12 +123,22 @@ public class AccountFragment extends Fragment {
             mRealNameTextView.setText(user.getString(UserContract.UserEntry.COLUMN_REAL_NAME));
 
             AVFile imageFile = user.getAVFile(UserContract.UserEntry.COLUMN_AVATAR);
-            Log.d(TAG, "loadData: get user image url: " + imageFile.getUrl());
-            Picasso.with(context)
-                    .load(imageFile.getUrl())
-                    .fit()
-                    .transform(getRoundedTransformation())
-                    .into(mUserHeadImage);
+            if (imageFile != null) {
+                Log.d(TAG, "loadData: get user image url: " + imageFile.getUrl());
+                Picasso.with(context)
+                        .load(imageFile.getUrl())
+                        .fit()
+                        .transform(getRoundedTransformation())
+                        .into(mUserHeadImage);
+            }
+            else {
+                Picasso.with(context)
+                        .load(R.drawable.default_header)
+                        .fit()
+                        .transform(getRoundedTransformation())
+                        .into(mUserHeadImage);
+            }
+
 //            user.fetchInBackground(new GetCallback<AVObject>() {
 //                @Override
 //                public void done(AVObject avObject, AVException e) {

@@ -6,22 +6,9 @@
     android:background="@color/main_background"
     android:orientation="vertical"
     app:layout_behavior="@string/appbar_scrolling_view_behavior">
-
-    <android.support.v4.widget.SwipeRefreshLayout
-        android:id="@+id/swipe_refresh_layout_recycler_view"
+    <android.support.v4.view.ViewPager
+        android:id="@+id/view_pager_order"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
-
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/rv_order_list"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/activity_background"
-            android:paddingEnd="@dimen/zero_horizontal_margin_big_activity"
-            android:paddingStart="@dimen/zero_horizontal_margin_big_activity" />
-
-    </android.support.v4.widget.SwipeRefreshLayout>
-
-
+        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 </RelativeLayout>

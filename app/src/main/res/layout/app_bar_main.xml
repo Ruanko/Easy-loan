@@ -26,18 +26,6 @@
             android:layout_height="?attr/actionBarSize"
             android:visibility="gone"
             app:tabIndicatorColor="@color/colorAccent">
-            <android.support.design.widget.TabItem
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:text="全部订单"/>
-            <android.support.design.widget.TabItem
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:text="近期待还"/>
-            <android.support.design.widget.TabItem
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:text="申请中"/>
         </android.support.design.widget.TabLayout>
     </android.support.design.widget.AppBarLayout>
 

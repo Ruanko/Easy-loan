@@ -12,9 +12,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.AlphaAnimation;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -57,18 +54,18 @@ public class OrderListAdapter extends RecyclerView.Adapter<OrderListAdapter.Orde
         Date date = orderObject.getDate(OrderContract.OrderEntry.COLUMN_DEADLINE);
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
         holder.dateText.setText("最后还款日期：" + simpleDateFormat.format(date));
-        Animation animation = AnimationUtils.loadAnimation(context, R.anim.anim_recycler_item_show);
-        holder.mView.startAnimation(animation);
+//        Animation animation = AnimationUtils.loadAnimation(context, R.anim.anim_recycler_item_show);
+//        holder.mView.startAnimation(animation);
         holder.initRoundIcon(String.valueOf(title.charAt(0)));
 
-        AlphaAnimation aa1 = new AlphaAnimation(1.0f, 0.1f);
-        aa1.setDuration(400);
-        holder.roundIcon.startAnimation(aa1);
-
-        AlphaAnimation aa = new AlphaAnimation(0.1f, 1.0f);
-        aa.setDuration(400);
-
-        holder.roundIcon.startAnimation(aa);
+//        AlphaAnimation aa1 = new AlphaAnimation(1.0f, 0.1f);
+//        aa1.setDuration(400);
+//        holder.roundIcon.startAnimation(aa1);
+//
+//        AlphaAnimation aa = new AlphaAnimation(0.1f, 1.0f);
+//        aa.setDuration(400);
+//
+//        holder.roundIcon.startAnimation(aa);
 
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
