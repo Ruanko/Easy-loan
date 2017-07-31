@@ -1,9 +1,66 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-    <CheckBoxPreference
-        android:defaultValue="true"
-        android:key="show_start"
-        android:summaryOff="Shown"
-        android:summaryOn="Hidden"
-        android:title="Show start" />
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">  
+
+    <PreferenceCategory android:title="账号">
+
+        <Preference android:title="账号同步设置">
+            <intent android:action="android.settings.SYNC_SETTINGS" />
+        </Preference>
+        -*
+        <Preference
+            android:key="account"
+            android:title="账号绑定设置">
+            <intent
+                android:action="com.ruanko.easyloan.Binding"
+                android:targetClass="com.ruanko.easyloan.activity.BindingActivity"
+                android:targetPackage="com.ruanko.easyloan"/>
+        </Preference>
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="消息与通知">
+
+        <!-- A 'parent' preference, which enables/disables child preferences (below) when checked/unchecked. -->
+        <SwitchPreferenceCompat
+            android:defaultValue="true"
+            android:key="notifications_new_message"
+            android:title="消息通知"
+            android:summaryOn="关闭"
+            android:summaryOff="开启" />
+
+        <!-- NOTE: This preference will be enabled only when the checkbox above is checked. -->
+        <SwitchPreferenceCompat
+            android:defaultValue="true"
+            android:dependency="notifications_new_message"
+            android:key="notifications_new_message_vibrate"
+            android:title="震动"
+            android:summaryOn="关闭"
+            android:summaryOff="开启"/>
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="关于">
+        <Preference
+            android:title="用户协议">
+            <intent android:action="com.ruanko.easyloan.AGREEMENT"
+                android:targetClass="com.ruanko.easyloan.activity.AgreementActivity"
+                android:targetPackage="com.ruanko.easyloan"/>
+        </Preference>
+        <Preference
+            android:title="隐私政策">
+            <intent
+                android:action="com.ruanko.easyloan.PRIVACY"
+                android:targetClass="com.ruanko.easyloan.activity.PrivacyActivity"
+                android:targetPackage="com.ruanko.easyloan"/>
+        </Preference>
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="更新">
+        <Preference
+            android:title="检查更新"
+            android:summary="当前版本：V 1.0"
+            />
+    </PreferenceCategory>
+
 </PreferenceScreen>

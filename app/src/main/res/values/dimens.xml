@@ -51,5 +51,6 @@
     <dimen name="arc_margin">96dp</dimen>
 
     <dimen name="order_detail_margin_top">24dp</dimen>
+    <dimen name="fab_margin">16dp</dimen>
 
 </resources>
