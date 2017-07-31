@@ -45,6 +45,7 @@
                     android:layout_height="wrap_content"
                     android:hint="借贷金额"
                     android:maxLines="1"
+                    android:inputType="number"
                     android:textSize="16sp" />
             </android.support.design.widget.TextInputLayout>
 
@@ -58,6 +59,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:inputType="text"
                     android:hint="借款用途说明"
                     android:maxLines="1"
                     android:textSize="16sp" />
@@ -221,6 +223,7 @@
                     android:layout_weight="1"
                     android:hint="借款备注信息"
                     android:maxLines="4"
+                    android:inputType="text"
                     android:textSize="16sp" />
             </android.support.design.widget.TextInputLayout>
         </LinearLayout>

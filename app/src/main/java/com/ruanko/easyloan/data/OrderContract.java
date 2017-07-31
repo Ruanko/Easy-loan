@@ -5,6 +5,14 @@ package com.ruanko.easyloan.data;
 
 
 public class OrderContract {
+    public static final class Status {
+        public static final int PENDING = 0;
+        public static final int PASS = 1;
+        public static final int GRANT = 2;
+        public static final int PARTIAL_REPAY = 3;
+        public static final int DONE = 4;
+        public static final int OVERDUE = 5;
+    }
     public static final class OrderEntry {
         public static final String TABLE_NAME = "Order";
         public static final String COLUMN_TITLE = "title";

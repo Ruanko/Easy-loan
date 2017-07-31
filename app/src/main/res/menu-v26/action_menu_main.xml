@@ -6,8 +6,6 @@
         android:orderInCategory="1"
         app:showAsAction="always"
         android:icon="@drawable/ic_add_white_24dp"
-        android:iconTint="@color/app_blue"
-        android:iconTintMode="add"
         android:title="快速申请" />
 
 </menu>

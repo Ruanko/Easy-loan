@@ -46,10 +46,12 @@
     <string name="error_invalid_phone">请输入正确的手机号</string>
 
     <!--for arc view-->
+
     <string name="arc_final_text_level1">信誉极好</string>
     <string name="arc_final_text_level2">信誉良好</string>
-    <string name="arc_final_text_level3">还需努力</string>
-    <string name="arc_final_text_level4">加油</string>
+    <string name="arc_final_text_level3">信誉良好</string>
+    <string name="arc_final_text_level4">还需努力</string>
+    <string name="arc_final_text_level5">加油</string>
     <string name="tv_recycler_item_1">Title</string>
     <string name="tv_recycler_item_2">sub title</string>
     <string name="tv_recycler_item_3">detail</string>
@@ -86,13 +88,27 @@
     <string name="repay_method">选择还款方式</string>
     <string name="pay_method">选择收款方式</string>
     <string name="submit">提交</string>
-    <string name="action_apply">提交申请</string>
-    <string name="apply_help">申请帮助</string>
+    <string name="action_apply">提交</string>
+    <string name="apply_help">帮助</string>
     <string name="apply_done">申请已经提交，请等待审核！</string>
     <string name="guarantee_label">请填写担保人信息</string>
     <string name="apply_basic_label">请填写借款基本信息</string>
     <string name="apply_extra_label">请在此输入借款详细说明</string>
     <string name="repay_date">选择截止日期</string>
     <string name="title_order_detail">订单详情</string>
+    <string name="crop_image_title">选择图片并裁切</string>
+    <string name="upload_done">上传完成！</string>
+    <string name="upload_fail">上传失败，请重试！</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="tab_all_order">全部借款</string>
+    <string name="tab_recent_order">近期待还</string>
+    <string name="tab_unpassed_order">申请中</string>
+    <string name="tab_passed_order">已审核</string>
+    <string name="tab_finished_order">已完成</string>
+    <string name="main_action_menu_item2">注销账户</string>
+    <string name="tab_overdue_order">已逾期</string>
+    <string name="user_info_modified">修改成功</string>
 
 </resources>

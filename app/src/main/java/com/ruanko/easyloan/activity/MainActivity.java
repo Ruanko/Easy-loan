@@ -16,32 +16,40 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.avos.avoscloud.AVFile;
 import com.avos.avoscloud.AVUser;
+import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 import com.ruanko.easyloan.R;
 import com.ruanko.easyloan.adapter.MainFragmentPagerAdapter;
+import com.ruanko.easyloan.data.UserContract;
 import com.ruanko.easyloan.fragment.AccountFragment;
 import com.ruanko.easyloan.fragment.HomeFragment;
 import com.ruanko.easyloan.fragment.OrderFragment;
+import com.squareup.picasso.Picasso;
+
+import static com.ruanko.easyloan.utilities.ImageUtils.getRoundedTransformation;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener,
+        AccountFragment.UserInfoChangedListener {
+    private Toolbar mToolbar;
     // For tab layout
-    private TabLayout tabLayout;
-    private ViewPager viewPager;
-    private FloatingActionButton floatButtonAddOrder;
-    private FloatingActionButton floatButtonModifyInfo;
-
-    private boolean isSignIn = false;
+    private TabLayout mTabLayoutForOrderList;
+    private ViewPager mViewPager;
+    private FloatingActionButton mFloatButtonAddOrder;
+    private FloatingActionButton mFloatButtonModifyInfo;
 
     // For drawer
-    private NavigationView navigationView;
-    private DrawerLayout drawerLayout;
+    private NavigationView mNavigationView;
+    private DrawerLayout mDrawerLayout;
 
-    // user
-    AVUser avUser;
+    // bottom navigation
+    private BottomNavigationViewEx mBottomNavigationViewEx;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,91 +57,63 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         // 警告：以下耦合度极其高，注意调用顺序
         initView();
-        checkAccountState();
         initNavigation();
         initTabLayout();
         initFloatingActionButton();
-        selectTab();
-        if (!isSignIn) {
-            Intent intent = new Intent(this, LoginActivity.class);
-            startActivity(intent);
-        }
-    }
-
-    private void selectTab() {
-        Intent intent = getIntent();
-        if (intent.hasExtra(Intent.EXTRA_TEXT)) {
-            try {
-                if (intent.getStringExtra(Intent.EXTRA_TEXT).equals("account")) {
-                    tabLayout.getTabAt(2).select();
-                } else if (intent.getStringExtra(Intent.EXTRA_TEXT).equals("order")) {
-                    tabLayout.getTabAt(1).select();
-                } else {
-                    tabLayout.getTabAt(0).select();
-                }
-            } catch (NullPointerException e) {
-            }
-
-        }
     }
     // for some views
 
     private void initView() {
-        drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-        navigationView = (NavigationView) findViewById(R.id.nav_view);
+        mTabLayoutForOrderList = (TabLayout) findViewById(R.id.tab_layout_for_orders);
+        mBottomNavigationViewEx = (BottomNavigationViewEx) findViewById(R.id.bottom_navigation);
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        mNavigationView = (NavigationView) findViewById(R.id.nav_view);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_main);
-        setSupportActionBar(toolbar);
 
-        drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        mToolbar = (Toolbar) findViewById(R.id.toolbar_main);
+        setSupportActionBar(mToolbar);
+
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawerLayout.addDrawerListener(toggle);
+                this, mDrawerLayout, mToolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        mDrawerLayout.addDrawerListener(toggle);
         toggle.syncState();
     }
 
     private void initNavigation() {
-        navigationView.setNavigationItemSelectedListener(this);
-        View headerView = navigationView.getHeaderView(0);
-        final LinearLayout nav_header = (LinearLayout) headerView.findViewById(R.id.nav_header);
-        TextView navHeadName = (TextView) nav_header.findViewById(R.id.name_nav_header);
-        TextView navHeadInfo = (TextView) nav_header.findViewById(R.id.info_nav_header);
-        if (isSignIn) {
+        mNavigationView.setNavigationItemSelectedListener(this);
+        View headerView = mNavigationView.getHeaderView(0);
+        final LinearLayout navHeaderRoot = (LinearLayout) headerView.findViewById(R.id.nav_header);
+        TextView navHeadName = (TextView) navHeaderRoot.findViewById(R.id.name_nav_header);
+        TextView navHeadInfo = (TextView) navHeaderRoot.findViewById(R.id.info_nav_header);
+        ImageView avatarImageView = (ImageView) navHeaderRoot.findViewById(R.id.round_image_view_head);
+        AVUser avUser = AVUser.getCurrentUser();
+        if (avUser != null) {
             navHeadName.setText(avUser.getUsername());
-            if (avUser.getMobilePhoneNumber() != null) {
-                navHeadInfo.setText(avUser.getMobilePhoneNumber());
+            navHeadInfo.setText(avUser.getMobilePhoneNumber());
+            AVFile avFile = avUser.getAVFile(UserContract.UserEntry.COLUMN_AVATAR);
+            if (avFile != null) {
+                Picasso.with(this)
+                        .load(avFile.getUrl())
+                        .transform(getRoundedTransformation())
+                        .fit()
+                        .into(avatarImageView);
+            } else {
+                Picasso.with(this)
+                        .load(R.drawable.default_header)
+                        .transform(getRoundedTransformation())
+                        .fit()
+                        .into(avatarImageView);
             }
-        }
-        else {
+
+        } else {
             navHeadName.setText(getString(R.string.nav_header_text));
             navHeadInfo.setText(getString(R.string.nav_header_info));
         }
-        nav_header.setOnClickListener(new View.OnClickListener() {
+        avatarImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!isSignIn) {
-                    Intent intent = new Intent(MainActivity.this, LoginActivity.class);
-                    startActivity(intent);
-                    DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-                    drawer.closeDrawer(GravityCompat.START);
-                    finish();
-                }
-                else {
-                    new AlertDialog.Builder(MainActivity.this)
-                            .setTitle(getString(R.string.sign_out_alert_title))
-                            .setMessage(getString(R.string.sign_out_alert_text))
-                            .setPositiveButton(getString(R.string.dialog_ok), new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialogInterface, int i) {
-                                    avUser.logOut();
-                                    isSignIn = false;
-                                    initNavigation();
-                                    //startActivity(new Intent(MainActivity.this, LoginActivity.class));
-                                }
-                            })
-                            .setNegativeButton(getString(R.string.dialog_cancel), null)
-                            .show();
-                }
+                mDrawerLayout.closeDrawer(GravityCompat.START);
+//                mViewPager.getChildAt(2).setSelected(true);
             }
         });
 
@@ -141,10 +121,10 @@ public class MainActivity extends AppCompatActivity
 
     // floating action button
     private void initFloatingActionButton() {
-        this.floatButtonAddOrder = (FloatingActionButton) findViewById(R.id.fab_main_add_order);
-        this.floatButtonModifyInfo = (FloatingActionButton) findViewById(R.id.fab_main_modify_info);
+        this.mFloatButtonAddOrder = (FloatingActionButton) findViewById(R.id.fab_main_add_order);
+        this.mFloatButtonModifyInfo = (FloatingActionButton) findViewById(R.id.fab_main_modify_info);
         // 只在第二个Tab显示浮动按钮
-        this.viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+        this.mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 
@@ -153,14 +133,20 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onPageSelected(int position) {
                 if (position == 1) {
-                    floatButtonAddOrder.show();
-                    floatButtonModifyInfo.hide();
+                    mFloatButtonAddOrder.show();
+                    mFloatButtonModifyInfo.hide();
+                    mTabLayoutForOrderList.setVisibility(View.VISIBLE);
+                    mToolbar.setVisibility(View.GONE);
                 } else if (position == 2) {
-                    floatButtonModifyInfo.show();
-                    floatButtonAddOrder.hide();
+                    mFloatButtonModifyInfo.show();
+                    mFloatButtonAddOrder.hide();
+                    mTabLayoutForOrderList.setVisibility(View.GONE);
+                    mToolbar.setVisibility(View.VISIBLE);
                 } else {
-                    floatButtonModifyInfo.hide();
-                    floatButtonAddOrder.hide();
+                    mTabLayoutForOrderList.setVisibility(View.GONE);
+                    mFloatButtonModifyInfo.hide();
+                    mFloatButtonAddOrder.hide();
+                    mToolbar.setVisibility(View.VISIBLE);
                 }
             }
 
@@ -169,47 +155,28 @@ public class MainActivity extends AppCompatActivity
 
             }
         });
-        floatButtonAddOrder.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(MainActivity.this, ApplyActivity.class));
-
-            }
-        });
-        floatButtonModifyInfo.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(MainActivity.this, UserInfoActivity.class));
-//                Snackbar.make(view, getString(R.string.snack_bar_main_info), Snackbar.LENGTH_LONG)
-//                        .setAction(getString(R.string.snack_bar_main_action), new View.OnClickListener() {
-//                            @Override
-//                            public void onClick(View view) {
-//
-//                            }
-//                        }).show();
-            }
-        });
     }
 
     // for tab layout
     private void initTabLayout() {
-        viewPager = (ViewPager) findViewById(R.id.view_pager_main);
-        //initViewPager(viewPager);
+        mViewPager = (ViewPager) findViewById(R.id.view_pager_main);
+        //initViewPager(mViewPager);
 
         MainFragmentPagerAdapter adapter = new MainFragmentPagerAdapter(getSupportFragmentManager());
         adapter.addFragment(new HomeFragment(), getString(R.string.tab_home));
         adapter.addFragment(new OrderFragment(), getString(R.string.tab_orders));
         adapter.addFragment(new AccountFragment(), getString(R.string.tab_account));
-        viewPager.setAdapter(adapter);
-        tabLayout = (TabLayout) findViewById(R.id.tab_layout_main);
-        tabLayout.setupWithViewPager(viewPager);
+        mViewPager.setAdapter(adapter);
+        mBottomNavigationViewEx.setupWithViewPager(mViewPager);
+//        mTabLayout = (TabLayout) findViewById(R.id.tab_layout_main);
+//        mTabLayout.setupWithViewPager(mViewPager);
     }
 
     // For navigation
     @Override
     public void onBackPressed() {
-        if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
-            drawerLayout.closeDrawer(GravityCompat.START);
+        if (mDrawerLayout.isDrawerOpen(GravityCompat.START)) {
+            mDrawerLayout.closeDrawer(GravityCompat.START);
         }
         Intent intent = new Intent(Intent.ACTION_MAIN);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -224,12 +191,13 @@ public class MainActivity extends AppCompatActivity
 
         switch (item.getItemId()) {
             case R.id.nav_item1:
-//                intent.setClass(this, RecyclerViewActivity.class);
-//                startActivity(intent);
+                mDrawerLayout.closeDrawer(GravityCompat.START);
+//                mTabLayout.getTabAt(0).select();
                 break;
 
             case R.id.nav_item2:
-//                startActivity(intent);
+                mDrawerLayout.closeDrawer(GravityCompat.START);
+//                mTabLayout.getTabAt(1).select();
                 break;
 
             case R.id.nav_item3:
@@ -247,7 +215,7 @@ public class MainActivity extends AppCompatActivity
                 break;
         }
 
-        drawerLayout.closeDrawer(GravityCompat.START);
+        mDrawerLayout.closeDrawer(GravityCompat.START);
         return true;
     }
 
@@ -262,14 +230,33 @@ public class MainActivity extends AppCompatActivity
         int itemId = item.getItemId();
         switch (itemId) {
             case R.id.action_menu_main_1:
-                Intent intent = new Intent();
+                startActivity(new Intent(this, ApplyActivity.class));
+                break;
+            case R.id.action_menu_main_2:
+                new AlertDialog.Builder(MainActivity.this)
+                        .setTitle(getString(R.string.sign_out_alert_title))
+                        .setMessage(getString(R.string.sign_out_alert_text))
+                        .setPositiveButton(getString(R.string.dialog_ok), new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                AVUser user = AVUser.getCurrentUser();
+                                user.logOut();
+                                MainActivity.this.finish();
+                                startActivity(new Intent(MainActivity.this, LoginActivity.class));
+                            }
+                        })
+                        .setNegativeButton(getString(R.string.dialog_cancel), null)
+                        .show();
+                break;
+
         }
         return super.onOptionsItemSelected(item);
     }
 
-    // check if login
-    private void checkAccountState() {
-        this.avUser = AVUser.getCurrentUser();
-        this.isSignIn = avUser != null;
+    @Override
+    public void OnUserInfoChanged() {
+        Toast.makeText(this, "界面已更新", Toast.LENGTH_LONG).show();
+        initNavigation();
     }
+
 }

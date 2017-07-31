@@ -22,6 +22,7 @@ import com.avos.avoscloud.AVException;
 import com.avos.avoscloud.AVUser;
 import com.avos.avoscloud.SignUpCallback;
 import com.ruanko.easyloan.R;
+import com.ruanko.easyloan.data.UserContract;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -105,6 +106,8 @@ public class RegisterActivity extends AppCompatActivity {
             user.setUsername(username);// 设置用户名
             user.setPassword(password);// 设置密码
             user.setMobilePhoneNumber(phone);
+            user.put(UserContract.UserEntry.COLUMN_LEVEL, UserContract.INIT_LEVEL);
+            user.put(UserContract.UserEntry.COLUMN_LEVEL, UserContract.USER_ROLE);
             user.signUpInBackground(new SignUpCallback() {
                 @Override
                 public void done(AVException e) {

@@ -12,9 +12,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.AlphaAnimation;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -33,11 +30,11 @@ import java.util.List;
 public class OrderListAdapter extends RecyclerView.Adapter<OrderListAdapter.OrderListViewHolder> {
 
     private Context context;
-    private List<AVObject> orderList;
+    private List<AVObject> mOrderList;
 
     public OrderListAdapter(Context context, List<AVObject> orders) {
         this.context = context;
-        this.orderList = orders;
+        this.mOrderList = orders;
     }
 
     @Override
@@ -49,7 +46,7 @@ public class OrderListAdapter extends RecyclerView.Adapter<OrderListAdapter.Orde
 
     @Override
     public void onBindViewHolder(final OrderListViewHolder holder, final int position) {
-        AVObject orderObject = orderList.get(position);
+        AVObject orderObject = mOrderList.get(position);
         String title = orderObject.getString(OrderContract.OrderEntry.COLUMN_TITLE);
         holder.titleText.setText(title);
         int amount = orderObject.getInt(OrderContract.OrderEntry.COLUMN_AMOUNT);
@@ -57,25 +54,25 @@ public class OrderListAdapter extends RecyclerView.Adapter<OrderListAdapter.Orde
         Date date = orderObject.getDate(OrderContract.OrderEntry.COLUMN_DEADLINE);
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
         holder.dateText.setText("最后还款日期：" + simpleDateFormat.format(date));
-        Animation animation = AnimationUtils.loadAnimation(context, R.anim.anim_recycler_item_show);
-        holder.mView.startAnimation(animation);
+//        Animation animation = AnimationUtils.loadAnimation(context, R.anim.anim_recycler_item_show);
+//        holder.mView.startAnimation(animation);
         holder.initRoundIcon(String.valueOf(title.charAt(0)));
 
-        AlphaAnimation aa1 = new AlphaAnimation(1.0f, 0.1f);
-        aa1.setDuration(400);
-        holder.roundIcon.startAnimation(aa1);
-
-        AlphaAnimation aa = new AlphaAnimation(0.1f, 1.0f);
-        aa.setDuration(400);
-
-        holder.roundIcon.startAnimation(aa);
+//        AlphaAnimation aa1 = new AlphaAnimation(1.0f, 0.1f);
+//        aa1.setDuration(400);
+//        holder.roundIcon.startAnimation(aa1);
+//
+//        AlphaAnimation aa = new AlphaAnimation(0.1f, 1.0f);
+//        aa.setDuration(400);
+//
+//        holder.roundIcon.startAnimation(aa);
 
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 // 点击进入详情
                 Intent intent = new Intent(context, OrderDetailActivity.class);
-                intent.putExtra("orderObjectId", orderList.get(position).getObjectId());
+                intent.putExtra("orderObjectId", mOrderList.get(position).getObjectId());
                 context.startActivity(intent, ActivityOptions.makeSceneTransitionAnimation
                         ((Activity) context, holder.roundIcon, "orderDetail").toBundle());
             }
@@ -84,7 +81,17 @@ public class OrderListAdapter extends RecyclerView.Adapter<OrderListAdapter.Orde
 
     @Override
     public int getItemCount() {
-        return orderList.size();
+        return mOrderList.size();
+    }
+
+    public void updateData(List<AVObject> orderList) {
+        if (orderList != null) {
+            int previousSize = orderList.size();
+            mOrderList.clear();
+            notifyItemRangeRemoved(0, previousSize);
+            mOrderList.addAll(orderList);
+            notifyItemRangeInserted(0, orderList.size());
+        }
     }
 
     class OrderListViewHolder extends RecyclerView.ViewHolder {

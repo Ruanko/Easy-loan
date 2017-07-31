@@ -1,5 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string-array name="credit_levels">
+        <item>@string/arc_final_text_level5</item>
+        <item>@string/arc_final_text_level4</item>
+        <item>@string/arc_final_text_level3</item>
+        <item>@string/arc_final_text_level2</item>
+        <item>@string/arc_final_text_level1</item>
+    </string-array>
+    <string-array name="relation">
+        <item>父母</item>
+        <item>兄弟姐妹</item>
+        <item>朋友</item>
+        <item>其他</item>
+    </string-array>
     <string-array name="by_stage_spinner">   <!--  分期期数得到后的结果  -->
         <item>不分期</item>
         <item>分3期</item>
@@ -30,8 +43,8 @@
     <string-array name="sex_person">   <!--  性别  -->
         <item>男</item>
         <item>女</item>
+        <item>变性人</item>
         <item>保密</item>
-        <item>不详</item>
     </string-array>
     <string-array name="province">   <!--  地区  -->
         <item>北京</item>
@@ -41,10 +54,30 @@
         <item>浙江</item>
     </string-array>
     <string-array name="school">   <!-- 学校  -->
-        <item>北京大学,清华大学,北京师范大学</item>
+        <item>北京大学,清华大学</item>
         <item>天津大学,南开大学</item>
         <item>燕山大学,河北大学</item>
         <item>山西大学,太原理工大学</item>
         <item>浙江大学,杭州大学</item>
+    </string-array>
+    <string-array name="school0">   <!-- 学校  -->
+        <item>北京大学</item>
+        <item>清华大学</item>
+    </string-array>
+    <string-array name="school1">   <!-- 学校  -->
+        <item>天津大学</item>
+        <item>南开大学</item>
+    </string-array>
+    <string-array name="school2">   <!-- 学校  -->
+        <item>燕山大学</item>
+        <item>河北大学</item>
+    </string-array>
+    <string-array name="school3">   <!-- 学校  -->
+        <item>山西大学</item>
+        <item>太原理工大学</item>
+    </string-array>
+    <string-array name="school4">   <!-- 学校  -->
+        <item>浙江大学</item>
+        <item>杭州大学</item>
     </string-array>
 </resources>

@@ -68,13 +68,13 @@ public class HomeFragment extends Fragment {
     }
 
     private void initDecoView(final List<Float> data) {
-        mDecoView3 = this.rootView.findViewById(R.id.dynamicArcView1);
-        mDecoView2 = this.rootView.findViewById(R.id.dynamicArcView2);
-        mDecoView1 = this.rootView.findViewById(R.id.dynamicArcView3);
+        mDecoView3 = (DecoView) this.rootView.findViewById(R.id.dynamicArcView1);
+        mDecoView2 = (DecoView)this.rootView.findViewById(R.id.dynamicArcView2);
+        mDecoView1 = (DecoView)this.rootView.findViewById(R.id.dynamicArcView3);
         DecoView[] decoViews = {mDecoView1, mDecoView2, mDecoView3};
 
-        textPercentage = this.rootView.findViewById(R.id.tv_percentage);
-        textBelowPercentage = rootView.findViewById(R.id.tv_below_percentage);
+        textPercentage = (TextView) this.rootView.findViewById(R.id.tv_percentage);
+        textBelowPercentage = (TextView) rootView.findViewById(R.id.tv_below_percentage);
         int delay = 300;
         createBackSeries(mDecoView2);
         for (int i = 0; i < data.size(); i++) {
@@ -170,46 +170,4 @@ public class HomeFragment extends Fragment {
         textPercentage.setText(String.valueOf((int)score));
         textBelowPercentage.setText(getCreditLevel(score));
     }
-
-//    private void otherEvents() {
-//        mDecoView.addEvent(new DecoEvent.Builder(0).setIndex(mSeries3Index).setDelay(16000).build());
-//
-//        mDecoView.addEvent(new DecoEvent.Builder(0).setIndex(mSeries2Index).setDelay(16000).build());
-//
-//        mDecoView.addEvent(new DecoEvent.Builder(0)
-//                .setIndex(mSeries1Index)
-//                .setDelay(20000)
-//                .setDuration(1000)
-//                .setInterpolator(new AnticipateInterpolator())
-//                .setListener(new DecoEvent.ExecuteEventListener() {
-//                    @Override
-//                    public void onEventStart(DecoEvent decoEvent) {
-//
-//                    }
-//
-//                    @Override
-//                    public void onEventEnd(DecoEvent decoEvent) {
-//                        resetText();
-//                    }
-//                })
-//                .build());
-//
-//        mDecoView.addEvent(new DecoEvent.Builder(DecoDrawEffect.EffectType.EFFECT_SPIRAL_EXPLODE)
-//                .setIndex(mSeries1Index)
-//                .setDelay(21000)
-//                .setDuration(3000)
-//                .setDisplayText("GOAL!")
-//                .setListener(new DecoEvent.ExecuteEventListener() {
-//                    @Override
-//                    public void onEventStart(DecoEvent decoEvent) {
-//
-//                    }
-//
-//                    @Override
-//                    public void onEventEnd(DecoEvent decoEvent) {
-//                        createEvents();
-//                    }
-//                })
-//                .build());
-//    }
 }
