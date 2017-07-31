@@ -117,23 +117,23 @@ public class AccountFragment extends Fragment {
         AVUser user = AVUser.getCurrentUser();
         if (user != null) {
             int score = 100;
-            if (user.getEmail().length() == 0){
+            if (user.getEmail() == null || user.getEmail().length() == 0) {
                 score -= 10;
             }
-            if (user.getString(UserContract.UserEntry.COLUMN_REAL_NAME).length() == 0) {
+            if (user.getString(UserContract.UserEntry.COLUMN_REAL_NAME) == null || user.getString(UserContract.UserEntry.COLUMN_REAL_NAME).length() == 0) {
                 score -= 10;
             }
-            if (user.getString(UserContract.UserEntry.COLUMN_HOME).length() == 0) {
+            if (user.getString(UserContract.UserEntry.COLUMN_REAL_NAME) == null || user.getString(UserContract.UserEntry.COLUMN_HOME).length() == 0) {
                 score -= 10;
             }
-            if (user.getString(UserContract.UserEntry.COLUMN_RELATIVE_NAME).length() == 0) {
+            if (user.getString(UserContract.UserEntry.COLUMN_REAL_NAME) == null || user.getString(UserContract.UserEntry.COLUMN_RELATIVE_NAME).length() == 0) {
                 score -= 10;
             }
-            if (user.getString(UserContract.UserEntry.COLUMN_SCHOOL).length() == 0) {
+            if (user.getString(UserContract.UserEntry.COLUMN_REAL_NAME) == null || user.getString(UserContract.UserEntry.COLUMN_SCHOOL).length() == 0) {
                 score -= 10;
             }
 
-            if (user.getString(UserContract.UserEntry.COLUMN_ID_CARD).length() == 0) {
+            if (user.getString(UserContract.UserEntry.COLUMN_REAL_NAME) == null || user.getString(UserContract.UserEntry.COLUMN_ID_CARD).length() == 0) {
                 score -= 10;
             }
 
@@ -152,8 +152,7 @@ public class AccountFragment extends Fragment {
                         .fit()
                         .transform(getRoundedTransformation())
                         .into(mUserHeadImage);
-            }
-            else {
+            } else {
                 Picasso.with(context)
                         .load(R.drawable.default_header)
                         .fit()
@@ -171,9 +170,8 @@ public class AccountFragment extends Fragment {
             String[] level_list = getResources().getStringArray(R.array.credit_levels);
             if (level < 50) {
                 mLevelTextView.setText(level_list[0]);
-            }
-            else {
-                mLevelTextView.setText(level_list[(int) ((level-50)/10)]);
+            } else {
+                mLevelTextView.setText(level_list[(int) ((level - 50) / 10)]);
             }
 
 
@@ -234,8 +232,7 @@ public class AccountFragment extends Fragment {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-        }
-        else if (requestCode == UserInfoActivity.USER_INFO_ACTIVITY_REQUEST_CODE
+        } else if (requestCode == UserInfoActivity.USER_INFO_ACTIVITY_REQUEST_CODE
                 && resultCode == Activity.RESULT_OK) {
             loadData();
         }
