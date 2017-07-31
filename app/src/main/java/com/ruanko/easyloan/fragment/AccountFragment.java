@@ -89,8 +89,8 @@ public class AccountFragment extends Fragment {
         mSchoolTextView = (TextView) mRootView.findViewById(R.id.tv_school_account_center);
         mMailTextView = (TextView) mRootView.findViewById(R.id.tv_mail_account_center);
 
-        mLevelTextView = (TextView) mRootView.findViewById(R.id.tv_review_account_center);
-        mInfoIntegrityTextView = (TextView) mRootView.findViewById(R.id.tv_info_account_center);
+        mLevelTextView = (TextView) mRootView.findViewById(R.id.tv_credit_account_center);
+        mInfoIntegrityTextView = (TextView) mRootView.findViewById(R.id.tv_info_level_account_center);
         mUserHeadImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -107,7 +107,8 @@ public class AccountFragment extends Fragment {
         mFloatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(getContext(), UserInfoActivity.class));
+                startActivityForResult(new Intent(getContext(), UserInfoActivity.class),
+                        UserInfoActivity.USER_INFO_ACTIVITY_REQUEST_CODE);
             }
         });
     }
@@ -115,6 +116,27 @@ public class AccountFragment extends Fragment {
     private void loadData() {
         AVUser user = AVUser.getCurrentUser();
         if (user != null) {
+            int score = 100;
+            if (user.getEmail().length() == 0){
+                score -= 10;
+            }
+            if (user.getString(UserContract.UserEntry.COLUMN_REAL_NAME).length() == 0) {
+                score -= 10;
+            }
+            if (user.getString(UserContract.UserEntry.COLUMN_HOME).length() == 0) {
+                score -= 10;
+            }
+            if (user.getString(UserContract.UserEntry.COLUMN_RELATIVE_NAME).length() == 0) {
+                score -= 10;
+            }
+            if (user.getString(UserContract.UserEntry.COLUMN_SCHOOL).length() == 0) {
+                score -= 10;
+            }
+
+            if (user.getString(UserContract.UserEntry.COLUMN_ID_CARD).length() == 0) {
+                score -= 10;
+            }
+
             mNameTextView.setText(user.getUsername());
             mInfoTextView.setText(user.getMobilePhoneNumber());
             mPhoneTextView.setText(user.getMobilePhoneNumber());
@@ -138,6 +160,22 @@ public class AccountFragment extends Fragment {
                         .transform(getRoundedTransformation())
                         .into(mUserHeadImage);
             }
+            int level = user.getInt(UserContract.UserEntry.COLUMN_LEVEL);
+            if (user.getInt(UserContract.UserEntry.COLUMN_INFO_LEVEL) != score) {
+                user.put(UserContract.UserEntry.COLUMN_INFO_LEVEL, score);
+                level = (int) (score * 0.5 + 0.5 * user.getInt(UserContract.UserEntry.COLUMN_TRADE_LEVEL));
+                user.put(UserContract.UserEntry.COLUMN_LEVEL, level);
+                user.saveInBackground();
+            }
+            mInfoIntegrityTextView.setText(score + "%");
+            String[] level_list = getResources().getStringArray(R.array.credit_levels);
+            if (level < 50) {
+                mLevelTextView.setText(level_list[0]);
+            }
+            else {
+                mLevelTextView.setText(level_list[(int) ((level-50)/10)]);
+            }
+
 
 //            user.fetchInBackground(new GetCallback<AVObject>() {
 //                @Override
@@ -165,7 +203,6 @@ public class AccountFragment extends Fragment {
         mMailTextView.setText("");
         mLevelTextView.setText("");
         mInfoIntegrityTextView.setText("");
-
     }
 
     @Override
@@ -197,6 +234,10 @@ public class AccountFragment extends Fragment {
             } catch (IOException e) {
                 e.printStackTrace();
             }
+        }
+        else if (requestCode == UserInfoActivity.USER_INFO_ACTIVITY_REQUEST_CODE
+                && resultCode == Activity.RESULT_OK) {
+            loadData();
         }
     }
 }

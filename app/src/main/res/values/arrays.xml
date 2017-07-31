@@ -1,5 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string-array name="credit_levels">
+        <item>@string/arc_final_text_level5</item>
+        <item>@string/arc_final_text_level4</item>
+        <item>@string/arc_final_text_level3</item>
+        <item>@string/arc_final_text_level2</item>
+        <item>@string/arc_final_text_level1</item>
+    </string-array>
+    <string-array name="relation">
+        <item>父母</item>
+        <item>兄弟姐妹</item>
+        <item>朋友</item>
+        <item>其他</item>
+    </string-array>
     <string-array name="by_stage_spinner">   <!--  分期期数得到后的结果  -->
         <item>不分期</item>
         <item>分3期</item>
