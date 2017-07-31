@@ -11,11 +11,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.avos.avoscloud.AVUser;
 import com.hookedonplay.decoviewlib.DecoView;
 import com.hookedonplay.decoviewlib.charts.DecoDrawEffect;
 import com.hookedonplay.decoviewlib.charts.SeriesItem;
 import com.hookedonplay.decoviewlib.events.DecoEvent;
 import com.ruanko.easyloan.R;
+import com.ruanko.easyloan.data.UserContract;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -59,12 +61,20 @@ public class HomeFragment extends Fragment {
         COLORS.add(ContextCompat.getColor(getContext(), R.color.google_blue));
         COLORS.add(ContextCompat.getColor(getContext(), R.color.google_yellow));
         COLORS.add(ContextCompat.getColor(getContext(), R.color.google_red));
-        DATA = new ArrayList<>();
-        DATA.add(22f);
-        DATA.add(66f);
-        DATA.add(86f);
+        loadData();
         initDecoView(DATA);
         return this.rootView;
+    }
+
+    private void loadData(){
+        DATA = new ArrayList<>();
+        AVUser user = AVUser.getCurrentUser();
+        int score1 = user.getInt(UserContract.UserEntry.COLUMN_LEVEL);
+        int score2 = user.getInt(UserContract.UserEntry.COLUMN_INFO_LEVEL);
+        int score3 = user.getInt(UserContract.UserEntry.COLUMN_TRADE_LEVEL);
+        DATA.add((float)score1);
+        DATA.add((float)score2);
+        DATA.add((float)score3);
     }
 
     private void initDecoView(final List<Float> data) {

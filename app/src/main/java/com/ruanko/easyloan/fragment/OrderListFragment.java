@@ -34,7 +34,7 @@ import com.ruanko.easyloan.adapter.OrderListAdapter;
 import com.ruanko.easyloan.data.OrderContract;
 
 import java.util.ArrayList;
-import java.util.Date;
+import java.util.Arrays;
 import java.util.List;
 
 public class OrderListFragment extends Fragment
@@ -137,29 +137,25 @@ public class OrderListFragment extends Fragment
 
     private void loadData() {
         int tabAt = (int) getArguments().get("tab_at");
-        AVQuery<AVObject> avQuery;
-        avQuery = new AVQuery<>(OrderContract.OrderEntry.TABLE_NAME);
-        avQuery.whereEqualTo(OrderContract.OrderEntry.COLUMN_OWNER, AVUser.getCurrentUser());
-        if (tabAt == 0) {
-            avQuery.orderByDescending("createdAt");
-        }
-        else if (tabAt == 1) {
-            avQuery.whereEqualTo(OrderContract.OrderEntry.COLUMN_STATUS, OrderContract.Status.GRANT);
-            avQuery.orderByDescending(OrderContract.OrderEntry.COLUMN_DEADLINE);
+        AVQuery<AVObject> avQuery1;
+        avQuery1 = new AVQuery<>(OrderContract.OrderEntry.TABLE_NAME);
+
+        if (tabAt == 1) {
+            avQuery1.whereEqualTo(OrderContract.OrderEntry.COLUMN_STATUS, OrderContract.Status.GRANT);
         }
         else if (tabAt == 2) {
-            avQuery.whereEqualTo(OrderContract.OrderEntry.COLUMN_STATUS, OrderContract.Status.PENDING);
-            avQuery.orderByDescending("createAt");
+            avQuery1.whereEqualTo(OrderContract.OrderEntry.COLUMN_STATUS, OrderContract.Status.PENDING);
         }
         else if (tabAt == 3) {
-            avQuery.whereEqualTo(OrderContract.OrderEntry.COLUMN_STATUS, OrderContract.Status.DONE);
-            avQuery.orderByDescending("createAt");
+            avQuery1.whereEqualTo(OrderContract.OrderEntry.COLUMN_STATUS, OrderContract.Status.DONE);
         }
         else if (tabAt == 4) {
-            avQuery.whereEqualTo(OrderContract.OrderEntry.COLUMN_STATUS, OrderContract.Status.OVERDUE);
-            avQuery.whereLessThan(OrderContract.OrderEntry.COLUMN_DEADLINE, new Date());
-            avQuery.orderByDescending("createAt");
+            avQuery1.whereEqualTo(OrderContract.OrderEntry.COLUMN_STATUS, OrderContract.Status.OVERDUE);
         }
+        AVQuery<AVObject> avQuery2 = new AVQuery<>(OrderContract.OrderEntry.TABLE_NAME);
+        avQuery2.whereEqualTo(OrderContract.OrderEntry.COLUMN_OWNER, AVUser.getCurrentUser());
+        AVQuery<AVObject> avQuery = AVQuery.and(Arrays.asList(avQuery1, avQuery2));
+        avQuery.orderByDescending(OrderContract.OrderEntry.COLUMN_DEADLINE);
         avQuery.findInBackground(new FindCallback<AVObject>() {
             @Override
             public void done(List<AVObject> list, AVException e) {
