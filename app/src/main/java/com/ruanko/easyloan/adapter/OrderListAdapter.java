@@ -77,6 +77,8 @@ public class OrderListAdapter extends RecyclerView.Adapter<OrderListAdapter.Orde
                         ((Activity) context, holder.roundIcon, "orderDetail").toBundle());
             }
         });
+
+        //08/01
     }
 
     @Override

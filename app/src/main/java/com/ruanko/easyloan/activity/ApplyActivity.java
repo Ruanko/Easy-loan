@@ -22,6 +22,7 @@ import com.avos.avoscloud.AVUser;
 import com.avos.avoscloud.SaveCallback;
 import com.ruanko.easyloan.R;
 import com.ruanko.easyloan.data.OrderContract;
+import com.ruanko.easyloan.utilities.DateUtils;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -96,6 +97,11 @@ public class ApplyActivity extends AppCompatActivity {
         if ("".equals(bankAccountEt.getText().toString())) {
             Toast.makeText(ApplyActivity.this, "请输入账户", Toast.LENGTH_SHORT).show();
             bankAccountEt.requestFocus();
+            return false;
+        }
+
+        if (DateUtils.differentDays(new Date(), calendar.getTime()) < 0) {
+            Toast.makeText(ApplyActivity.this, "请选择正确的日期", Toast.LENGTH_SHORT).show();
             return false;
         }
         return true;

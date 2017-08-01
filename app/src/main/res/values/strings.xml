@@ -109,5 +109,19 @@
     <string name="main_action_menu_item2">注销账户</string>
     <string name="tab_overdue_order">已逾期</string>
     <string name="user_info_modified">修改成功</string>
+    <string name="alipay_account">a6x00993tus34lwjnovdt9c</string>
+    <string name="action_repay">立即还款</string>
+    <string name="action_delete_order">删除记录</string>
+    <string name="action_undo_apply">确认</string>
+    <string name="snack_bar_undo_order">确定？撤销申请将不可恢复。</string>
+    <string name="snack_bar_redo">撤销</string>
+    <string name="snack_bar_confirm">确定</string>
+    <string name="alipay_not_installed">未安装支付宝客户端！</string>
+    <string name="snack_bar_goto_web">扫码支付</string>
+    <string name="wechat_qrcode_url">http://junwen.qiniudn.com/Fg0bjJ0FeWKnWe_5l_LnZt50boLc</string>
+    <string name="alipay_qrcode_url">http://junwen.qiniudn.com/Fr6azl-_m7FMI0Ur3NGqaD0zild_</string>
+    <string name="dialog_goto_alipay">去支付宝</string>
+    <string name="dialog_done">好</string>
+    <string name="repay_notice">扫码使用微信转账，或去支付宝客户端转账</string>
 
 </resources>
