@@ -70,7 +70,7 @@
     <string name="transaction_record">交易记录</string>
     <string name="info_integrity">信息完整</string>
     <string name="help_info_title">Tips: 如何提高信誉度</string>
-    <string name="help_info_content">完善个人信息，保证信息的正确度；按时还款避免逾期</string>
+    <string name="help_info_content">完善个人信息; 多使用E贷借款; 按时还款，避免逾期</string>
     <string name="order_count_label">借款次数</string>
     <string name="recent_deadline_label">近期待还</string>
     <string name="total_loan_label">全部待还</string>
