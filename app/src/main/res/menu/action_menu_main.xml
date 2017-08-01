@@ -7,4 +7,5 @@
         app:showAsAction="always"
         android:icon="@drawable/ic_add_white_24dp"
         android:title="@string/main_action_menu_item1" />
+
 </menu>

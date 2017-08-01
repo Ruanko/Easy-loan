@@ -229,8 +229,11 @@ public class MainActivity extends AppCompatActivity
         switch (itemId) {
             case R.id.action_menu_main_1:
                 startActivity(new Intent(this, ApplyActivity.class));
-                break;
-
+                return true;
+            case R.id.action_menu_account1:
+                return false;
+            case R.id.action_menu_account2:
+                return false;
         }
         return super.onOptionsItemSelected(item);
     }

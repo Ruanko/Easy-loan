@@ -5,12 +5,10 @@
         android:id="@+id/action_menu_account1"
         android:orderInCategory="2"
         app:showAsAction="never"
-        android:visible="false"
         android:title="@string/main_action_menu_item2" />
     <item
         android:id="@+id/action_menu_account2"
         android:orderInCategory="3"
         app:showAsAction="never"
-        android:visible="false"
         android:title="@string/main_action_menu_item3" />
 </menu>

@@ -106,8 +106,8 @@ public class AccountFragment extends Fragment {
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         menu.clear();
-        inflater.inflate(R.menu.action_menu_account, menu);
         super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.action_menu_account, menu);
     }
 
     @Override
@@ -128,7 +128,7 @@ public class AccountFragment extends Fragment {
                         })
                         .setNegativeButton(getString(R.string.dialog_cancel), null)
                         .show();
-                break;
+                return true;
             case R.id.action_menu_account2:
                 BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(getContext());
                 View dialogView = getActivity().getLayoutInflater().inflate(R.layout.dialog_reset_password, null);
@@ -165,6 +165,7 @@ public class AccountFragment extends Fragment {
                 });
                 bottomSheetDialog.show();
                 emailTextView.requestFocus();
+                return true;
         }
         return super.onOptionsItemSelected(item);
     }
