@@ -135,23 +135,10 @@
                 android:textAppearance="@style/TextAppearance.AppCompat.Caption" />
 
             <com.hookedonplay.decoviewlib.DecoView xmlns:custom="http://schemas.android.com/apk/res-auto"
-                android:id="@+id/dynamicArcView1"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                custom:dv_lineWidth="12dp" />
-
-            <com.hookedonplay.decoviewlib.DecoView xmlns:custom="http://schemas.android.com/apk/res-auto"
-                android:id="@+id/dynamicArcView2"
+                android:id="@+id/dynamicArcView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:padding="12.2dp"
-                custom:dv_lineWidth="12dp" />
-
-            <com.hookedonplay.decoviewlib.DecoView xmlns:custom="http://schemas.android.com/apk/res-auto"
-                android:id="@+id/dynamicArcView3"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:padding="24.4dp"
                 custom:dv_lineWidth="12dp" />
         </RelativeLayout>
 

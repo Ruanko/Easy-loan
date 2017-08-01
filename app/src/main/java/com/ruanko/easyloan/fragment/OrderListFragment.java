@@ -136,6 +136,8 @@ public class OrderListFragment extends Fragment
 
 
     private void loadData() {
+        //  update user credit level
+
         int tabAt = (int) getArguments().get("tab_at");
         AVQuery<AVObject> avQuery1;
         avQuery1 = new AVQuery<>(OrderContract.OrderEntry.TABLE_NAME);
@@ -154,7 +156,7 @@ public class OrderListFragment extends Fragment
         }
         AVQuery<AVObject> avQuery2 = new AVQuery<>(OrderContract.OrderEntry.TABLE_NAME);
         avQuery2.whereEqualTo(OrderContract.OrderEntry.COLUMN_OWNER, AVUser.getCurrentUser());
-        AVQuery<AVObject> avQuery = AVQuery.and(Arrays.asList(avQuery1, avQuery2));
+        AVQuery<AVObject> avQuery = AVQuery.and(Arrays.asList(avQuery2, avQuery1));
         avQuery.orderByDescending(OrderContract.OrderEntry.COLUMN_DEADLINE);
         avQuery.findInBackground(new FindCallback<AVObject>() {
             @Override

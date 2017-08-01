@@ -21,17 +21,22 @@ import android.widget.Toast;
 
 import com.avos.avoscloud.AVException;
 import com.avos.avoscloud.AVFile;
+import com.avos.avoscloud.AVObject;
+import com.avos.avoscloud.AVQuery;
 import com.avos.avoscloud.AVUser;
+import com.avos.avoscloud.CountCallback;
 import com.avos.avoscloud.SaveCallback;
 import com.ruanko.easyloan.R;
 import com.ruanko.easyloan.activity.MainActivity;
 import com.ruanko.easyloan.activity.UserInfoActivity;
+import com.ruanko.easyloan.data.OrderContract;
 import com.ruanko.easyloan.data.UserContract;
 import com.squareup.picasso.Picasso;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
 
 import java.io.IOException;
+import java.util.Arrays;
 
 import static com.ruanko.easyloan.utilities.FileUtils.getFileBytes;
 import static com.ruanko.easyloan.utilities.ImageUtils.getRoundedTransformation;
@@ -76,6 +81,7 @@ public class AccountFragment extends Fragment {
         this.mRootView = (NestedScrollView) inflater.inflate(R.layout.fragment_account, container, false);
         initView();
         loadData();
+        updateLevel();
         return mRootView;
     }
 
@@ -116,25 +122,25 @@ public class AccountFragment extends Fragment {
     private void loadData() {
         AVUser user = AVUser.getCurrentUser();
         if (user != null) {
-            int score = 100;
+            int account_score = 100;
             if (user.getEmail() == null || user.getEmail().length() == 0) {
-                score -= 10;
+                account_score -= 10;
             }
             if (user.getString(UserContract.UserEntry.COLUMN_REAL_NAME) == null || user.getString(UserContract.UserEntry.COLUMN_REAL_NAME).length() == 0) {
-                score -= 10;
+                account_score -= 10;
             }
             if (user.getString(UserContract.UserEntry.COLUMN_REAL_NAME) == null || user.getString(UserContract.UserEntry.COLUMN_HOME).length() == 0) {
-                score -= 10;
+                account_score -= 10;
             }
             if (user.getString(UserContract.UserEntry.COLUMN_REAL_NAME) == null || user.getString(UserContract.UserEntry.COLUMN_RELATIVE_NAME).length() == 0) {
-                score -= 10;
+                account_score -= 10;
             }
             if (user.getString(UserContract.UserEntry.COLUMN_REAL_NAME) == null || user.getString(UserContract.UserEntry.COLUMN_SCHOOL).length() == 0) {
-                score -= 10;
+                account_score -= 10;
             }
 
             if (user.getString(UserContract.UserEntry.COLUMN_REAL_NAME) == null || user.getString(UserContract.UserEntry.COLUMN_ID_CARD).length() == 0) {
-                score -= 10;
+                account_score -= 10;
             }
 
             mNameTextView.setText(user.getUsername());
@@ -159,37 +165,79 @@ public class AccountFragment extends Fragment {
                         .transform(getRoundedTransformation())
                         .into(mUserHeadImage);
             }
+
+            // update level
             int level = user.getInt(UserContract.UserEntry.COLUMN_LEVEL);
-            if (user.getInt(UserContract.UserEntry.COLUMN_INFO_LEVEL) != score) {
-                user.put(UserContract.UserEntry.COLUMN_INFO_LEVEL, score);
-                level = (int) (score * 0.5 + 0.5 * user.getInt(UserContract.UserEntry.COLUMN_TRADE_LEVEL));
+            if (user.getInt(UserContract.UserEntry.COLUMN_INFO_LEVEL) != account_score) {
+                user.put(UserContract.UserEntry.COLUMN_INFO_LEVEL, account_score);
+                level = (int) (account_score * 0.5 + 0.5 * user.getInt(UserContract.UserEntry.COLUMN_TRADE_LEVEL));
                 user.put(UserContract.UserEntry.COLUMN_LEVEL, level);
                 user.saveInBackground();
             }
-            mInfoIntegrityTextView.setText(score + "%");
+            mInfoIntegrityTextView.setText(account_score + "%");
             String[] level_list = getResources().getStringArray(R.array.credit_levels);
             if (level < 50) {
                 mLevelTextView.setText(level_list[0]);
-            } else {
+            } else if (level < 100){
                 mLevelTextView.setText(level_list[(int) ((level - 50) / 10)]);
             }
-
-
-//            user.fetchInBackground(new GetCallback<AVObject>() {
-//                @Override
-//                public void done(AVObject avObject, AVException e) {
-//                    if (avObject.getAVFile(UserContract.UserEntry.COLUMN_AVATAR) != null) {
-//                        Picasso.with(context)
-//                                .load(avObject.getAVFile(UserContract.UserEntry.COLUMN_AVATAR).getUrl())
-//                                .into(mUserHeadImage);
-//                    }
-//                }
-//            });
-
+            else {
+                mLevelTextView.setText(level_list[-1]);
+            }
 
         } else {
             resetView();
         }
+    }
+
+    private void updateLevel(){
+        AVUser user = AVUser.getCurrentUser();
+        AVQuery<AVObject> avQuery1 = new AVQuery<>(OrderContract.OrderEntry.TABLE_NAME);
+        avQuery1.whereEqualTo(OrderContract.OrderEntry.COLUMN_STATUS, OrderContract.Status.DONE);
+        AVQuery<AVObject> avQuery2 = new AVQuery<>(OrderContract.OrderEntry.TABLE_NAME);
+        avQuery2.whereEqualTo(OrderContract.OrderEntry.COLUMN_OWNER, user);
+        AVQuery<AVObject> avQuery = AVQuery.and(Arrays.asList(avQuery2, avQuery1));
+        avQuery.countInBackground(new CountCallback() {
+            @Override
+            public void done(int i, AVException e) {
+                if (e == null) {
+                    final int finishedCount = i;
+                    AVQuery<AVObject> avQuery1 = new AVQuery<>(OrderContract.OrderEntry.TABLE_NAME);
+                    avQuery1.whereEqualTo(OrderContract.OrderEntry.COLUMN_STATUS, OrderContract.Status.OVERDUE);
+                    AVQuery<AVObject> avQuery2 = new AVQuery<>(OrderContract.OrderEntry.TABLE_NAME);
+                    avQuery2.whereEqualTo(OrderContract.OrderEntry.COLUMN_OWNER, AVUser.getCurrentUser());
+                    AVQuery<AVObject> avQuery = AVQuery.and(Arrays.asList(avQuery2, avQuery1));
+                    avQuery.countInBackground(new CountCallback() {
+                        @Override
+                        public void done(int i, AVException e) {
+                            int overdueCount = i;
+                            AVUser user1 = AVUser.getCurrentUser();
+                            int trade_score = user1.getInt(UserContract.UserEntry.COLUMN_TRADE_LEVEL);
+                            int new_trade_score = 50;
+                            if (finishedCount < 10){
+                                new_trade_score += finishedCount * 4;
+                            }
+                            else if (finishedCount < 20) {
+                                new_trade_score += (finishedCount - 10) * 0.8 + 40;
+                            }
+                            else if (finishedCount < 30) {
+                                new_trade_score += (finishedCount - 20) * 0.2 + 48;
+                            }
+                            else {
+                                new_trade_score += 50;
+                            }
+                            new_trade_score = new_trade_score - overdueCount * 8;
+                            if (new_trade_score != trade_score) {
+                                user1.put(UserContract.UserEntry.COLUMN_TRADE_LEVEL, (int)new_trade_score);
+                                user1.put(UserContract.UserEntry.COLUMN_LEVEL,
+                                        (int)(new_trade_score * 0.5 + 0.5 * user1.getInt(UserContract.UserEntry.COLUMN_INFO_LEVEL)));
+                            }
+                        }
+
+                    });
+                }
+            }
+        });
     }
 
     private void resetView() {
