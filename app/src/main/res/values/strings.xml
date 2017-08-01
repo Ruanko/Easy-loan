@@ -129,5 +129,8 @@
     <string name="email_verified">(已验证)</string>
     <string name="email_not_verified">(未验证)</string>
     <string name="action_request_email_verify">发送验证邮件</string>
+    <string name="reset_pass_email_hint">请输入注册邮箱</string>
+    <string name="dialog_send_email">发送密码重置邮件</string>
+    <string name="reset_pass_notice">我们会给您发送密码重置邮件，请根据邮件内容重置密码</string>
 
 </resources>

@@ -4,6 +4,7 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.BottomSheetDialog;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
@@ -56,7 +57,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 attemptLogin();
                 break;
             case R.id.btn_forgot_password:
-
+                attemptResetPassword();
                 break;
             case R.id.btn_register:
                 intent.setClass(this, RegisterActivity.class);
@@ -199,26 +200,40 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     }
 
     private void attemptResetPassword() {
-        AVUser.requestPasswordResetInBackground("myemail@example.com", new RequestPasswordResetCallback() {
+        BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(LoginActivity.this);
+        View dialogView = LoginActivity.this.getLayoutInflater().inflate(R.layout.dialog_reset_password, null);
+        Button sendEmail = (Button) dialogView.findViewById(R.id.btn_send_reset_email);
+        bottomSheetDialog.setContentView(dialogView);
+        final EditText emailTextView = (EditText) dialogView.findViewById(R.id.tv_reset_password);
+        sendEmail.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void done(AVException e) {
-                if (e == null) {
-                    Toast.makeText(LoginActivity.this, "密码重置邮件已经发到您的邮箱", Toast.LENGTH_LONG).show();
-                } else {
-                    e.printStackTrace();
-                    String json = e.getMessage();
-                    JSONTokener tokener = new JSONTokener(json);
-                    try{
-                        JSONObject jsonObject = (JSONObject) tokener.nextValue();
-                        Toast.makeText(LoginActivity.this,
-                                jsonObject.getString("error"),
-                                Toast.LENGTH_LONG).show();
+            public void onClick(View v) {
+//                if (emailTextView.getText().length() ==)
+                AVUser.requestPasswordResetInBackground(emailTextView.getText().toString(),
+                        new RequestPasswordResetCallback() {
+                    @Override
+                    public void done(AVException e) {
+                        if (e == null) {
+                            Toast.makeText(LoginActivity.this, "密码重置邮件已经发到您的邮箱", Toast.LENGTH_LONG).show();
+                        } else {
+                            e.printStackTrace();
+                            String json = e.getMessage();
+                            JSONTokener tokener = new JSONTokener(json);
+                            try{
+                                JSONObject jsonObject = (JSONObject) tokener.nextValue();
+                                Toast.makeText(LoginActivity.this,
+                                        jsonObject.getString("error"),
+                                        Toast.LENGTH_LONG).show();
+                            }
+                            catch (JSONException jse) {
+                                jse.printStackTrace();
+                            }
+                        }
                     }
-                    catch (JSONException jse) {
-                        jse.printStackTrace();
-                    }
-                }
+                });
             }
         });
+        bottomSheetDialog.show();
+        emailTextView.requestFocus();
     }
 }

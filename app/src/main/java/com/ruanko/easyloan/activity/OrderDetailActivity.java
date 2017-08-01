@@ -162,13 +162,13 @@ public class OrderDetailActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                final BottomSheetDialog mBottomSheetDialog = new BottomSheetDialog(OrderDetailActivity.this);
+                final BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(OrderDetailActivity.this);
                 View dialogView = OrderDetailActivity.this.getLayoutInflater().inflate(R.layout.dialog_repay, null);
                 Button btn_dialog_bottom_sheet_ok = (Button) dialogView.findViewById(R.id.btn_dialog_bottom_sheet_ok);
                 Button btn_dialog_bottom_sheet_cancel = (Button) dialogView.findViewById(R.id.btn_dialog_bottom_sheet_cancel);
                 ImageView img_bottom_dialog = (ImageView) dialogView.findViewById(R.id.img_bottom_dialog);
                 Picasso.with(OrderDetailActivity.this).load(OrderDetailActivity.this.getString(R.string.wechat_qrcode_url)).into(img_bottom_dialog);
-                mBottomSheetDialog.setContentView(dialogView);
+                bottomSheetDialog.setContentView(dialogView);
 
                 btn_dialog_bottom_sheet_ok.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -209,10 +209,10 @@ public class OrderDetailActivity extends AppCompatActivity {
                                 }
                             }
                         });
-                        mBottomSheetDialog.dismiss();
+                        bottomSheetDialog.dismiss();
                     }
                 });
-                mBottomSheetDialog.show();
+                bottomSheetDialog.show();
             }
         });
         undoButton.setOnClickListener(new View.OnClickListener() {
