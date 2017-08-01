@@ -59,6 +59,15 @@
             android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
             android:theme="@style/AppTheme" />
         <activity android:name=".activity.RepayActivity"></activity>
+        <!--<activity-->
+            <!--android:name=".activity.AgreementActivity"-->
+            <!--android:label="用户协议"-->
+            <!--android:theme="@style/AppTheme.NoActionBar" />-->
+        <!--<activity-->
+            <!--android:name=".activity.PrivacyActivity"-->
+            <!--android:label="隐私政策"-->
+            <!--android:theme="@style/AppTheme.NoActionBar" />-->
+        <!--<activity android:name=".activity.BindingActivity"></activity>-->
     </application>
 
 </manifest>

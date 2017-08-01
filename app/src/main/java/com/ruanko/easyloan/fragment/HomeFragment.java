@@ -67,9 +67,9 @@ public class HomeFragment extends Fragment {
         this.mRootView =
                 (NestedScrollView) inflater.inflate(R.layout.fragment_home, container, false);
         COLORS = new ArrayList<>();
-        COLORS.add(ContextCompat.getColor(getContext(), R.color.google_blue));
-        COLORS.add(ContextCompat.getColor(getContext(), R.color.google_yellow));
-        COLORS.add(ContextCompat.getColor(getContext(), R.color.google_red));
+        COLORS.add(ContextCompat.getColor(getContext(), R.color.colorPrimary));
+        COLORS.add(ContextCompat.getColor(getContext(), R.color.blue_grey_primary));
+        COLORS.add(ContextCompat.getColor(getContext(), R.color.colorAccent));
         loadData();
         initView();
         initDecoView(DATA);
