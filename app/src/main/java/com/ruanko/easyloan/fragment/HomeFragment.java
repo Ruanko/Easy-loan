@@ -11,15 +11,21 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.avos.avoscloud.AVException;
+import com.avos.avoscloud.AVObject;
+import com.avos.avoscloud.AVQuery;
 import com.avos.avoscloud.AVUser;
+import com.avos.avoscloud.CountCallback;
 import com.hookedonplay.decoviewlib.DecoView;
 import com.hookedonplay.decoviewlib.charts.DecoDrawEffect;
 import com.hookedonplay.decoviewlib.charts.SeriesItem;
 import com.hookedonplay.decoviewlib.events.DecoEvent;
 import com.ruanko.easyloan.R;
+import com.ruanko.easyloan.data.OrderContract;
 import com.ruanko.easyloan.data.UserContract;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -27,48 +33,86 @@ import java.util.List;
  */
 
 public class HomeFragment extends Fragment {
-    private NestedScrollView rootView;
+    private NestedScrollView mRootView;
     // arc related
     private DecoView mDecoView;
-//    private DecoView mDecoView2;
+    //    private DecoView mDecoView2;
 //    private DecoView mDecoView3;
     private int mBackIndex;
-    private TextView textPercentage;
-    private TextView textBelowPercentage;
+    private TextView mTextPercentage;
+    private TextView mTextBelowPercentage;
+    private TextView mLoanCountTextView;
+    private TextView mRecentRepayTextView;
+    private TextView mOverdueTextView;
+
     private final float mSeriesMax = 100f;
-    private boolean IS_FIRST_FLAG = true;
 
     private ArrayList<Integer> COLORS;
     private ArrayList<Float> DATA;
 
     private float last_position;
     private boolean arc_first_flag = true;
-    //    private RelativeLayout rootView;
+    //    private RelativeLayout mRootView;
 //    private SwipeRefreshLayout swipeRefreshLayout;
     private RecyclerView mRecyclerView;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
     }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        this.rootView =
+        this.mRootView =
                 (NestedScrollView) inflater.inflate(R.layout.fragment_home, container, false);
         COLORS = new ArrayList<>();
         COLORS.add(ContextCompat.getColor(getContext(), R.color.google_blue));
         COLORS.add(ContextCompat.getColor(getContext(), R.color.google_yellow));
         COLORS.add(ContextCompat.getColor(getContext(), R.color.google_red));
         loadData();
-
+        initView();
         initDecoView(DATA);
-        return this.rootView;
+        return this.mRootView;
     }
 
-    private void loadData(){
+    private void initView() {
+        mRecentRepayTextView = (TextView) mRootView.findViewById(R.id.tv_recent_repay);
+        mLoanCountTextView = (TextView) mRootView.findViewById(R.id.tv_loan_count);
+        mOverdueTextView = (TextView) mRootView.findViewById(R.id.tv_total_loan);
+        AVQuery<AVObject> query = new AVQuery<AVObject>(OrderContract.OrderEntry.TABLE_NAME);
+        query.whereEqualTo(OrderContract.OrderEntry.COLUMN_OWNER, AVUser.getCurrentUser());
+        query.countInBackground(new CountCallback() {
+            @Override
+            public void done(int i, AVException e) {
+                if (e == null)
+                    mLoanCountTextView.setText(String.valueOf(i));
+            }
+        });
+        AVQuery<AVObject> query1 = new AVQuery<>(OrderContract.OrderEntry.TABLE_NAME);
+        AVQuery<AVObject> query2 = new AVQuery<>(OrderContract.OrderEntry.TABLE_NAME);
+        query1.whereEqualTo(OrderContract.OrderEntry.COLUMN_STATUS, OrderContract.Status.GRANT);
+        query2.whereEqualTo(OrderContract.OrderEntry.COLUMN_STATUS, OrderContract.Status.PARTIAL_REPAY);
+        query = AVQuery.or(Arrays.asList(query1, query2));
+        query.countInBackground(new CountCallback() {
+            @Override
+            public void done(int i, AVException e) {
+                if (e == null)
+                    mRecentRepayTextView.setText(String.valueOf(i));
+            }
+        });
+        query = new AVQuery<AVObject>(OrderContract.OrderEntry.TABLE_NAME);
+        query.whereEqualTo(OrderContract.OrderEntry.COLUMN_STATUS, OrderContract.Status.OVERDUE);
+        query.countInBackground(new CountCallback() {
+            @Override
+            public void done(int i, AVException e) {
+                if (e == null)
+                    mOverdueTextView.setText(String.valueOf(i));
+            }
+        });
+    }
+
+    private void loadData() {
         last_position = 0;
         DATA = new ArrayList<>();
         AVUser user = AVUser.getCurrentUser();
@@ -78,24 +122,20 @@ public class HomeFragment extends Fragment {
         int data1 = score2 / 3;
         int data2 = score3 / 3;
         int data3 = score1 / 3;
-        DATA.add((float)(data1 + data2 + data3));
-        DATA.add((float)(data1 + data2));
-        DATA.add((float)(data1));
-//        DATA.add(60f);
-//        DATA.add(40f);
-//        DATA.add(20f);
+        DATA.add((float) (data1 + data2 + data3));
+        DATA.add((float) (data1 + data2));
+        DATA.add((float) (data1));
     }
 
     private void initDecoView(final List<Float> data) {
-        mDecoView = (DecoView)this.rootView.findViewById(R.id.dynamicArcView);
-        textPercentage = (TextView) this.rootView.findViewById(R.id.tv_percentage);
-        textBelowPercentage = (TextView) rootView.findViewById(R.id.tv_below_percentage);
+        mDecoView = (DecoView) this.mRootView.findViewById(R.id.dynamicArcView);
+        mTextPercentage = (TextView) this.mRootView.findViewById(R.id.tv_percentage);
+        mTextBelowPercentage = (TextView) mRootView.findViewById(R.id.tv_below_percentage);
 //        DecoView[] decoViews = {mDecoView, mDecoView2, mDecoView3};
         int duration;
         if (arc_first_flag) {
             duration = 1000;
-        }
-        else {
+        } else {
             duration = 0;
         }
 
@@ -108,7 +148,7 @@ public class HomeFragment extends Fragment {
             if (i == data.size() - 1)
                 createDataSeries(mDecoView, data.get(i), COLORS.get(i), delay_inner, duration, true);
             else
-                createDataSeries(mDecoView, data.get(i), COLORS.get(i), delay_inner+100, duration, false);
+                createDataSeries(mDecoView, data.get(i), COLORS.get(i), delay_inner + 100, duration, false);
             delay -= 2000;
         }
         if (!arc_first_flag) {
@@ -159,7 +199,7 @@ public class HomeFragment extends Fragment {
             @Override
             public void onSeriesItemAnimationProgress(float percentComplete, float currentPosition) {
                 if (currentPosition > last_position) {
-                    textPercentage.setText(String.valueOf((int) currentPosition));
+                    mTextPercentage.setText(String.valueOf((int) currentPosition));
                     last_position = currentPosition;
                 }
             }
@@ -186,12 +226,12 @@ public class HomeFragment extends Fragment {
                 .build());
     }
 
-    private void resetText () {
-        textBelowPercentage.setText("");
-        textPercentage.setText("");
+    private void resetText() {
+        mTextBelowPercentage.setText("");
+        mTextPercentage.setText("");
     }
 
-    private String getCreditLevel (float score) {
+    private String getCreditLevel(float score) {
         String string;
         if (score >= 90)
             string = getString(R.string.arc_final_text_level1);
@@ -204,9 +244,9 @@ public class HomeFragment extends Fragment {
         return string;
     }
 
-    private void setText () {
-        float score = DATA.get(0) ;
-        textPercentage.setText(String.valueOf((int)score));
-        textBelowPercentage.setText(getCreditLevel(score));
+    private void setText() {
+        float score = DATA.get(0);
+        mTextPercentage.setText(String.valueOf((int) score));
+        mTextBelowPercentage.setText(getCreditLevel(score));
     }
 }

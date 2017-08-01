@@ -5,17 +5,24 @@ package com.ruanko.easyloan.fragment;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.BottomSheetDialog;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.NestedScrollView;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -26,9 +33,12 @@ import com.avos.avoscloud.AVObject;
 import com.avos.avoscloud.AVQuery;
 import com.avos.avoscloud.AVUser;
 import com.avos.avoscloud.CountCallback;
+import com.avos.avoscloud.RefreshCallback;
 import com.avos.avoscloud.RequestEmailVerifyCallback;
+import com.avos.avoscloud.RequestPasswordResetCallback;
 import com.avos.avoscloud.SaveCallback;
 import com.ruanko.easyloan.R;
+import com.ruanko.easyloan.activity.LoginActivity;
 import com.ruanko.easyloan.activity.MainActivity;
 import com.ruanko.easyloan.activity.UserInfoActivity;
 import com.ruanko.easyloan.data.OrderContract;
@@ -80,6 +90,7 @@ public class AccountFragment extends Fragment {
         super.onCreate(savedInstanceState);
         context = getContext();
         mUserInfoChangedListener = (MainActivity) getActivity();
+        setHasOptionsMenu(true);
     }
 
     @Nullable
@@ -90,6 +101,72 @@ public class AccountFragment extends Fragment {
         loadData();
         updateLevel();
         return mRootView;
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        menu.clear();
+        inflater.inflate(R.menu.action_menu_account, menu);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.action_menu_account1:
+                new AlertDialog.Builder(getContext())
+                        .setTitle(getString(R.string.sign_out_alert_title))
+                        .setMessage(getString(R.string.sign_out_alert_text))
+                        .setPositiveButton(getString(R.string.dialog_ok), new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                AVUser user = AVUser.getCurrentUser();
+                                user.logOut();
+                                getActivity().finish();
+                                startActivity(new Intent(getContext(), LoginActivity.class));
+                            }
+                        })
+                        .setNegativeButton(getString(R.string.dialog_cancel), null)
+                        .show();
+                break;
+            case R.id.action_menu_account2:
+                BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(getContext());
+                View dialogView = getActivity().getLayoutInflater().inflate(R.layout.dialog_reset_password, null);
+                Button sendEmail = (Button) dialogView.findViewById(R.id.btn_send_reset_email);
+                bottomSheetDialog.setContentView(dialogView);
+                final EditText emailTextView = (EditText) dialogView.findViewById(R.id.tv_reset_password);
+                sendEmail.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+//                if (emailTextView.getText().length() ==)
+                        AVUser.requestPasswordResetInBackground(emailTextView.getText().toString(),
+                                new RequestPasswordResetCallback() {
+                                    @Override
+                                    public void done(AVException e) {
+                                        if (e == null) {
+                                            Toast.makeText(getContext(), "密码重置邮件已经发到您的邮箱", Toast.LENGTH_LONG).show();
+                                        } else {
+                                            e.printStackTrace();
+                                            String json = e.getMessage();
+                                            JSONTokener tokener = new JSONTokener(json);
+                                            try{
+                                                JSONObject jsonObject = (JSONObject) tokener.nextValue();
+                                                Toast.makeText(getContext(),
+                                                        jsonObject.getString("error"),
+                                                        Toast.LENGTH_LONG).show();
+                                            }
+                                            catch (JSONException jse) {
+                                                jse.printStackTrace();
+                                            }
+                                        }
+                                    }
+                                });
+                    }
+                });
+                bottomSheetDialog.show();
+                emailTextView.requestFocus();
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     private void initView() {
@@ -130,26 +207,36 @@ public class AccountFragment extends Fragment {
 
     private void loadData() {
         final AVUser user = AVUser.getCurrentUser();
+        user.refreshInBackground(new RefreshCallback<AVObject>() {
+            @Override
+            public void done(AVObject avObject, AVException e) {
+
+            }
+        });
         if (user != null) {
             int account_score = 100;
-            if (user.getEmail() == null || user.getEmail().length() == 0) {
+            if (user.getMobilePhoneNumber() == null || user.getMobilePhoneNumber().length() == 0) {
                 account_score -= 10;
             }
             if (user.getString(UserContract.UserEntry.COLUMN_REAL_NAME) == null || user.getString(UserContract.UserEntry.COLUMN_REAL_NAME).length() == 0) {
-                account_score -= 10;
+                account_score -= 5;
             }
-            if (user.getString(UserContract.UserEntry.COLUMN_REAL_NAME) == null || user.getString(UserContract.UserEntry.COLUMN_HOME).length() == 0) {
-                account_score -= 10;
+            if (user.getString(UserContract.UserEntry.COLUMN_HOME) == null || user.getString(UserContract.UserEntry.COLUMN_HOME).length() == 0) {
+                account_score -= 5;
             }
-            if (user.getString(UserContract.UserEntry.COLUMN_REAL_NAME) == null || user.getString(UserContract.UserEntry.COLUMN_RELATIVE_NAME).length() == 0) {
-                account_score -= 10;
+            if (user.getString(UserContract.UserEntry.COLUMN_RELATIVE_NAME) == null || user.getString(UserContract.UserEntry.COLUMN_RELATIVE_NAME).length() == 0) {
+                account_score -= 5;
             }
-            if (user.getString(UserContract.UserEntry.COLUMN_REAL_NAME) == null || user.getString(UserContract.UserEntry.COLUMN_SCHOOL).length() == 0) {
+            if (user.getString(UserContract.UserEntry.COLUMN_SCHOOL) == null || user.getString(UserContract.UserEntry.COLUMN_SCHOOL).length() == 0) {
+                account_score -= 5;
+            }
+
+            if (user.getString(UserContract.UserEntry.COLUMN_ID_CARD) == null || user.getString(UserContract.UserEntry.COLUMN_ID_CARD).length() == 0) {
                 account_score -= 10;
             }
 
-            if (user.getString(UserContract.UserEntry.COLUMN_REAL_NAME) == null || user.getString(UserContract.UserEntry.COLUMN_ID_CARD).length() == 0) {
-                account_score -= 10;
+            if (!user.getBoolean(UserContract.UserEntry.COLUMN_IS_EMAIL_VERIFIED)) {
+                account_score -= 20;
             }
 
             mNameTextView.setText(user.getUsername());
@@ -197,6 +284,10 @@ public class AccountFragment extends Fragment {
             // email verify
             if (user.getBoolean(UserContract.UserEntry.COLUMN_IS_EMAIL_VERIFIED)) {
                 mEmailVerifyButton.setVisibility(View.GONE);
+                mEmailVerifyTextView.setText(getString(R.string.email_verified));
+            } else {
+                mEmailVerifyButton.setVisibility(View.VISIBLE);
+                mEmailVerifyTextView.setText(getString(R.string.email_not_verified));
                 mEmailVerifyButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(final View v) {
@@ -223,10 +314,6 @@ public class AccountFragment extends Fragment {
                         });
                     }
                 });
-                mEmailVerifyTextView.setText(getString(R.string.email_verified));
-            } else {
-                mEmailVerifyButton.setVisibility(View.VISIBLE);
-                mEmailVerifyTextView.setText(getString(R.string.email_not_verified));
             }
 
         } else {
@@ -339,4 +426,5 @@ public class AccountFragment extends Fragment {
             loadData();
         }
     }
+
 }

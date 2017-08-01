@@ -41,12 +41,12 @@
                     android:textAppearance="@style/TextAppearance.AppCompat.Caption" />
 
                 <TextView
+                    android:id="@+id/tv_loan_count"
                     android:paddingTop="@dimen/card_margin_vertical"
                     android:layout_below="@id/tv_label1"
                     android:layout_centerHorizontal="true"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:text="3"
                     android:textAppearance="@style/TextAppearance.AppCompat.Title" />
 
             </RelativeLayout>
@@ -64,12 +64,12 @@
                     android:textAppearance="@style/TextAppearance.AppCompat.Caption" />
 
                 <TextView
+                    android:id="@+id/tv_recent_repay"
                     android:paddingTop="@dimen/card_margin_vertical"
                     android:layout_below="@id/tv_label2"
                     android:layout_centerHorizontal="true"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:text="￥5000"
                     android:textAppearance="@style/TextAppearance.AppCompat.Title" />
 
             </RelativeLayout>
@@ -86,12 +86,12 @@
                     android:textAppearance="@style/TextAppearance.AppCompat.Caption" />
 
                 <TextView
+                    android:id="@+id/tv_total_loan"
                     android:paddingTop="@dimen/card_margin_vertical"
                     android:layout_below="@id/tv_label3"
                     android:layout_centerHorizontal="true"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:text="￥15000"
                     android:textAppearance="@style/TextAppearance.AppCompat.Title" />
 
             </RelativeLayout>

@@ -71,9 +71,9 @@
     <string name="info_integrity">信息完整</string>
     <string name="help_info_title">Tips: 如何提高信誉度</string>
     <string name="help_info_content">完善个人信息; 多使用E贷借款; 按时还款，避免逾期</string>
-    <string name="order_count_label">借款次数</string>
+    <string name="order_count_label">全部借款</string>
     <string name="recent_deadline_label">近期待还</string>
-    <string name="total_loan_label">全部待还</string>
+    <string name="total_loan_label">逾期未还</string>
     <string name="honor_label">根据您的信息估算您的信誉度为</string>
     <string name="statics_label">概览</string>
     <string name="name_label">姓名: </string>
@@ -132,5 +132,6 @@
     <string name="reset_pass_email_hint">请输入注册邮箱</string>
     <string name="dialog_send_email">发送密码重置邮件</string>
     <string name="reset_pass_notice">我们会给您发送密码重置邮件，请根据邮件内容重置密码</string>
+    <string name="main_action_menu_item3">修改密码</string>
 
 </resources>

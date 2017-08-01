@@ -1,6 +1,5 @@
 package com.ruanko.easyloan.activity;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -10,7 +9,6 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -231,22 +229,6 @@ public class MainActivity extends AppCompatActivity
         switch (itemId) {
             case R.id.action_menu_main_1:
                 startActivity(new Intent(this, ApplyActivity.class));
-                break;
-            case R.id.action_menu_main_2:
-                new AlertDialog.Builder(MainActivity.this)
-                        .setTitle(getString(R.string.sign_out_alert_title))
-                        .setMessage(getString(R.string.sign_out_alert_text))
-                        .setPositiveButton(getString(R.string.dialog_ok), new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                AVUser user = AVUser.getCurrentUser();
-                                user.logOut();
-                                MainActivity.this.finish();
-                                startActivity(new Intent(MainActivity.this, LoginActivity.class));
-                            }
-                        })
-                        .setNegativeButton(getString(R.string.dialog_cancel), null)
-                        .show();
                 break;
 
         }
