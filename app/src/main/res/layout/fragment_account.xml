@@ -111,6 +111,13 @@
                     android:layout_height="match_parent"
                     android:text=""
                     android:textAppearance="@style/TextAppearance.AppCompat.Body1"/>
+                <TextView
+                    android:id="@+id/tv_account_mail_is_verified"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="16dp"
+                    android:text="@string/email_verified"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body2"/>
             </LinearLayout>
             <LinearLayout
                 android:layout_width="match_parent"
@@ -169,6 +176,17 @@
                     android:text="100 %"
                     android:textAppearance="@style/TextAppearance.AppCompat.Body1"/>
             </LinearLayout>
+            <Button
+                android:id="@+id/btn_request_verify_email"
+                style="?android:textAppearanceMedium"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:backgroundTint="@color/google_red"
+                android:padding="16dp"
+                android:text="@string/action_request_email_verify"
+                android:textColor="@color/white"
+                android:visibility="gone"/>
         </LinearLayout>
     </LinearLayout>
 </android.support.v4.widget.NestedScrollView>

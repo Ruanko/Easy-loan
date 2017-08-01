@@ -160,6 +160,28 @@
                     android:layout_height="wrap_content"
                     android:lineSpacingExtra="@dimen/text_margin_very_small"
                     android:textIsSelectable="true"
+                    android:text="应还金额"/>
+                <TextView
+                    android:layout_alignParentRight="true"
+                    android:id="@+id/tv_detail_should_repay"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:lineSpacingExtra="@dimen/text_margin_very_small"
+                    android:textIsSelectable="true"/>
+            </RelativeLayout>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                android:layout_marginRight="@dimen/activity_horizontal_margin"
+                android:layout_marginTop="@dimen/activity_vertical_margin">
+                <TextView
+                    android:layout_alignParentLeft="true"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:lineSpacingExtra="@dimen/text_margin_very_small"
+                    android:textIsSelectable="true"
                     android:text="还款方式"/>
                 <TextView
                     android:layout_alignParentRight="true"
@@ -281,6 +303,47 @@
                     android:textIsSelectable="true"
                     android:text=""/>
             </RelativeLayout>
+            <LinearLayout
+                android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                android:layout_marginRight="@dimen/activity_horizontal_margin"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <Button
+                    android:id="@+id/btn_repay"
+                    style="?android:textAppearanceMedium"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:backgroundTint="@color/colorPrimaryDark"
+                    android:padding="16dp"
+                    android:text="@string/action_repay"
+                    android:textColor="@color/white"
+                    android:visibility="gone"/>
+                <Button
+                    android:id="@+id/btn_delete"
+                    style="?android:textAppearanceMedium"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:backgroundTint="@color/google_red"
+                    android:padding="16dp"
+                    android:text="@string/action_delete_order"
+                    android:textColor="@color/white"
+                    android:visibility="gone"/>
+                <Button
+                    android:id="@+id/btn_undo_apply"
+                    style="?android:textAppearanceMedium"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:backgroundTint="@color/google_red"
+                    android:padding="16dp"
+                    android:text="@string/action_undo_apply"
+                    android:textColor="@color/white"
+                    android:visibility="visible"/>
+            </LinearLayout>
+
         </LinearLayout>
     </android.support.v4.widget.NestedScrollView>
 

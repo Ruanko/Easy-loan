@@ -22,6 +22,11 @@ import com.avos.avoscloud.AVUser;
 import com.avos.avoscloud.SaveCallback;
 import com.ruanko.easyloan.R;
 import com.ruanko.easyloan.data.OrderContract;
+import com.ruanko.easyloan.utilities.DateUtils;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.json.JSONTokener;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -98,6 +103,11 @@ public class ApplyActivity extends AppCompatActivity {
             bankAccountEt.requestFocus();
             return false;
         }
+
+        if (DateUtils.differentDays(new Date(), calendar.getTime()) < 0) {
+            Toast.makeText(ApplyActivity.this, "请选择正确的日期", Toast.LENGTH_SHORT).show();
+            return false;
+        }
         return true;
     }
 
@@ -150,7 +160,17 @@ public class ApplyActivity extends AppCompatActivity {
                     ApplyActivity.this.finish();
                 } else {
                     scrollView.setVisibility(View.VISIBLE);
-                    Toast.makeText(ApplyActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                    String json = e.getMessage();
+                    JSONTokener tokener = new JSONTokener(json);
+                    try{
+                        JSONObject jsonObject = (JSONObject) tokener.nextValue();
+                        Toast.makeText(ApplyActivity.this,
+                                jsonObject.getString("error"),
+                                Toast.LENGTH_LONG).show();
+                    }
+                    catch (JSONException jse) {
+                        jse.printStackTrace();
+                    }
                 }
             }
         });

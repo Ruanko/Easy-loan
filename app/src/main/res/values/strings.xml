@@ -49,9 +49,9 @@
 
     <string name="arc_final_text_level1">信誉极好</string>
     <string name="arc_final_text_level2">信誉良好</string>
-    <string name="arc_final_text_level3">信誉良好</string>
-    <string name="arc_final_text_level4">还需努力</string>
-    <string name="arc_final_text_level5">加油</string>
+    <string name="arc_final_text_level3">信誉一般</string>
+    <string name="arc_final_text_level4">信誉较差</string>
+    <string name="arc_final_text_level5">信誉很差</string>
     <string name="tv_recycler_item_1">Title</string>
     <string name="tv_recycler_item_2">sub title</string>
     <string name="tv_recycler_item_3">detail</string>
@@ -71,10 +71,10 @@
     <string name="transaction_record">交易记录</string>
     <string name="info_integrity">信息完整</string>
     <string name="help_info_title">Tips: 如何提高信誉度</string>
-    <string name="help_info_content">完善个人信息，保证信息的正确度；按时还款避免逾期</string>
-    <string name="order_count_label">借款次数</string>
+    <string name="help_info_content">完善个人信息; 多使用E贷借款; 按时还款，避免逾期</string>
+    <string name="order_count_label">全部借款</string>
     <string name="recent_deadline_label">近期待还</string>
-    <string name="total_loan_label">全部待还</string>
+    <string name="total_loan_label">逾期未还</string>
     <string name="honor_label">根据您的信息估算您的信誉度为</string>
     <string name="statics_label">概览</string>
     <string name="name_label">姓名: </string>
@@ -110,5 +110,29 @@
     <string name="main_action_menu_item2">注销账户</string>
     <string name="tab_overdue_order">已逾期</string>
     <string name="user_info_modified">修改成功</string>
+    <string name="alipay_account">a6x00993tus34lwjnovdt9c</string>
+    <string name="action_repay">立即还款</string>
+    <string name="action_delete_order">删除记录</string>
+    <string name="action_undo_apply">撤销申请</string>
+    <string name="snack_bar_undo_order">确定？撤销申请将不可恢复。</string>
+    <string name="snack_bar_redo">撤销</string>
+    <string name="snack_bar_confirm">确认</string>
+    <string name="alipay_not_installed">未安装支付宝客户端！</string>
+    <string name="snack_bar_goto_web">扫码支付</string>
+    <string name="wechat_qrcode_url">http://junwen.qiniudn.com/Fg0bjJ0FeWKnWe_5l_LnZt50boLc</string>
+    <string name="alipay_qrcode_url">http://junwen.qiniudn.com/Fr6azl-_m7FMI0Ur3NGqaD0zild_</string>
+    <string name="dialog_goto_alipay">去支付宝</string>
+    <string name="dialog_done">我已完成还款</string>
+    <string name="repay_notice">扫码使用微信转账，或去支付宝客户端转账</string>
+    <string name="repaid_notice">还款请求已提交，请等待审核</string>
+    <string name="login_user_email_hint">电子邮箱</string>
+    <string name="error_invalid_email">邮箱无效</string>
+    <string name="email_verified">(已验证)</string>
+    <string name="email_not_verified">(未验证)</string>
+    <string name="action_request_email_verify">发送验证邮件</string>
+    <string name="reset_pass_email_hint">请输入注册邮箱</string>
+    <string name="dialog_send_email">发送密码重置邮件</string>
+    <string name="reset_pass_notice">我们会给您发送密码重置邮件，请根据邮件内容重置密码</string>
+    <string name="main_action_menu_item3">修改密码</string>
 
 </resources>

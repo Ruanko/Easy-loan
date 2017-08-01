@@ -27,6 +27,8 @@ public class UserContract {
         public static final String COLUMN_LEVEL = "level";
         public static final String COLUMN_INFO_LEVEL = "info_level";
         public static final String COLUMN_TRADE_LEVEL = "trade_level";
+        public static final String COLUMN_IS_EMAIL_VERIFIED = "emailVerified";
+        public static final String COLUMN_IS_PHONE_VERIFIED = "mobilePhoneVerified";
 
         public static final String COLUMN_AVATAR = "avatar";
 

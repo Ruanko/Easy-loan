@@ -34,7 +34,7 @@ import com.ruanko.easyloan.adapter.OrderListAdapter;
 import com.ruanko.easyloan.data.OrderContract;
 
 import java.util.ArrayList;
-import java.util.Date;
+import java.util.Arrays;
 import java.util.List;
 
 public class OrderListFragment extends Fragment
@@ -99,24 +99,6 @@ public class OrderListFragment extends Fragment
             }
         });
 
-        // 滑动隐藏浮动按钮
-//        mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-//            @Override
-//            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-//                super.onScrollStateChanged(recyclerView, newState);
-//                if (newState > 0) {
-//                    mFloatingActionButton.hide();
-//                } else {
-//                    mFloatingActionButton.show();
-//                }
-//            }
-//
-//            @Override
-//            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-//                super.onScrolled(recyclerView, dx, dy);
-//            }
-//        });
-
         mFloatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -136,30 +118,32 @@ public class OrderListFragment extends Fragment
 
 
     private void loadData() {
+        //  update user credit level
+
         int tabAt = (int) getArguments().get("tab_at");
-        AVQuery<AVObject> avQuery;
-        avQuery = new AVQuery<>(OrderContract.OrderEntry.TABLE_NAME);
-        avQuery.whereEqualTo(OrderContract.OrderEntry.COLUMN_OWNER, AVUser.getCurrentUser());
-        if (tabAt == 0) {
-            avQuery.orderByDescending("createdAt");
-        }
-        else if (tabAt == 1) {
-            avQuery.whereEqualTo(OrderContract.OrderEntry.COLUMN_STATUS, OrderContract.Status.GRANT);
-            avQuery.orderByDescending(OrderContract.OrderEntry.COLUMN_DEADLINE);
+        AVQuery<AVObject> avQuery1;
+        avQuery1 = new AVQuery<>(OrderContract.OrderEntry.TABLE_NAME);
+
+        if (tabAt == 1) {
+            AVQuery<AVObject> query1 = new AVQuery<>(OrderContract.OrderEntry.TABLE_NAME);
+            AVQuery<AVObject> query2 = new AVQuery<>(OrderContract.OrderEntry.TABLE_NAME);
+            query1.whereEqualTo(OrderContract.OrderEntry.COLUMN_STATUS, OrderContract.Status.GRANT);
+            query2.whereEqualTo(OrderContract.OrderEntry.COLUMN_STATUS, OrderContract.Status.PARTIAL_REPAY);
+            avQuery1 = AVQuery.or(Arrays.asList(query1, query2));
         }
         else if (tabAt == 2) {
-            avQuery.whereEqualTo(OrderContract.OrderEntry.COLUMN_STATUS, OrderContract.Status.PENDING);
-            avQuery.orderByDescending("createAt");
+            avQuery1.whereEqualTo(OrderContract.OrderEntry.COLUMN_STATUS, OrderContract.Status.PENDING);
         }
         else if (tabAt == 3) {
-            avQuery.whereEqualTo(OrderContract.OrderEntry.COLUMN_STATUS, OrderContract.Status.DONE);
-            avQuery.orderByDescending("createAt");
+            avQuery1.whereEqualTo(OrderContract.OrderEntry.COLUMN_STATUS, OrderContract.Status.DONE);
         }
         else if (tabAt == 4) {
-            avQuery.whereEqualTo(OrderContract.OrderEntry.COLUMN_STATUS, OrderContract.Status.OVERDUE);
-            avQuery.whereLessThan(OrderContract.OrderEntry.COLUMN_DEADLINE, new Date());
-            avQuery.orderByDescending("createAt");
+            avQuery1.whereEqualTo(OrderContract.OrderEntry.COLUMN_STATUS, OrderContract.Status.OVERDUE);
         }
+        AVQuery<AVObject> avQuery2 = new AVQuery<>(OrderContract.OrderEntry.TABLE_NAME);
+        avQuery2.whereEqualTo(OrderContract.OrderEntry.COLUMN_OWNER, AVUser.getCurrentUser());
+        AVQuery<AVObject> avQuery = AVQuery.and(Arrays.asList(avQuery2, avQuery1));
+        avQuery.orderByDescending(OrderContract.OrderEntry.COLUMN_CREATE_AT);
         avQuery.findInBackground(new FindCallback<AVObject>() {
             @Override
             public void done(List<AVObject> list, AVException e) {

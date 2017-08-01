@@ -24,13 +24,14 @@ import com.avos.avoscloud.SignUpCallback;
 import com.ruanko.easyloan.R;
 import com.ruanko.easyloan.data.UserContract;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.json.JSONTokener;
 
 public class RegisterActivity extends AppCompatActivity {
     private AutoCompleteTextView mUsernameView;
     private EditText mPasswordView;
-    private AutoCompleteTextView mPhoneView;
+    private AutoCompleteTextView mEmailView;
     private View mProgressView;
     private View mRegisterFormView;
 
@@ -42,7 +43,7 @@ public class RegisterActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         // Set up the register form.
         mUsernameView = (AutoCompleteTextView) findViewById(R.id.register_username);
-        mPhoneView = (AutoCompleteTextView) findViewById(R.id.register_phone);
+        mEmailView = (AutoCompleteTextView) findViewById(R.id.register_mail);
 
         mPasswordView = (EditText) findViewById(R.id.register_password);
         mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
@@ -72,15 +73,15 @@ public class RegisterActivity extends AppCompatActivity {
         mPasswordView.setError(null);
 
         String username = mUsernameView.getText().toString();
-        String phone = mPhoneView.getText().toString();
+        String email = mEmailView.getText().toString();
         String password = mPasswordView.getText().toString();
 
         boolean cancel = false;
         View focusView = null;
 
-        if (!isPhoneValid(phone)) {
-            mPhoneView.setError(getString(R.string.error_invalid_phone));
-            focusView = mPhoneView;
+        if (!isEmailValid(email)) {
+            mEmailView.setError(getString(R.string.error_invalid_email));
+            focusView = mEmailView;
             cancel = true;
         }
 
@@ -105,7 +106,7 @@ public class RegisterActivity extends AppCompatActivity {
             AVUser user = new AVUser();// 新建 AVUser 对象实例
             user.setUsername(username);// 设置用户名
             user.setPassword(password);// 设置密码
-            user.setMobilePhoneNumber(phone);
+            user.setEmail(email);
             user.put(UserContract.UserEntry.COLUMN_LEVEL, UserContract.INIT_LEVEL);
             user.put(UserContract.UserEntry.COLUMN_LEVEL, UserContract.USER_ROLE);
             user.signUpInBackground(new SignUpCallback() {
@@ -119,8 +120,17 @@ public class RegisterActivity extends AppCompatActivity {
                     } else {
                         // 失败的原因可能有多种，常见的是用户名已经存在。
                         showProgress(false);
-                        Toast.makeText(RegisterActivity.this,
-                                e.getMessage(), Toast.LENGTH_LONG).show();
+                        String json = e.getMessage();
+                        JSONTokener tokener = new JSONTokener(json);
+                        try{
+                            JSONObject jsonObject = (JSONObject) tokener.nextValue();
+                            Toast.makeText(RegisterActivity.this,
+                                    jsonObject.getString("error"),
+                                    Toast.LENGTH_LONG).show();
+                        }
+                        catch (JSONException jse) {
+                            jse.printStackTrace();
+                        }
                     }
                 }
             });
@@ -132,15 +142,16 @@ public class RegisterActivity extends AppCompatActivity {
         return true;
     }
 
-    private boolean isPhoneValid(String phone) {
-        Pattern p = Pattern.compile("[0-9]*");
-        Matcher m = p.matcher(phone);
-        return m.matches() && phone.length() >= 7 && phone.length() <= 12;
+    private boolean isEmailValid(String email) {
+        return true;
+//        Pattern p = Pattern.compile("[0-9]*");
+//        Matcher m = p.matcher(email);
+//        return m.matches() && email.length() >= 7 && email.length() <= 12;
     }
 
     private boolean isPasswordValid(String password) {
         //TODO: Replace this with your own logic
-        return password.length() > 6;
+        return password.length() >= 6;
     }
 
     @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
