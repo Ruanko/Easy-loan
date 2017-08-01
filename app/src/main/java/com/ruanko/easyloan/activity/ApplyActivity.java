@@ -24,6 +24,10 @@ import com.ruanko.easyloan.R;
 import com.ruanko.easyloan.data.OrderContract;
 import com.ruanko.easyloan.utilities.DateUtils;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.json.JSONTokener;
+
 import java.util.Calendar;
 import java.util.Date;
 
@@ -156,7 +160,17 @@ public class ApplyActivity extends AppCompatActivity {
                     ApplyActivity.this.finish();
                 } else {
                     scrollView.setVisibility(View.VISIBLE);
-                    Toast.makeText(ApplyActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                    String json = e.getMessage();
+                    JSONTokener tokener = new JSONTokener(json);
+                    try{
+                        JSONObject jsonObject = (JSONObject) tokener.nextValue();
+                        Toast.makeText(ApplyActivity.this,
+                                jsonObject.getString("error"),
+                                Toast.LENGTH_LONG).show();
+                    }
+                    catch (JSONException jse) {
+                        jse.printStackTrace();
+                    }
                 }
             }
         });

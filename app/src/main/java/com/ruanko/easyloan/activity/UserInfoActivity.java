@@ -19,6 +19,10 @@ import com.avos.avoscloud.SaveCallback;
 import com.ruanko.easyloan.R;
 import com.ruanko.easyloan.data.UserContract;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.json.JSONTokener;
+
 public class UserInfoActivity extends AppCompatActivity {
     public static final int USER_INFO_ACTIVITY_REQUEST_CODE = 10012;
     private String[] province;
@@ -188,7 +192,17 @@ public class UserInfoActivity extends AppCompatActivity {
                             Toast.LENGTH_LONG).show();
                     UserInfoActivity.this.finish();
                 } else {
-                    Toast.makeText(UserInfoActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                    String json = e.getMessage();
+                    JSONTokener tokener = new JSONTokener(json);
+                    try{
+                        JSONObject jsonObject = (JSONObject) tokener.nextValue();
+                        Toast.makeText(UserInfoActivity.this,
+                                jsonObject.getString("error"),
+                                Toast.LENGTH_LONG).show();
+                    }
+                    catch (JSONException jse) {
+                        jse.printStackTrace();
+                    }
                 }
             }
         });

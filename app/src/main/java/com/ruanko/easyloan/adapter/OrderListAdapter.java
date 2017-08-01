@@ -21,6 +21,7 @@ import com.avos.avoscloud.AVObject;
 import com.ruanko.easyloan.R;
 import com.ruanko.easyloan.activity.OrderDetailActivity;
 import com.ruanko.easyloan.data.OrderContract;
+import com.ruanko.easyloan.utilities.DateUtils;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -78,7 +79,18 @@ public class OrderListAdapter extends RecyclerView.Adapter<OrderListAdapter.Orde
             }
         });
 
-        //08/01
+        //08/01 update order status
+//        Date deadline = orderObject.getDate(OrderContract.OrderEntry.COLUMN_DEADLINE);
+        if (DateUtils.differentDays(new Date(), date) < 0) {
+            int status = orderObject.getInt(OrderContract.OrderEntry.COLUMN_STATUS);
+            if (status < OrderContract.Status.GRANT) {
+                orderObject.deleteInBackground();
+            }
+            else if (status >= OrderContract.Status.GRANT && status < OrderContract.Status.OVERDUE){
+                orderObject.put(OrderContract.OrderEntry.COLUMN_STATUS, OrderContract.Status.OVERDUE);
+                orderObject.saveInBackground();
+            }
+        }
     }
 
     @Override

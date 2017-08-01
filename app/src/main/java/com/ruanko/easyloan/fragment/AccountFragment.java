@@ -15,6 +15,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -25,6 +26,7 @@ import com.avos.avoscloud.AVObject;
 import com.avos.avoscloud.AVQuery;
 import com.avos.avoscloud.AVUser;
 import com.avos.avoscloud.CountCallback;
+import com.avos.avoscloud.RequestEmailVerifyCallback;
 import com.avos.avoscloud.SaveCallback;
 import com.ruanko.easyloan.R;
 import com.ruanko.easyloan.activity.MainActivity;
@@ -34,6 +36,10 @@ import com.ruanko.easyloan.data.UserContract;
 import com.squareup.picasso.Picasso;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.json.JSONTokener;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -56,7 +62,8 @@ public class AccountFragment extends Fragment {
     private TextView mInfoIntegrityTextView;
 
     private FloatingActionButton mFloatingActionButton;
-
+    private Button mEmailVerifyButton;
+    private TextView mEmailVerifyTextView;
     private Context context;
 
     private byte[] mImageBytes = null;
@@ -86,6 +93,8 @@ public class AccountFragment extends Fragment {
     }
 
     private void initView() {
+        mEmailVerifyTextView = (TextView) mRootView.findViewById(R.id.tv_account_mail_is_verified);
+        mEmailVerifyButton = (Button) mRootView.findViewById(R.id.btn_request_verify_email);
         mFloatingActionButton = (FloatingActionButton) getActivity().findViewById(R.id.fab_main_modify_info);
         mUserHeadImage = (ImageView) mRootView.findViewById(R.id.img_user_head);
         mNameTextView = (TextView) mRootView.findViewById(R.id.tv_real_name);
@@ -120,7 +129,7 @@ public class AccountFragment extends Fragment {
     }
 
     private void loadData() {
-        AVUser user = AVUser.getCurrentUser();
+        final AVUser user = AVUser.getCurrentUser();
         if (user != null) {
             int account_score = 100;
             if (user.getEmail() == null || user.getEmail().length() == 0) {
@@ -183,6 +192,41 @@ public class AccountFragment extends Fragment {
             }
             else {
                 mLevelTextView.setText(level_list[-1]);
+            }
+
+            // email verify
+            if (user.getBoolean(UserContract.UserEntry.COLUMN_IS_EMAIL_VERIFIED)) {
+                mEmailVerifyButton.setVisibility(View.GONE);
+                mEmailVerifyButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(final View v) {
+                        AVUser.requestEmailVerifyInBackground(user.getEmail(), new RequestEmailVerifyCallback() {
+                            @Override
+                            public void done(AVException e) {
+                                if (e == null) {
+                                    Toast.makeText(AccountFragment.this.getContext(), "邮件已发送", Toast.LENGTH_LONG).show();
+                                }
+                                else {
+                                    String json = e.getMessage();
+                                    JSONTokener tokener = new JSONTokener(json);
+                                    try{
+                                        JSONObject jsonObject = (JSONObject) tokener.nextValue();
+                                        Toast.makeText(AccountFragment.this.getContext(),
+                                                jsonObject.getString("error"),
+                                                Toast.LENGTH_LONG).show();
+                                    }
+                                    catch (JSONException jse) {
+                                        jse.printStackTrace();
+                                    }
+                                }
+                            }
+                        });
+                    }
+                });
+                mEmailVerifyTextView.setText(getString(R.string.email_verified));
+            } else {
+                mEmailVerifyButton.setVisibility(View.VISIBLE);
+                mEmailVerifyTextView.setText(getString(R.string.email_not_verified));
             }
 
         } else {
@@ -272,7 +316,17 @@ public class AccountFragment extends Fragment {
                                 loadData();
                                 Toast.makeText(context, getString(R.string.upload_done), Toast.LENGTH_LONG).show();
                             } else {
-                                Toast.makeText(context, getString(R.string.upload_fail), Toast.LENGTH_LONG).show();
+                                String json = e.getMessage();
+                                JSONTokener tokener = new JSONTokener(json);
+                                try{
+                                    JSONObject jsonObject = (JSONObject) tokener.nextValue();
+                                    Toast.makeText(AccountFragment.this.getContext(),
+                                            jsonObject.getString("error"),
+                                            Toast.LENGTH_LONG).show();
+                                }
+                                catch (JSONException jse) {
+                                    jse.printStackTrace();
+                                }
                             }
                         }
                     });

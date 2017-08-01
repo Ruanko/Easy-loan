@@ -11,14 +11,20 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.avos.avoscloud.AVException;
 import com.avos.avoscloud.AVObject;
 import com.avos.avoscloud.GetCallback;
+import com.avos.avoscloud.SaveCallback;
 import com.ruanko.easyloan.R;
 import com.ruanko.easyloan.data.OrderContract;
 import com.ruanko.easyloan.utilities.DateUtils;
 import com.squareup.picasso.Picasso;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.json.JSONTokener;
 
 import java.text.SimpleDateFormat;
 
@@ -157,7 +163,7 @@ public class OrderDetailActivity extends AppCompatActivity {
             public void onClick(View v) {
 
                 final BottomSheetDialog mBottomSheetDialog = new BottomSheetDialog(OrderDetailActivity.this);
-                View dialogView = OrderDetailActivity.this.getLayoutInflater().inflate(R.layout.dialog_bottom_sheet, null);
+                View dialogView = OrderDetailActivity.this.getLayoutInflater().inflate(R.layout.dialog_repay, null);
                 Button btn_dialog_bottom_sheet_ok = (Button) dialogView.findViewById(R.id.btn_dialog_bottom_sheet_ok);
                 Button btn_dialog_bottom_sheet_cancel = (Button) dialogView.findViewById(R.id.btn_dialog_bottom_sheet_cancel);
                 ImageView img_bottom_dialog = (ImageView) dialogView.findViewById(R.id.img_bottom_dialog);
@@ -175,12 +181,34 @@ public class OrderDetailActivity extends AppCompatActivity {
                             Snackbar.make(v, getString(R.string.alipay_not_installed), Snackbar.LENGTH_LONG)
                                     .show();
                         }
-                        mBottomSheetDialog.dismiss();
                     }
                 });
                 btn_dialog_bottom_sheet_cancel.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        avObject.put(OrderContract.OrderEntry.COLUMN_STATUS, OrderContract.Status.REPAY_PENDING);
+                        avObject.saveInBackground(new SaveCallback() {
+                            @Override
+                            public void done(AVException e) {
+                                if (e == null){
+                                    Toast.makeText(OrderDetailActivity.this, R.string.repaid_notice, Toast.LENGTH_LONG)
+                                            .show();
+                                }
+                                else {
+                                    String json = e.getMessage();
+                                    JSONTokener tokener = new JSONTokener(json);
+                                    try{
+                                        JSONObject jsonObject = (JSONObject) tokener.nextValue();
+                                        Toast.makeText(OrderDetailActivity.this,
+                                                jsonObject.getString("error"),
+                                                Toast.LENGTH_LONG).show();
+                                    }
+                                    catch (JSONException jse) {
+                                        jse.printStackTrace();
+                                    }
+                                }
+                            }
+                        });
                         mBottomSheetDialog.dismiss();
                     }
                 });

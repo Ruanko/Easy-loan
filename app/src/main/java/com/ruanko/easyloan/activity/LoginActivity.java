@@ -20,14 +20,19 @@ import android.widget.Toast;
 import com.avos.avoscloud.AVException;
 import com.avos.avoscloud.AVUser;
 import com.avos.avoscloud.LogInCallback;
+import com.avos.avoscloud.RequestPasswordResetCallback;
 import com.ruanko.easyloan.R;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.json.JSONTokener;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
     private AutoCompleteTextView mUserNameView;
-    private TextInputLayout inputUserNname, inputPassword;
+    private TextInputLayout inputUsername, inputPassword;
     private EditText mPasswordView;
     private View mProgressView;
     private View mLoginFormView;
@@ -51,6 +56,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 attemptLogin();
                 break;
             case R.id.btn_forgot_password:
+
                 break;
             case R.id.btn_register:
                 intent.setClass(this, RegisterActivity.class);
@@ -66,7 +72,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         mProgressView = findViewById(R.id.progress_login);
         mUserNameView = (AutoCompleteTextView) findViewById(R.id.tv_user_name);
         mPasswordView = (EditText) findViewById(R.id.tv_password);
-        inputUserNname = (TextInputLayout) findViewById(R.id.input_user_name);
+        inputUsername = (TextInputLayout) findViewById(R.id.input_user_name);
         inputPassword = (TextInputLayout) findViewById(R.id.input_password);
         mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
@@ -85,6 +91,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         forgot_password.setOnClickListener(this);
         Button register = (Button) findViewById(R.id.btn_register);
         register.setOnClickListener(this);
+        Button resetPassword = (Button) findViewById(R.id.btn_forgot_password);
+        resetPassword.setOnClickListener(this);
     }
 
     /**
@@ -97,7 +105,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         }
 
         // Reset errors.
-        inputUserNname.setError(null);
+        inputUsername.setError(null);
         inputPassword.setError(null);
 
         String username = mUserNameView.getText().toString();
@@ -107,7 +115,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         View focusView = null;
 
         if (TextUtils.isEmpty(username)) {
-            inputUserNname.setError(getString(R.string.error_no_name));
+            inputUsername.setError(getString(R.string.error_no_name));
             focusView = mUserNameView;
             cancel = true;
         } else if (!TextUtils.isEmpty(password) && !isPasswordValid(password)) {
@@ -133,7 +141,17 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                         startActivity(new Intent(LoginActivity.this, MainActivity.class));
                     } else {
                         showProgress(false);
-                        Toast.makeText(LoginActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                        String json = e.getMessage();
+                        JSONTokener tokener = new JSONTokener(json);
+                        try{
+                            JSONObject jsonObject = (JSONObject) tokener.nextValue();
+                            Toast.makeText(LoginActivity.this,
+                                    jsonObject.getString("error"),
+                                    Toast.LENGTH_LONG).show();
+                        }
+                        catch (JSONException jse) {
+                            jse.printStackTrace();
+                        }
                     }
                 }
             });
@@ -176,6 +194,30 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             @Override
             public void onAnimationEnd(Animator animation) {
                 mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
+            }
+        });
+    }
+
+    private void attemptResetPassword() {
+        AVUser.requestPasswordResetInBackground("myemail@example.com", new RequestPasswordResetCallback() {
+            @Override
+            public void done(AVException e) {
+                if (e == null) {
+                    Toast.makeText(LoginActivity.this, "密码重置邮件已经发到您的邮箱", Toast.LENGTH_LONG).show();
+                } else {
+                    e.printStackTrace();
+                    String json = e.getMessage();
+                    JSONTokener tokener = new JSONTokener(json);
+                    try{
+                        JSONObject jsonObject = (JSONObject) tokener.nextValue();
+                        Toast.makeText(LoginActivity.this,
+                                jsonObject.getString("error"),
+                                Toast.LENGTH_LONG).show();
+                    }
+                    catch (JSONException jse) {
+                        jse.printStackTrace();
+                    }
+                }
             }
         });
     }

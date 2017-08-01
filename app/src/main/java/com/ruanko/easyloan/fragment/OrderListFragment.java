@@ -125,7 +125,11 @@ public class OrderListFragment extends Fragment
         avQuery1 = new AVQuery<>(OrderContract.OrderEntry.TABLE_NAME);
 
         if (tabAt == 1) {
-            avQuery1.whereEqualTo(OrderContract.OrderEntry.COLUMN_STATUS, OrderContract.Status.GRANT);
+            AVQuery<AVObject> query1 = new AVQuery<>(OrderContract.OrderEntry.TABLE_NAME);
+            AVQuery<AVObject> query2 = new AVQuery<>(OrderContract.OrderEntry.TABLE_NAME);
+            query1.whereEqualTo(OrderContract.OrderEntry.COLUMN_STATUS, OrderContract.Status.GRANT);
+            query2.whereEqualTo(OrderContract.OrderEntry.COLUMN_STATUS, OrderContract.Status.PARTIAL_REPAY);
+            avQuery1 = AVQuery.or(Arrays.asList(query1, query2));
         }
         else if (tabAt == 2) {
             avQuery1.whereEqualTo(OrderContract.OrderEntry.COLUMN_STATUS, OrderContract.Status.PENDING);
@@ -139,7 +143,7 @@ public class OrderListFragment extends Fragment
         AVQuery<AVObject> avQuery2 = new AVQuery<>(OrderContract.OrderEntry.TABLE_NAME);
         avQuery2.whereEqualTo(OrderContract.OrderEntry.COLUMN_OWNER, AVUser.getCurrentUser());
         AVQuery<AVObject> avQuery = AVQuery.and(Arrays.asList(avQuery2, avQuery1));
-        avQuery.orderByDescending(OrderContract.OrderEntry.COLUMN_DEADLINE);
+        avQuery.orderByDescending(OrderContract.OrderEntry.COLUMN_CREATE_AT);
         avQuery.findInBackground(new FindCallback<AVObject>() {
             @Override
             public void done(List<AVObject> list, AVException e) {
