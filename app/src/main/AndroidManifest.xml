@@ -59,6 +59,11 @@
             android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
             android:theme="@style/AppTheme" />
         <activity android:name=".activity.RepayActivity"></activity>
+        <activity
+            android:name=".activity.AboutActivity"
+            android:label="@string/title_activity_about"
+            android:parentActivityName=".activity.MainActivity"
+            android:theme="@style/AppTheme.NoActionBarStatusBar" />
         <!--<activity-->
             <!--android:name=".activity.AgreementActivity"-->
             <!--android:label="用户协议"-->

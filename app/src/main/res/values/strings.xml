@@ -296,5 +296,16 @@
     </string>
     <string name="action_settings">Settings</string>
     <string name="title_activity_privacy">PrivacyActivity</string>
+    <string name="about_card1_message">欢迎使用软酷E贷</string>
+    <string name="about_card2_title">您可以通过以下方式联系我们</string>
+    <string name="about_us">燕山大学14级计算机4班</string>
+    <string name="about_email">i@panjunwen.com</string>
+    <string name="about_git_hub">\@Ruanko/Easy loan</string>
+    <string name="about_address">河北/秦皇岛</string>
+    <string name="about_email_intent">About: Easy loan</string>
+    <string name="about_version">1.0</string>
+    <string name="title_activity_about">关于我们</string>
+    <string name="snack_bar_delete_order">确定删除订单记录？将对您的信誉评估产生影响</string>
+    <string name="action_confirm_delete">确认</string>
 
 </resources>

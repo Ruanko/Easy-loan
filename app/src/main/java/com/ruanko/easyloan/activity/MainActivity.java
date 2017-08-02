@@ -192,24 +192,23 @@ public class MainActivity extends AppCompatActivity
                 mDrawerLayout.closeDrawer(GravityCompat.START);
 //                mTabLayout.getTabAt(0).select();
                 break;
-
-            case R.id.nav_item2:
-                mDrawerLayout.closeDrawer(GravityCompat.START);
-//                mTabLayout.getTabAt(1).select();
-                break;
-
-            case R.id.nav_item3:
-//                startActivity(intent);
-                break;
-
-            case R.id.nav_item4:
-//                intent.setClass(this, BottomNavigationActivity.class);
-//                startActivity(intent);
-                break;
             case R.id.nav_setting:
+                mDrawerLayout.closeDrawer(GravityCompat.START);
                 intent.setClass(this, SettingsActivity.class);
                 startActivity(intent);
+                break;
+            case R.id.nav_about_us:
+                mDrawerLayout.closeDrawer(GravityCompat.START);
+                intent.setClass(this, AboutActivity.class);
+                startActivity(intent);
+                break;
+            case R.id.nav_user_setting:
+                mDrawerLayout.closeDrawer(GravityCompat.START);
+                intent.setClass(this, UserInfoActivity.class);
+                startActivity(intent);
+                break;
             default:
+                mDrawerLayout.closeDrawer(GravityCompat.START);
                 break;
         }
 

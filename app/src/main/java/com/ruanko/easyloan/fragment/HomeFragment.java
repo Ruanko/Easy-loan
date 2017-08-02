@@ -78,9 +78,14 @@ public class HomeFragment extends Fragment {
         mRecentRepayTextView = (TextView) mRootView.findViewById(R.id.tv_recent_repay);
         mLoanCountTextView = (TextView) mRootView.findViewById(R.id.tv_loan_count);
         mOverdueTextView = (TextView) mRootView.findViewById(R.id.tv_total_loan);
-        AVQuery<AVObject> query = new AVQuery<AVObject>(OrderContract.OrderEntry.TABLE_NAME);
-        query.whereEqualTo(OrderContract.OrderEntry.COLUMN_OWNER, AVUser.getCurrentUser());
-        query.countInBackground(new CountCallback() {
+        AVQuery<AVObject> query3 = new AVQuery<>(OrderContract.OrderEntry.TABLE_NAME);
+
+        query3.whereEqualTo(OrderContract.OrderEntry.COLUMN_OWNER, AVUser.getCurrentUser());
+
+        AVQuery<AVObject> query6 = new AVQuery<AVObject>(OrderContract.OrderEntry.TABLE_NAME);
+        query6.whereEqualTo(OrderContract.OrderEntry.COLUMN_OWNER, AVUser.getCurrentUser());
+        AVQuery<AVObject> query7 = AVQuery.and(Arrays.asList(query3, query6));
+        query7.countInBackground(new CountCallback() {
             @Override
             public void done(int i, AVException e) {
                 if (e == null)
@@ -91,17 +96,19 @@ public class HomeFragment extends Fragment {
         AVQuery<AVObject> query2 = new AVQuery<>(OrderContract.OrderEntry.TABLE_NAME);
         query1.whereEqualTo(OrderContract.OrderEntry.COLUMN_STATUS, OrderContract.Status.GRANT);
         query2.whereEqualTo(OrderContract.OrderEntry.COLUMN_STATUS, OrderContract.Status.PARTIAL_REPAY);
-        query = AVQuery.or(Arrays.asList(query1, query2));
-        query.countInBackground(new CountCallback() {
+        AVQuery<AVObject> query = AVQuery.or(Arrays.asList(query1, query2));
+        AVQuery<AVObject> query4 = AVQuery.and(Arrays.asList(query3, query));
+        query4.countInBackground(new CountCallback() {
             @Override
             public void done(int i, AVException e) {
                 if (e == null)
                     mRecentRepayTextView.setText(String.valueOf(i));
             }
         });
-        query = new AVQuery<AVObject>(OrderContract.OrderEntry.TABLE_NAME);
-        query.whereEqualTo(OrderContract.OrderEntry.COLUMN_STATUS, OrderContract.Status.OVERDUE);
-        query.countInBackground(new CountCallback() {
+        AVQuery<AVObject> query8 = new AVQuery<AVObject>(OrderContract.OrderEntry.TABLE_NAME);
+        query8.whereEqualTo(OrderContract.OrderEntry.COLUMN_STATUS, OrderContract.Status.OVERDUE);
+        AVQuery<AVObject> query5 = AVQuery.and(Arrays.asList(query3, query8));
+        query5.countInBackground(new CountCallback() {
             @Override
             public void done(int i, AVException e) {
                 if (e == null)

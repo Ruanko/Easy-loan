@@ -237,7 +237,7 @@ public class AccountFragment extends Fragment {
             }
 
             if (!user.getBoolean(UserContract.UserEntry.COLUMN_IS_EMAIL_VERIFIED)) {
-                account_score -= 20;
+                account_score -= 10;
             }
 
             mNameTextView.setText(user.getUsername());

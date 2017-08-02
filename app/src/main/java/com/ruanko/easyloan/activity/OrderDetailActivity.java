@@ -147,11 +147,11 @@ public class OrderDetailActivity extends AppCompatActivity {
             undoButton.setVisibility(View.VISIBLE);
             repayButton.setVisibility(View.GONE);
             deleteButton.setVisibility(View.GONE);
-        } else if (status < OrderContract.Status.DONE) {
+        } else if (status >= OrderContract.Status.GRANT && status < OrderContract.Status.DONE) {
             undoButton.setVisibility(View.GONE);
             repayButton.setVisibility(View.VISIBLE);
             deleteButton.setVisibility(View.GONE);
-        } else {
+        } else if (OrderContract.Status.DONE == status){
             undoButton.setVisibility(View.GONE);
             repayButton.setVisibility(View.GONE);
             deleteButton.setVisibility(View.VISIBLE);
@@ -220,6 +220,21 @@ public class OrderDetailActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Snackbar.make(v, getString(R.string.snack_bar_undo_order), Snackbar.LENGTH_LONG)
                         .setAction(R.string.action_undo_apply, new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                avObject.deleteInBackground();
+                                onBackPressed();
+                            }
+                        })
+                        .show();
+            }
+        });
+
+        deleteButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Snackbar.make(v, getString(R.string.snack_bar_delete_order), Snackbar.LENGTH_LONG)
+                        .setAction(R.string.action_confirm_delete, new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
                                 avObject.deleteInBackground();

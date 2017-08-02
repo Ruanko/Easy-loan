@@ -6,22 +6,22 @@
             android:id="@+id/nav_item1"
             android:icon="@drawable/ic_home_black_24dp"
             android:title="@string/nav_item1" />
-        <item
-            android:id="@+id/nav_item2"
-            android:icon="@drawable/ic_attach_money_black_24dp"
-            android:title="@string/nav_item2" />
-        <item
-            android:id="@+id/nav_item3"
-            android:icon="@drawable/ic_credit_card_black_24dp"
-            android:title="@string/nav_item3" />
-        <item
-            android:id="@+id/nav_item4"
-            android:icon="@drawable/ic_access_time_black_24dp"
-            android:title="@string/nav_item4" />
-        <item
-            android:id="@+id/nav_item5"
-            android:icon="@drawable/ic_done_all_black_24dp"
-            android:title="@string/nav_item5" />
+        <!--<item-->
+            <!--android:id="@+id/nav_item2"-->
+            <!--android:icon="@drawable/ic_attach_money_black_24dp"-->
+            <!--android:title="@string/nav_item2" />-->
+        <!--<item-->
+            <!--android:id="@+id/nav_item3"-->
+            <!--android:icon="@drawable/ic_credit_card_black_24dp"-->
+            <!--android:title="@string/nav_item3" />-->
+        <!--<item-->
+            <!--android:id="@+id/nav_item4"-->
+            <!--android:icon="@drawable/ic_access_time_black_24dp"-->
+            <!--android:title="@string/nav_item4" />-->
+        <!--<item-->
+            <!--android:id="@+id/nav_item5"-->
+            <!--android:icon="@drawable/ic_done_all_black_24dp"-->
+            <!--android:title="@string/nav_item5" />-->
 
     </group>
 
