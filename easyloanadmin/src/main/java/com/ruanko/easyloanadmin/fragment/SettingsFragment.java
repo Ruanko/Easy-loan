@@ -1,0 +1,18 @@
+package com.ruanko.easyloanadmin.fragment;
+
+import android.os.Bundle;
+import android.support.v7.preference.PreferenceFragmentCompat;
+
+import com.ruanko.easyloanadmin.R;
+
+/**
+ * Created by deserts on 17/7/26.
+ */
+
+public class SettingsFragment extends PreferenceFragmentCompat {
+    @Override
+    public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
+        addPreferencesFromResource(R.xml.preferences_settings);
+//        setPreferencesFromResource(R.xml.preferences_settings, rootKey);
+    }
+}

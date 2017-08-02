@@ -5,6 +5,7 @@
       <module fileurl="file://$PROJECT_DIR$/Easy-loan.iml" filepath="$PROJECT_DIR$/Easy-loan.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/easyloan_dev.iml" filepath="$PROJECT_DIR$/easyloan_dev.iml" />
+      <module fileurl="file://$PROJECT_DIR$/easyloanadmin/easyloanadmin.iml" filepath="$PROJECT_DIR$/easyloanadmin/easyloanadmin.iml" />
     </modules>
   </component>
 </project>
