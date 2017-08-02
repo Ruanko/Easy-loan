@@ -36,8 +36,6 @@ public class HomeFragment extends Fragment {
     private NestedScrollView mRootView;
     // arc related
     private DecoView mDecoView;
-    //    private DecoView mDecoView2;
-//    private DecoView mDecoView3;
     private int mBackIndex;
     private TextView mTextPercentage;
     private TextView mTextBelowPercentage;
@@ -67,9 +65,9 @@ public class HomeFragment extends Fragment {
         this.mRootView =
                 (NestedScrollView) inflater.inflate(R.layout.fragment_home, container, false);
         COLORS = new ArrayList<>();
-        COLORS.add(ContextCompat.getColor(getContext(), R.color.colorPrimary));
-        COLORS.add(ContextCompat.getColor(getContext(), R.color.blue_grey_primary));
         COLORS.add(ContextCompat.getColor(getContext(), R.color.colorAccent));
+        COLORS.add(ContextCompat.getColor(getContext(), R.color.lime_primary));
+        COLORS.add(ContextCompat.getColor(getContext(), R.color.colorPrimary));
         loadData();
         initView();
         initDecoView(DATA);

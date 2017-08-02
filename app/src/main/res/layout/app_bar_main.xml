@@ -44,7 +44,7 @@
         android:layout_marginRight="@dimen/float_button_margin"
         android:src="@drawable/ic_add_white_24dp"
         android:visibility="gone"
-        app:backgroundTint="@color/google_blue"
+        app:backgroundTint="@color/colorPrimaryLight"
         app:layout_behavior="@string/bye_burger_float_behavior"
         app:layout_scrollFlags="scroll|enterAlways" />
 
@@ -57,7 +57,7 @@
         android:layout_marginRight="@dimen/float_button_margin"
         android:src="@drawable/ic_create_white_24dp"
         android:visibility="gone"
-        app:backgroundTint="@color/google_red"
+        app:backgroundTint="@color/colorAccent"
         app:layout_behavior="@string/bye_burger_float_behavior"
         app:layout_scrollFlags="scroll|enterAlways" />
 

@@ -24,6 +24,7 @@ import com.ruanko.easyloan.data.OrderContract;
 import com.ruanko.easyloan.utilities.DateUtils;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -32,10 +33,16 @@ public class OrderListAdapter extends RecyclerView.Adapter<OrderListAdapter.Orde
 
     private Context context;
     private List<AVObject> mOrderList;
+    private static ColorGenerator COLOR_GENERATOR = ColorGenerator.MATERIAL;
 
     public OrderListAdapter(Context context, List<AVObject> orders) {
         this.context = context;
         this.mOrderList = orders;
+        List<Integer> colors = new ArrayList<Integer>();
+        colors.add(context.getResources().getColor(R.color.colorPrimary));
+        colors.add(context.getResources().getColor(R.color.colorAccent));
+        colors.add(context.getResources().getColor(R.color.lime_primary));
+        COLOR_GENERATOR = ColorGenerator.create(colors);
     }
 
     @Override
@@ -85,8 +92,7 @@ public class OrderListAdapter extends RecyclerView.Adapter<OrderListAdapter.Orde
             int status = orderObject.getInt(OrderContract.OrderEntry.COLUMN_STATUS);
             if (status < OrderContract.Status.GRANT) {
                 orderObject.deleteInBackground();
-            }
-            else if (status >= OrderContract.Status.GRANT && status < OrderContract.Status.OVERDUE){
+            } else if (status >= OrderContract.Status.GRANT && status < OrderContract.Status.OVERDUE) {
                 orderObject.put(OrderContract.OrderEntry.COLUMN_STATUS, OrderContract.Status.OVERDUE);
                 orderObject.saveInBackground();
             }
@@ -126,9 +132,8 @@ public class OrderListAdapter extends RecyclerView.Adapter<OrderListAdapter.Orde
         }
 
         private void initRoundIcon(String letter) {
-            ColorGenerator generator = ColorGenerator.MATERIAL;
             TextDrawable drawable = TextDrawable.builder()
-                    .buildRound(letter, generator.getRandomColor());
+                    .buildRound(letter, COLOR_GENERATOR.getRandomColor());
             roundIcon.setImageDrawable(drawable);
         }
     }
