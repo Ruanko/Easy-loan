@@ -91,7 +91,6 @@ public class OrderDetailActivity extends AppCompatActivity {
         simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         createDateTextView.setText(simpleDateFormat.format(avObject.getCreatedAt()));
         orderIdTextView.setText(avObject.getObjectId());
-
         int methodGrant = avObject.getInt(OrderContract.OrderEntry.COLUMN_GRANT_METHOD);
         String[] grantMethods = getResources().getStringArray(R.array.type_received);
         grantAccountTextView.setText(grantMethods[methodGrant] + ": " +

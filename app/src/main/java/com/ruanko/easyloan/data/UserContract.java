@@ -27,7 +27,6 @@ public class UserContract {
         public static final String COLUMN_LEVEL = "level";
         public static final String COLUMN_INFO_LEVEL = "info_level";
         public static final String COLUMN_TRADE_LEVEL = "trade_level";
-
         public static final String COLUMN_AVATAR = "avatar";
 
     }
