@@ -178,7 +178,7 @@ public class OrderDetailActivity extends AppCompatActivity {
                                     OrderDetailActivity.this.getString(R.string.alipay_account));
                         }
                         else {
-                            Snackbar.make(v, getString(R.string.alipay_not_installed), Snackbar.LENGTH_LONG)
+                            Toast.makeText(OrderDetailActivity.this, getString(R.string.alipay_not_installed), Toast.LENGTH_LONG)
                                     .show();
                         }
                     }
