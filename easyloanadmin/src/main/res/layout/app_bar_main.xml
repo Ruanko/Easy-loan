@@ -21,10 +21,9 @@
             app:popupTheme="@style/AppTheme.PopupOverlay" />
 
         <android.support.design.widget.TabLayout
-            android:id="@+id/tab_layout_for_orders"
+            android:id="@+id/tab_layout_main"
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:visibility="gone"
+            android:layout_height="wrap_content"
             app:tabIndicatorColor="@color/colorAccent">
         </android.support.design.widget.TabLayout>
     </android.support.design.widget.AppBarLayout>
@@ -69,5 +68,6 @@
         android:background="@color/white"
         app:layout_behavior="@string/bye_burger_bottom_behavior"
         app:layout_scrollFlags="scroll|enterAlways"
-        app:menu="@menu/navigation" />
+        app:menu="@menu/navigation"
+        android:visibility="gone"/>
 </android.support.design.widget.CoordinatorLayout>

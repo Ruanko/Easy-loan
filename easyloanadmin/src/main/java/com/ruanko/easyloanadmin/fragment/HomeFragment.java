@@ -1,53 +1,76 @@
 package com.ruanko.easyloanadmin.fragment;
 
+import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.BottomSheetDialog;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.NestedScrollView;
-import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.avos.avoscloud.AVException;
+import com.avos.avoscloud.AVFile;
 import com.avos.avoscloud.AVObject;
 import com.avos.avoscloud.AVQuery;
-import com.avos.avoscloud.AVUser;
 import com.avos.avoscloud.CountCallback;
+import com.avos.avoscloud.FindCallback;
+import com.avos.avoscloud.SaveCallback;
 import com.hookedonplay.decoviewlib.DecoView;
 import com.ruanko.easyloanadmin.R;
 import com.ruanko.easyloanadmin.data.OrderContract;
+import com.ruanko.easyloanadmin.data.SettingsContract;
+import com.squareup.picasso.Picasso;
+import com.theartofdev.edmodo.cropper.CropImage;
+import com.theartofdev.edmodo.cropper.CropImageView;
+import com.youth.banner.Banner;
+import com.youth.banner.BannerConfig;
+import com.youth.banner.loader.ImageLoader;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.json.JSONTokener;
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
+
+import static com.ruanko.easyloanadmin.utilities.FileUtils.getFileBytes;
 
 /**
  * Created by deserts on 17/7/25.
  */
 
-public class HomeFragment extends Fragment {
+public class HomeFragment extends Fragment implements View.OnClickListener {
     private NestedScrollView mRootView;
     // arc related
     private DecoView mDecoView;
+    private Banner banner;
     private int mBackIndex;
     private TextView mTextPercentage;
     private TextView mTextBelowPercentage;
     private TextView mLoanCountTextView;
     private TextView mRecentRepayTextView;
     private TextView mOverdueTextView;
+    Context context;
+    ImageView previewImageView;
+    Button selectPicButton;
+    EditText mBannerTitleEditText;
 
-    private final float mSeriesMax = 100f;
-
-    private ArrayList<Integer> COLORS;
-    private ArrayList<Float> DATA;
-
-    private float last_position;
-    private boolean arc_first_flag = true;
+    private byte[] mImageBytes = null;
     //    private RelativeLayout mRootView;
 //    private SwipeRefreshLayout swipeRefreshLayout;
-    private RecyclerView mRecyclerView;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -59,10 +82,7 @@ public class HomeFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         this.mRootView =
                 (NestedScrollView) inflater.inflate(R.layout.fragment_home, container, false);
-        COLORS = new ArrayList<>();
-        COLORS.add(ContextCompat.getColor(getContext(), R.color.colorAccent));
-        COLORS.add(ContextCompat.getColor(getContext(), R.color.lime_primary));
-        COLORS.add(ContextCompat.getColor(getContext(), R.color.colorPrimary));
+        context = getContext();
 //        loadData();
         initView();
 //        initDecoView(DATA);
@@ -75,7 +95,6 @@ public class HomeFragment extends Fragment {
         mOverdueTextView = (TextView) mRootView.findViewById(R.id.tv_total_loan);
 
         AVQuery<AVObject> query6 = new AVQuery<AVObject>(OrderContract.OrderEntry.TABLE_NAME);
-        query6.whereEqualTo(OrderContract.OrderEntry.COLUMN_OWNER, AVUser.getCurrentUser());
         query6.countInBackground(new CountCallback() {
             @Override
             public void done(int i, AVException e) {
@@ -104,143 +123,128 @@ public class HomeFragment extends Fragment {
                     mOverdueTextView.setText(String.valueOf(i));
             }
         });
+        banner = (Banner) mRootView.findViewById(R.id.banner);
+        Button updateButton = (Button) mRootView.findViewById(R.id.btn_update_banner);
+        updateButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(getContext());
+                final View dialogView = getActivity().getLayoutInflater().inflate(R.layout.dialog_upload, null);
+                Button btn_dialog_bottom_sheet_ok = (Button) dialogView.findViewById(R.id.btn_dialog_bottom_sheet_ok);
+                mBannerTitleEditText = (EditText) dialogView.findViewById(R.id.et_banner_title);
+//                Button btn_dialog_bottom_sheet_cancel = (Button) dialogView.findViewById(R.id.btn_dialog_bottom_sheet_cancel);
+//                ImageView img_bottom_dialog = (ImageView) dialogView.findViewById(R.id.img_bottom_dialog);
+//                Picasso.with(getContext()).load(getActivity().getString(R.string.wechat_qrcode_url)).into(img_bottom_dialog);
+                bottomSheetDialog.setContentView(dialogView);
+                previewImageView = (ImageView) dialogView.findViewById(R.id.img_prepare_upload);
+                selectPicButton = (Button) dialogView.findViewById(R.id.btn_select_pic);
+                selectPicButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        CropImage.activity()
+                                .setGuidelines(CropImageView.Guidelines.ON)
+                                .setActivityTitle(getString(R.string.crop_image_title))
+                                .setOutputCompressQuality(90)
+                                .setOutputCompressFormat(Bitmap.CompressFormat.JPEG)
+                                .start(context, HomeFragment.this);
+                    }
+                });
+                btn_dialog_bottom_sheet_ok.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        bottomSheetDialog.dismiss();
+                    }
+                });
+                bottomSheetDialog.show();
+            }
+        });
+        banner.setVisibility(View.VISIBLE);
+        //设置图片加载器
+
+        loadBanner();
     }
 
-//    private void loadData() {
-//        last_position = 0;
-//        DATA = new ArrayList<>();
-//        AVUser user = AVUser.getCurrentUser();
-//        int score1 = user.getInt(UserContract.UserEntry.COLUMN_LEVEL);
-//        int score2 = user.getInt(UserContract.UserEntry.COLUMN_INFO_LEVEL);
-//        int score3 = user.getInt(UserContract.UserEntry.COLUMN_TRADE_LEVEL);
-//        int data1 = score2 / 3;
-//        int data2 = score3 / 3;
-//        int data3 = score1 / 3;
-//        DATA.add((float) (data1 + data2 + data3));
-//        DATA.add((float) (data1 + data2));
-//        DATA.add((float) (data1));
-//    }
-//
-//    private void initDecoView(final List<Float> data) {
-//        mDecoView = (DecoView) this.mRootView.findViewById(R.id.dynamicArcView);
-//        mTextPercentage = (TextView) this.mRootView.findViewById(R.id.tv_percentage);
-//        mTextBelowPercentage = (TextView) mRootView.findViewById(R.id.tv_below_percentage);
-////        DecoView[] decoViews = {mDecoView, mDecoView2, mDecoView3};
-//        int duration;
-//        if (arc_first_flag) {
-//            duration = 1000;
-//        } else {
-//            duration = 0;
-//        }
-//
-//        int delay = (data.size() - 1) * 2000 + 300;
-//        int delay_inner = 0;
-//        createBackSeries(mDecoView, 1000);
-//        for (int i = 0; i < data.size(); i++) {
-//            if (arc_first_flag)
-//                delay_inner = delay;
-//            if (i == data.size() - 1)
-//                createDataSeries(mDecoView, data.get(i), COLORS.get(i), delay_inner, duration, true);
-//            else
-//                createDataSeries(mDecoView, data.get(i), COLORS.get(i), delay_inner + 100, duration, false);
-//            delay -= 2000;
-//        }
-//        if (!arc_first_flag) {
-//            setText();
-//            return;
-//        }
-//        arc_first_flag = false;
-//        mDecoView.addEvent(new DecoEvent.Builder(DecoDrawEffect.EffectType.EFFECT_SPIRAL_EXPLODE)
-//                .setIndex(1)
-//                .setDelay(data.size() * 2000 + 1800)
-//                .setDuration(4000)
-//                .setDisplayText(getCreditLevel(data.get(0)))
-//                .setListener(new DecoEvent.ExecuteEventListener() {
-//                    @Override
-//                    public void onEventStart(DecoEvent decoEvent) {
-//                        resetText();
-//                    }
-//
-//                    @Override
-//                    public void onEventEnd(DecoEvent decoEvent) {
-//                        setText();
-//                        initDecoView(DATA);
-//                    }
-//                })
-//                .build());
-//    }
-//
-//    private void createBackSeries(DecoView decoView, int duration) {
-//        SeriesItem seriesItem = new SeriesItem.Builder(ContextCompat.getColor(getContext(), R.color.arc_base_grey))
-//                .setRange(0, mSeriesMax, 0)
-//                .setInitialVisibility(true)
-//                .build();
-//
-//        mBackIndex = decoView.addSeries(seriesItem);
-//        decoView.addEvent(new DecoEvent.Builder(mSeriesMax)
-//                .setIndex(mBackIndex)
-//                .setDuration(duration)
-//                .setDelay(0)
-//                .build());
-//    }
-//
-//    private void createDataSeries(DecoView decoView, final float endAt, int color, int delay, int duration, boolean showStart) {
-//        final SeriesItem seriesItem = new SeriesItem.Builder(color)
-//                .setRange(0, mSeriesMax, 0)
-//                .setInitialVisibility(false)
-//                .build();
-//        seriesItem.addArcSeriesItemListener(new SeriesItem.SeriesItemListener() {
-//            @Override
-//            public void onSeriesItemAnimationProgress(float percentComplete, float currentPosition) {
-//                if (currentPosition > last_position) {
-//                    mTextPercentage.setText(String.valueOf((int) currentPosition));
-//                    last_position = currentPosition;
-//                }
-//            }
-//
-//            @Override
-//            public void onSeriesItemDisplayProgress(float percentComplete) {
-//
-//            }
-//        });
-//
-//        int mIndex = decoView.addSeries(seriesItem);
-//
-//        if (showStart && !arc_first_flag) {
-//            decoView.addEvent(new DecoEvent.Builder(DecoDrawEffect.EffectType.EFFECT_SPIRAL_OUT)
-//                    .setIndex(mIndex)
-//                    .setDuration(duration)
-//                    .setEffectRotations(1)
-//                    .setDelay(delay)
-//                    .build());
-//        }
-//        decoView.addEvent(new DecoEvent.Builder(endAt)
-//                .setIndex(mIndex)
-//                .setDelay(delay + duration)
-//                .build());
-//    }
-//
-//    private void resetText() {
-//        mTextBelowPercentage.setText("");
-//        mTextPercentage.setText("");
-//    }
-//
-//    private String getCreditLevel(float score) {
-//        String string;
-//        if (score >= 90)
-//            string = getString(R.string.arc_final_text_level1);
-//        else if (score >= 80)
-//            string = getString(R.string.arc_final_text_level2);
-//        else if (score >= 70)
-//            string = getString(R.string.arc_final_text_level3);
-//        else
-//            string = getString(R.string.arc_final_text_level4);
-//        return string;
-//    }
-//
-//    private void setText() {
-//        float score = DATA.get(0);
-//        mTextPercentage.setText(String.valueOf((int) score));
-//        mTextBelowPercentage.setText(getCreditLevel(score));
-//    }
+
+    private void loadBanner() {
+        //设置图片集合
+        banner.setImageLoader(new HomeFragment.GlideImageLoader());
+        banner.setBannerStyle(BannerConfig.NUM_INDICATOR_TITLE);
+        final ArrayList images = new ArrayList<String>();
+        final ArrayList<String> titles = new ArrayList<>();
+        AVQuery<AVObject> avQuery = new AVQuery<>(SettingsContract.BannerEntry.TABLE_NAME);
+        avQuery.orderByAscending(SettingsContract.BannerEntry.COLUMN_CREATE_AT);
+        avQuery.limit(3);
+        avQuery.findInBackground(new FindCallback<AVObject>() {
+            @Override
+            public void done(List<AVObject> list, AVException e) {
+                int count = 5;
+                for (AVObject object : list){
+                    AVFile imageFile = object.getAVFile(SettingsContract.BannerEntry.COLUMN_IMAGE);
+                    if (imageFile != null) {
+                        Log.d("", "Home fragment: get url = " + imageFile.getUrl());
+                        images.add(imageFile.getUrl());
+                        titles.add(object.getString(SettingsContract.BannerEntry.COLUMN_TITLE));
+                    }
+                }
+                banner.setImages(images);
+                banner.setBannerTitles(titles);
+                //banner设置方法全部调用完毕时最后调用
+                banner.start();
+            }
+        });
+    }
+
+    @Override
+    public void onClick(View v) {
+
+    }
+
+    public class GlideImageLoader extends ImageLoader {
+        @Override
+        public void displayImage(Context context, Object path, ImageView imageView) {
+            Picasso.with(context).load((String) path).into(imageView);
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE
+                && resultCode == Activity.RESULT_OK) {
+            final CropImage.ActivityResult result = CropImage.getActivityResult(data);
+            try {
+                mImageBytes = getFileBytes(context.getContentResolver()
+                        .openInputStream(result.getUri()));
+                AVObject avObject = new AVObject(SettingsContract.BannerEntry.TABLE_NAME);
+                avObject.put(SettingsContract.BannerEntry.COLUMN_TITLE, mBannerTitleEditText.getText().toString());
+                avObject.put(SettingsContract.BannerEntry.COLUMN_IMAGE, new AVFile("banner.jpg", mImageBytes));
+                avObject.saveInBackground(new SaveCallback() {
+                    @Override
+                    public void done(AVException e) {
+                        if (e == null) {
+                            Picasso.with(getContext()).load(result.getUri()).into(previewImageView);
+                            loadBanner();
+                            selectPicButton.setText("上传完成，点击继续选择图片");
+                            Toast.makeText(context, getString(R.string.upload_done), Toast.LENGTH_LONG).show();
+                        } else {
+                            String json = e.getMessage();
+                            JSONTokener tokener = new JSONTokener(json);
+                            try {
+                                JSONObject jsonObject = (JSONObject) tokener.nextValue();
+                                Toast.makeText(HomeFragment.this.getContext(),
+                                        jsonObject.getString("error"),
+                                        Toast.LENGTH_LONG).show();
+                            } catch (JSONException jse) {
+                                jse.printStackTrace();
+                            }
+                        }
+                    }
+                });
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
 }

@@ -75,7 +75,7 @@
     <string name="order_count_label">全部借款</string>
     <string name="recent_deadline_label">近期待还</string>
     <string name="total_loan_label">逾期未还</string>
-    <string name="honor_label">根据您的信息估算您的信誉度为</string>
+    <string name="honor_label">信用评估</string>
     <string name="statics_label">概览</string>
     <string name="name_label">姓名: </string>
     <string name="phone_label">手机: </string>

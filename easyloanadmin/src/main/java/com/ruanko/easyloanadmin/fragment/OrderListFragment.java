@@ -64,10 +64,11 @@ public class OrderListFragment extends Fragment
     }
 
     private void initView() {
-        mTabLayout = (TabLayout) getActivity().findViewById(R.id.tab_layout_for_orders);
+        mTabLayout = (TabLayout) getActivity().findViewById(R.id.tab_layout_main);
         mOrderListAdapter = new OrderListAdapter(getContext(), mOrderList);
         mRecyclerView = (RecyclerView) mRootView.findViewById(R.id.rv_order_list);
         mFloatingActionButton = (FloatingActionButton) getActivity().findViewById(R.id.fab_main_add_order);
+
 
         if (getScreenWidthDp() >= 1200) {
             final GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), 3);

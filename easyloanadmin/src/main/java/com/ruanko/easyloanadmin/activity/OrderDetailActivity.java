@@ -1,34 +1,27 @@
 package com.ruanko.easyloanadmin.activity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.BottomSheetDialog;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.avos.avoscloud.AVException;
 import com.avos.avoscloud.AVObject;
 import com.avos.avoscloud.GetCallback;
-import com.avos.avoscloud.SaveCallback;
 import com.ruanko.easyloanadmin.R;
 import com.ruanko.easyloanadmin.data.OrderContract;
 import com.ruanko.easyloanadmin.utilities.DateUtils;
 import com.squareup.picasso.Picasso;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-import org.json.JSONTokener;
-
 import java.text.SimpleDateFormat;
-
-import moe.feng.alipay.zerosdk.AlipayZeroSdk;
 
 public class OrderDetailActivity extends AppCompatActivity {
     private ImageView topImageView;
@@ -147,7 +140,7 @@ public class OrderDetailActivity extends AppCompatActivity {
             undoButton.setVisibility(View.VISIBLE);
             repayButton.setVisibility(View.GONE);
             deleteButton.setVisibility(View.GONE);
-        } else if (status >= OrderContract.Status.GRANT && status < OrderContract.Status.DONE) {
+        } else if (status == OrderContract.Status.REPAY_PENDING) {
             undoButton.setVisibility(View.GONE);
             repayButton.setVisibility(View.VISIBLE);
             deleteButton.setVisibility(View.GONE);
@@ -156,76 +149,44 @@ public class OrderDetailActivity extends AppCompatActivity {
             repayButton.setVisibility(View.GONE);
             deleteButton.setVisibility(View.VISIBLE);
         }
+        else {
+            undoButton.setVisibility(View.GONE);
+            repayButton.setVisibility(View.GONE);
+            deleteButton.setVisibility(View.GONE);
+        }
 
         //设置按钮
         repayButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                final BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(OrderDetailActivity.this);
-                View dialogView = OrderDetailActivity.this.getLayoutInflater().inflate(R.layout.dialog_repay, null);
-                Button btn_dialog_bottom_sheet_ok = (Button) dialogView.findViewById(R.id.btn_dialog_bottom_sheet_ok);
-                Button btn_dialog_bottom_sheet_cancel = (Button) dialogView.findViewById(R.id.btn_dialog_bottom_sheet_cancel);
-                ImageView img_bottom_dialog = (ImageView) dialogView.findViewById(R.id.img_bottom_dialog);
-                Picasso.with(OrderDetailActivity.this).load(OrderDetailActivity.this.getString(R.string.wechat_qrcode_url)).into(img_bottom_dialog);
-                bottomSheetDialog.setContentView(dialogView);
-
-                btn_dialog_bottom_sheet_ok.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        if (AlipayZeroSdk.hasInstalledAlipayClient(OrderDetailActivity.this)) {
-                            AlipayZeroSdk.startAlipayClient(OrderDetailActivity.this,
-                                    OrderDetailActivity.this.getString(R.string.alipay_account));
-                        }
-                        else {
-                            Toast.makeText(OrderDetailActivity.this, getString(R.string.alipay_not_installed), Toast.LENGTH_LONG)
-                                    .show();
-                        }
-                    }
-                });
-                btn_dialog_bottom_sheet_cancel.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        avObject.put(OrderContract.OrderEntry.COLUMN_STATUS, OrderContract.Status.REPAY_PENDING);
-                        avObject.saveInBackground(new SaveCallback() {
+                new AlertDialog.Builder(OrderDetailActivity.this)
+                        .setTitle(getString(R.string.main_dialog_simple_title))
+                        .setMessage(getString(R.string.main_dialog_simple_message))
+                        .setPositiveButton(getString(R.string.dialog_ok), new DialogInterface.OnClickListener() {
                             @Override
-                            public void done(AVException e) {
-                                if (e == null){
-                                    Toast.makeText(OrderDetailActivity.this, R.string.repaid_notice, Toast.LENGTH_LONG)
-                                            .show();
-                                }
-                                else {
-                                    String json = e.getMessage();
-                                    JSONTokener tokener = new JSONTokener(json);
-                                    try{
-                                        JSONObject jsonObject = (JSONObject) tokener.nextValue();
-                                        Toast.makeText(OrderDetailActivity.this,
-                                                jsonObject.getString("error"),
-                                                Toast.LENGTH_LONG).show();
-                                    }
-                                    catch (JSONException jse) {
-                                        jse.printStackTrace();
-                                    }
-                                }
+                            public void onClick(DialogInterface dialog, int which) {
+                                avObject.put(OrderContract.OrderEntry.COLUMN_STATUS, OrderContract.Status.DONE);
+                                avObject.saveInBackground();
                             }
-                        });
-                        bottomSheetDialog.dismiss();
-                    }
-                });
-                bottomSheetDialog.show();
+                        })
+                        .setNegativeButton(getString(R.string.dialog_cancel), null)
+                        .show();
             }
         });
         undoButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Snackbar.make(v, getString(R.string.snack_bar_undo_order), Snackbar.LENGTH_LONG)
-                        .setAction(R.string.action_undo_apply, new View.OnClickListener() {
+                new AlertDialog.Builder(OrderDetailActivity.this)
+                        .setTitle(getString(R.string.main_dialog_simple_title))
+                        .setMessage(getString(R.string.snack_bar_grant_money))
+                        .setPositiveButton(getString(R.string.dialog_ok), new DialogInterface.OnClickListener() {
                             @Override
-                            public void onClick(View v) {
-                                avObject.deleteInBackground();
-                                onBackPressed();
+                            public void onClick(DialogInterface dialog, int which) {
+                                avObject.put(OrderContract.OrderEntry.COLUMN_STATUS, OrderContract.Status.GRANT);
+                                avObject.saveInBackground();
                             }
                         })
+                        .setNegativeButton(getString(R.string.dialog_cancel), null)
                         .show();
             }
         });
@@ -238,7 +199,6 @@ public class OrderDetailActivity extends AppCompatActivity {
                             @Override
                             public void onClick(View v) {
                                 avObject.deleteInBackground();
-                                onBackPressed();
                             }
                         })
                         .show();

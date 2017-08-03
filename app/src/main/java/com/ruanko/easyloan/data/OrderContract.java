@@ -24,7 +24,7 @@ public class OrderContract {
         public static final String COLUMN_BANK_ACCOUNT = "bank_account";
         public static final String COLUMN_REPAID = "repaid";
         public static final String COLUMN_DEADLINE = "deadline";
-        public static final String COLUMN_CREATE_AT = "createAt";
+        public static final String COLUMN_CREATE_AT = "createdAt";
         public static final String COLUMN_OWNER = "owner";
         public static final String COLUMN_STATUS = "status";
     }

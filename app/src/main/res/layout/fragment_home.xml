@@ -11,10 +11,9 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-
-        android:orientation="vertical"
-        android:paddingTop="@dimen/activity_vertical_margin">
+        android:orientation="vertical">
         <TextView
+            android:paddingTop="16dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingLeft="@dimen/activity_horizontal_margin"
@@ -233,11 +232,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingTop="8dp"
+                android:paddingBottom="24dp"
                 android:text="@string/help_info_content"
                 android:textAppearance="@style/TextAppearance.AppCompat.Caption" />
         </LinearLayout>
-
-
 
     </LinearLayout>
 </android.support.v4.widget.NestedScrollView>

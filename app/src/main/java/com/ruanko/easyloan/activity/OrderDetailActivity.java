@@ -103,6 +103,25 @@ public class OrderDetailActivity extends AppCompatActivity {
     }
 
     private void afterLoadData(final AVObject avObject) {
+        int status = avObject.getInt(OrderContract.OrderEntry.COLUMN_STATUS);
+        if (status == OrderContract.Status.PENDING) {
+            undoButton.setVisibility(View.VISIBLE);
+            repayButton.setVisibility(View.GONE);
+            deleteButton.setVisibility(View.GONE);
+        } else if (status == OrderContract.Status.GRANT
+                || status == OrderContract.Status.PARTIAL_REPAY) {
+            undoButton.setVisibility(View.GONE);
+            repayButton.setVisibility(View.VISIBLE);
+            deleteButton.setVisibility(View.GONE);
+        } else if (OrderContract.Status.DONE == status){
+            undoButton.setVisibility(View.GONE);
+            repayButton.setVisibility(View.GONE);
+            deleteButton.setVisibility(View.VISIBLE);
+        } else {
+            undoButton.setVisibility(View.GONE);
+            repayButton.setVisibility(View.GONE);
+            deleteButton.setVisibility(View.GONE);
+        }
         titleTextView.setText(avObject.getString(OrderContract.OrderEntry.COLUMN_TITLE));
         descriptionTextView.setText(avObject.getString(OrderContract.OrderEntry.COLUMN_DESCRIPTION));
         amountTextView.setText(
@@ -129,7 +148,6 @@ public class OrderDetailActivity extends AppCompatActivity {
         int methodRepay = avObject.getInt(OrderContract.OrderEntry.COLUMN_REPAY_METHOD);
         String[] repayMethods = getResources().getStringArray(R.array.by_stage_spinner);
         repayMethodTextView.setText(repayMethods[methodRepay]);
-        int status = avObject.getInt(OrderContract.OrderEntry.COLUMN_STATUS);
         String[] statusArray = getResources().getStringArray(R.array.status);
         statusTextView.setText(statusArray[status]);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -143,25 +161,11 @@ public class OrderDetailActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-        if (status < OrderContract.Status.GRANT) {
-            undoButton.setVisibility(View.VISIBLE);
-            repayButton.setVisibility(View.GONE);
-            deleteButton.setVisibility(View.GONE);
-        } else if (status >= OrderContract.Status.GRANT && status < OrderContract.Status.DONE) {
-            undoButton.setVisibility(View.GONE);
-            repayButton.setVisibility(View.VISIBLE);
-            deleteButton.setVisibility(View.GONE);
-        } else if (OrderContract.Status.DONE == status){
-            undoButton.setVisibility(View.GONE);
-            repayButton.setVisibility(View.GONE);
-            deleteButton.setVisibility(View.VISIBLE);
-        }
 
         //设置按钮
         repayButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 final BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(OrderDetailActivity.this);
                 View dialogView = OrderDetailActivity.this.getLayoutInflater().inflate(R.layout.dialog_repay, null);
                 Button btn_dialog_bottom_sheet_ok = (Button) dialogView.findViewById(R.id.btn_dialog_bottom_sheet_ok);

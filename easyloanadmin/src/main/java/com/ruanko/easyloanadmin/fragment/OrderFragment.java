@@ -37,7 +37,7 @@ public class OrderFragment extends Fragment
     }
 
     private void initView() {
-        mTabLayout = (TabLayout) getActivity().findViewById(R.id.tab_layout_for_orders);
+        mTabLayout = (TabLayout) getActivity().findViewById(R.id.tab_layout_main);
         mViewPaper = (ViewPager) mRootView.findViewById(R.id.view_pager_order);
         OrderFragmentPagerAdapter adapter = new OrderFragmentPagerAdapter(getChildFragmentManager());
         OrderListFragment fragment1 = new OrderListFragment();

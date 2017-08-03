@@ -12,6 +12,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AlphaAnimation;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -34,15 +35,15 @@ public class OrderListAdapter extends RecyclerView.Adapter<OrderListAdapter.Orde
     private Context context;
     private List<AVObject> mOrderList;
     private static ColorGenerator COLOR_GENERATOR = ColorGenerator.MATERIAL;
-
+    public static List<Integer> COLORS;
     public OrderListAdapter(Context context, List<AVObject> orders) {
         this.context = context;
         this.mOrderList = orders;
-        List<Integer> colors = new ArrayList<Integer>();
-        colors.add(context.getResources().getColor(R.color.colorPrimary));
-        colors.add(context.getResources().getColor(R.color.colorAccent));
-        colors.add(context.getResources().getColor(R.color.lime_primary));
-        COLOR_GENERATOR = ColorGenerator.create(colors);
+        COLORS = new ArrayList<Integer>();
+        COLORS.add(context.getResources().getColor(R.color.colorPrimary));
+        COLORS.add(context.getResources().getColor(R.color.colorAccent));
+        COLORS.add(context.getResources().getColor(R.color.lime_primary));
+//        COLOR_GENERATOR = ColorGenerator.create(COLORS);
     }
 
     @Override
@@ -64,16 +65,24 @@ public class OrderListAdapter extends RecyclerView.Adapter<OrderListAdapter.Orde
         holder.dateText.setText("最后还款日期：" + simpleDateFormat.format(date));
 //        Animation animation = AnimationUtils.loadAnimation(context, R.anim.anim_recycler_item_show);
 //        holder.mView.startAnimation(animation);
-        holder.initRoundIcon(String.valueOf(title.charAt(0)));
+        int status = orderObject.getInt(OrderContract.OrderEntry.COLUMN_STATUS);
+        if (status == OrderContract.Status.GRANT
+                || status == OrderContract.Status.PARTIAL_REPAY)
+            holder.initRoundIcon(String.valueOf(title.charAt(0)), COLORS.get(1));
+        else if (status == OrderContract.Status.DONE)
+            holder.initRoundIcon(String.valueOf(title.charAt(0)), COLORS.get(2));
+        else
+            holder.initRoundIcon(String.valueOf(title.charAt(0)), COLORS.get(0));
 
-//        AlphaAnimation aa1 = new AlphaAnimation(1.0f, 0.1f);
-//        aa1.setDuration(400);
-//        holder.roundIcon.startAnimation(aa1);
-//
-//        AlphaAnimation aa = new AlphaAnimation(0.1f, 1.0f);
-//        aa.setDuration(400);
-//
-//        holder.roundIcon.startAnimation(aa);
+
+        AlphaAnimation aa1 = new AlphaAnimation(1.0f, 0.1f);
+        aa1.setDuration(400);
+        holder.roundIcon.startAnimation(aa1);
+
+        AlphaAnimation aa = new AlphaAnimation(0.1f, 1.0f);
+        aa.setDuration(400);
+
+        holder.roundIcon.startAnimation(aa);
 
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -89,7 +98,6 @@ public class OrderListAdapter extends RecyclerView.Adapter<OrderListAdapter.Orde
         //08/01 update order status
 //        Date deadline = orderObject.getDate(OrderContract.OrderEntry.COLUMN_DEADLINE);
         if (DateUtils.differentDays(new Date(), date) < 0) {
-            int status = orderObject.getInt(OrderContract.OrderEntry.COLUMN_STATUS);
             if (status < OrderContract.Status.GRANT) {
                 orderObject.deleteInBackground();
             } else if (status >= OrderContract.Status.GRANT && status < OrderContract.Status.OVERDUE) {
@@ -131,9 +139,9 @@ public class OrderListAdapter extends RecyclerView.Adapter<OrderListAdapter.Orde
             amountText = (TextView) mView.findViewById(R.id.tv_order_item_amount);
         }
 
-        private void initRoundIcon(String letter) {
+        private void initRoundIcon(String letter, int color) {
             TextDrawable drawable = TextDrawable.builder()
-                    .buildRound(letter, COLOR_GENERATOR.getRandomColor());
+                    .buildRound(letter, color);
             roundIcon.setImageDrawable(drawable);
         }
     }

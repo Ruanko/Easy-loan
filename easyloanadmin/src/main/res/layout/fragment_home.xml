@@ -12,9 +12,17 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
 
-        android:orientation="vertical"
-        android:paddingTop="@dimen/activity_vertical_margin">
+        android:orientation="vertical">
+
+        <com.youth.banner.Banner
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/banner"
+            android:layout_width="match_parent"
+            android:layout_height="196dp"
+            android:paddingBottom="8dp"
+            android:visibility="visible" />
         <TextView
+            android:paddingTop="@dimen/activity_vertical_margin"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingLeft="@dimen/activity_horizontal_margin"
@@ -101,6 +109,42 @@
             android:layout_height="1dp"
             android:layout_marginTop="@dimen/card_title_margin"
             android:background="@color/gray_light" />
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:layout_marginRight="@dimen/activity_horizontal_margin"
+            android:layout_height="wrap_content">
+            <Button
+                android:id="@+id/btn_update_banner"
+                style="?android:textAppearanceMedium"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:backgroundTint="@color/colorPrimary"
+                android:paddingLeft="48dp"
+                android:paddingRight="48dp"
+                android:paddingTop="@dimen/btn_padding"
+                android:paddingBottom="@dimen/btn_padding"
+                android:text="更新公告"
+                android:textColor="@color/white"
+                android:visibility="visible"
+                android:layout_alignParentStart="true"/>
+            <Button
+                android:id="@+id/btn_update_rate"
+                style="?android:textAppearanceMedium"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:backgroundTint="@color/white"
+                android:layout_alignParentEnd="true"
+                android:paddingLeft="48dp"
+                android:paddingRight="48dp"
+                android:paddingTop="@dimen/btn_padding"
+                android:paddingBottom="@dimen/btn_padding"
+                android:text="更新利率"
+                android:textColor="@color/black"
+                android:visibility="visible"/>
+        </RelativeLayout>
 
     </LinearLayout>
 </android.support.v4.widget.NestedScrollView>

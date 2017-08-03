@@ -23,6 +23,7 @@ import com.avos.avoscloud.AVUser;
 import com.avos.avoscloud.LogInCallback;
 import com.avos.avoscloud.RequestPasswordResetCallback;
 import com.ruanko.easyloanadmin.R;
+import com.ruanko.easyloanadmin.data.UserContract;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -138,8 +139,16 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 @Override
                 public void done(AVUser avUser, AVException e) {
                     if (e == null) {
-                        LoginActivity.this.finish();
-                        startActivity(new Intent(LoginActivity.this, MainActivity.class));
+
+                        if (AVUser.getCurrentUser().getInt(UserContract.UserEntry.COLUMN_ROLE) == 10010){
+                            LoginActivity.this.finish();
+                            startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                        }else {
+                            showProgress(false);
+                            Toast.makeText(LoginActivity.this, "不是管理员账户，禁止登录", Toast.LENGTH_LONG)
+                            .show();
+                        }
+
                     } else {
                         showProgress(false);
                         String json = e.getMessage();

@@ -22,7 +22,7 @@ public class SplashActivity extends AppCompatActivity {
             public void run() {
                 Intent intent;
                 if (AVUser.getCurrentUser() != null) {
-                    if (AVUser.getCurrentUser().getInt(UserContract.UserEntry.COLUMN_ROLE) == 10012)
+                    if (AVUser.getCurrentUser().getInt(UserContract.UserEntry.COLUMN_ROLE) == 10010)
                         intent = new Intent(SplashActivity.this, MainActivity.class);
                     else
                         intent = new Intent(SplashActivity.this, LoginActivity.class);

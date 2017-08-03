@@ -305,9 +305,14 @@
     <string name="about_email_intent">About: Easy loan</string>
     <string name="about_version">1.0</string>
     <string name="title_activity_about">关于我们</string>
-    <string name="snack_bar_delete_order">确定删除订单记录？将对您的信誉评估产生影响</string>
+    <string name="snack_bar_delete_order">确定删除订单记录？用户将收不到任何通知</string>
     <string name="action_confirm_delete">确认</string>
     <string name="tab_repay_request">还款审核</string>
     <string name="tab_apply_check">申请审核</string>
+    <string name="action_repay_done">确认收到</string>
+    <string name="action_pass">通过审核并放款</string>
+    <string name="snack_bar_grant_money">确认要放款？</string>
+    <string name="main_dialog_simple_message">确定已经收到用户还款？</string>
+    <string name="main_dialog_simple_title">请确认</string>
 
 </resources>

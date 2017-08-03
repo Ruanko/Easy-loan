@@ -317,7 +317,7 @@
                     android:layout_marginTop="16dp"
                     android:backgroundTint="@color/colorPrimaryDark"
                     android:padding="16dp"
-                    android:text="@string/action_repay"
+                    android:text="@string/action_repay_done"
                     android:textColor="@color/white"
                     android:visibility="gone"/>
                 <Button
@@ -337,11 +337,11 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
-                    android:backgroundTint="@color/google_red"
+                    android:backgroundTint="@color/google_blue"
                     android:padding="16dp"
-                    android:text="@string/action_undo_apply"
+                    android:text="@string/action_pass"
                     android:textColor="@color/white"
-                    android:visibility="visible"/>
+                    android:visibility="gone"/>
             </LinearLayout>
 
         </LinearLayout>
