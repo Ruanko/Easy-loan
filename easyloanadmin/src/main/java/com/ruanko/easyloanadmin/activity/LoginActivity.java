@@ -61,8 +61,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 attemptResetPassword();
                 break;
             case R.id.btn_register:
-                intent.setClass(this, RegisterActivity.class);
-                startActivity(intent);
+                Toast.makeText(this, "请联系你的上级获取账号", Toast.LENGTH_LONG).show();
+//                intent.setClass(this, RegisterActivity.class);
+//                startActivity(intent);
                 break;
             default:
                 break;
